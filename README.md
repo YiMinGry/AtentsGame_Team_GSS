@@ -11,4 +11,4 @@
 - 서기 - **Github** : [YiMinGry](https://github.com/YiMinGry)
 - 팀원 - **Github** : [YiMinGry](https://github.com/YiMinGry)
 - 팀원 - **Github** : [YiMinGry](https://github.com/YiMinGry)
-- 팀원 이민규 - **Github** : [YiMinGry](https://github.com/YiMinGry)
+- 팀원 - 이민규 **Github** : [YiMinGry](https://github.com/YiMinGry)
