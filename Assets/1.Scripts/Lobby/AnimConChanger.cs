@@ -8,6 +8,8 @@ public class AnimConChanger : MonoBehaviour
 {
     public delegate void Callback();
 
+    public LookAtPlayer lookAtPlayer;
+    public bool isFpsMode = false;
     public enum PRState
     {
         move, stop
@@ -15,8 +17,8 @@ public class AnimConChanger : MonoBehaviour
     public PRState pRState = new PRState();
 
     public Animator animator;
-    public Vector3 moveDir;
-    float speed = 0;
+
+    float speed = 1;
     const float minSpeed = 3;
     const float maxSpeed = 5;
 
@@ -117,12 +119,39 @@ public class AnimConChanger : MonoBehaviour
         {
             Vector3 localVelocity = Vector3.ClampMagnitude(new Vector3(x, 0, z), 1) * speed;
 
-            rgBody.velocity = transform.TransformDirection(localVelocity);
+            //카메라 시점 조작 모드
+            if (isFpsMode == true)
+            {
+                lookAtPlayer.isFpsMode = true;
 
-            animator.SetFloat("xDir", localVelocity.x);
-            animator.SetFloat("zDir", localVelocity.z);
+                MouseLook();
 
-            if (localVelocity.x == 0 && localVelocity.z == 0)
+                rgBody.velocity = transform.TransformDirection(localVelocity);
+                animator.SetFloat("xDir", localVelocity.x);
+                animator.SetFloat("zDir", localVelocity.z);
+            }
+            else
+            {
+                lookAtPlayer.isFpsMode = false;
+
+                rgBody.velocity = localVelocity * -1;
+
+                animator.SetBool("isMove", true);
+
+                animator.SetFloat("zDir", speed);
+
+
+                if (rgBody.velocity != Vector3.zero)
+                {
+                    //벨로시티의 방향을 아크탄젠트로 라디안값으로 변환
+                    float angleInDegrees = Mathf.Atan2(rgBody.velocity.z, rgBody.velocity.x * -1) * 180 / 3.14f;
+                    transform.rotation = Quaternion.Euler(0, angleInDegrees - 90, 0);
+                }
+            }
+
+
+            //걷기 달리기 체크
+            if (rgBody.velocity.x == 0 && rgBody.velocity.z == 0)
             {
                 pRState = PRState.stop;
                 animator.SetBool("isMove", false);
@@ -141,6 +170,7 @@ public class AnimConChanger : MonoBehaviour
                     Run(maxSpeed);
                 }
             }
+
         }
     }
 

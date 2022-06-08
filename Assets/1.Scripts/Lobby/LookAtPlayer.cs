@@ -12,58 +12,72 @@ public class LookAtPlayer : MonoBehaviour
     private float x = 0.0f;
     private float y = 0.0f;
 
+    public bool isFpsMode = false;
+
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftControl))
+
+        if (isFpsMode == true)
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Vector3 angles = transform.eulerAngles;
+                x = angles.y;
+                y = angles.x;
+
+
+                if (target)
+                {
+                    dist -= 1 * Input.mouseScrollDelta.y;
+
+                    if (dist < 0.5f)
+                    {
+                        dist = 1;
+                    }
+
+                    if (dist >= 9)
+                    {
+                        dist = 9;
+                    }
+
+                    x += Input.GetAxis("Mouse X") * xSpeed * 0.015f;
+                    y -= Input.GetAxis("Mouse Y") * ySpeed * 0.015f;
+
+                    if (y < 3)
+                    {
+                        y = 3;
+                    }
+
+                    if (y > 85)
+                    {
+                        y = 85;
+                    }
+
+                    Quaternion rotation;
+                    Vector3 position;
+
+
+                    rotation = Quaternion.Euler(y, x, 0);
+                    position = rotation * new Vector3(0, 0.0f, -dist) + target.position + new Vector3(0.0f, 1, 0.0f);
+
+                    transform.rotation = rotation;
+                    transform.position = position;
+
+                }
+            }
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Vector3 angles = transform.eulerAngles;
-            x = angles.y;
-            y = angles.x;
+            Cursor.lockState = CursorLockMode.Confined;
 
+            transform.position = new Vector3(target.position.x - 0.52f, transform.position.y, target.position.z + 6.56f);
 
-            if (target)
-            {
-                dist -= 1 * Input.mouseScrollDelta.y;
-
-                if (dist < 0.5f)
-                {
-                    dist = 1;
-                }
-
-                if (dist >= 9)
-                {
-                    dist = 9;
-                }
-
-                x += Input.GetAxis("Mouse X") * xSpeed * 0.015f;
-                y -= Input.GetAxis("Mouse Y") * ySpeed * 0.015f;
-
-                if (y < 3)
-                {
-                    y = 3;
-                }
-
-                if (y > 85)
-                {
-                    y = 85;
-                }
-
-                Quaternion rotation;
-                Vector3 position;
-
-
-                rotation = Quaternion.Euler(y, x, 0);
-                position = rotation * new Vector3(0, 0.0f, -dist) + target.position + new Vector3(0.0f, 1, 0.0f);
-
-                transform.rotation = rotation;
-                transform.position = position;
-
-            }
+            transform.LookAt(target);
         }
     }
 

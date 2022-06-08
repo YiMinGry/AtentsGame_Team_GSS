@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    AnimConChanger animConChanger;
+    public AnimConChanger animConChanger;
 
     int curEventTypr = 0;
     string nextMoveScenes = "";
@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animConChanger = GetComponent<AnimConChanger>();
+        //animConChanger = GetComponent<AnimConChanger>();
         StartCoroutine(State());
     }
 
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
         while (true)
         {
             animConChanger.Walk(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            animConChanger.MouseLook();
+
             //±¸¸£±â
             if (Input.GetKeyDown(KeyCode.Space))
             {
