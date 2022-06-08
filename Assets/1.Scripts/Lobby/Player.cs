@@ -73,6 +73,29 @@ public class Player : MonoBehaviour
         }
 
     }
+    private void OnTriggerExit(Collider other)
+    {
+        string _name = other.gameObject.name;
+
+        switch (_name)
+        {
+            case "MG_S_01":
+            case "MG_S_02":
+            case "MG_S_03":
+            case "MG_S_04":
+            case "MG_S_05":
+                curEventTypr = 0;
+                nextMoveScenes = "";
+                break;
+
+            default:
+
+                break;
+        }
+
+    }
+
+
 
     IEnumerator ObjEvent(string _name)
     {
