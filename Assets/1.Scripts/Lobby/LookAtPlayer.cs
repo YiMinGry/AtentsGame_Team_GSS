@@ -12,11 +12,6 @@ public class LookAtPlayer : MonoBehaviour
     private float x = 0.0f;
     private float y = 0.0f;
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
         if (Input.GetKey(KeyCode.LeftControl))
@@ -57,8 +52,6 @@ public class LookAtPlayer : MonoBehaviour
                 {
                     y = 85;
                 }
-
-                Debug.Log("@@@ " + y);
 
                 Quaternion rotation;
                 Vector3 position;

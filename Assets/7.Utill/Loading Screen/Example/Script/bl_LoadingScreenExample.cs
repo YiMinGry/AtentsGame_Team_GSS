@@ -17,4 +17,14 @@ public class bl_LoadingScreenExample : MonoBehaviour
             loaded = true;
         }
     }
+
+    public void ToLobby()
+    {
+        if (!loaded)
+        {
+            bl_SceneLoaderManager.LoadScene(SceneName);
+            loaded = true;
+
+        }
+    }
 }
