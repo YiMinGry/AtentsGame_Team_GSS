@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void Callback();
+public delegate void Callback(string _str);
 
 public static class EventManager
 {
@@ -48,7 +48,7 @@ public static class EventManager
         return true;
     }
 
-    public static bool Invoke(string key)
+    public static bool Invoke(string key, string _str)
     {
         if (_keyPair.ContainsKey(key) == false)
         {
@@ -66,7 +66,7 @@ public static class EventManager
 
             try
             {
-                func.Invoke();
+                func.Invoke(_str);
             }
             catch (Exception e)
             {

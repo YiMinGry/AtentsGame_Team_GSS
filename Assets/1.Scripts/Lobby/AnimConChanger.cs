@@ -7,9 +7,13 @@ using UnityEngine;
 public class AnimConChanger : MonoBehaviour
 {
     public delegate void Callback();
-
+    public Camera handCam;
     public LookAtPlayer lookAtPlayer;
+    public GameObject mainCanvas;
+
     public bool isFpsMode = false;
+    public bool isHandCam = false;
+
     public enum PRState
     {
         move, stop
@@ -64,6 +68,10 @@ public class AnimConChanger : MonoBehaviour
     {
         switch (_type)
         {
+            case 0:
+
+                break;
+
             case 1:
 
                 if (animator.GetBool("isSit") == false)
@@ -172,6 +180,27 @@ public class AnimConChanger : MonoBehaviour
             }
 
         }
+    }
+
+    public void OpenPhone()
+    {
+        if (animator.GetBool("isPhoneOpen") == false)
+        {
+            mainCanvas.SetActive(false);
+            isHandCam = true;
+            handCam.gameObject.SetActive(true);
+            isMoveingHold = true;
+            animator.SetBool("isPhoneOpen", true);
+        }
+        else
+        {
+            mainCanvas.SetActive(true);
+            isHandCam = false;
+            handCam.gameObject.SetActive(false);
+            isMoveingHold = false;
+            animator.SetBool("isPhoneOpen", false);
+        }
+
     }
 
     public void ForcedStandeing()
