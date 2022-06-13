@@ -4,54 +4,72 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    AnimConChanger animConChanger;
+    public AnimConChanger animConChanger;
 
     int curEventTypr = 0;
     string nextMoveScenes = "";
-
+    string openUIName = "";
     // Start is called before the first frame update
     void Start()
     {
-        animConChanger = GetComponent<AnimConChanger>();
-        StartCoroutine(State());
+        //animConChanger = GetComponent<AnimConChanger>();
     }
 
-    // Update is called once per frame
-    IEnumerator State()
+
+
+    public void Update()
     {
-        while (true)
+        animConChanger.Walk(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+
+        switch (animConChanger.pRState)
         {
-            animConChanger.Walk(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            animConChanger.MouseLook();
-            //구르기
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                animConChanger.Roll();
-            }
+            case AnimConChanger.PRState.move:
 
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    animConChanger.Roll();
+                }
 
-            switch (animConChanger.pRState)
-            {
-                case AnimConChanger.PRState.move:
+                break;
 
-                    break;
+            case AnimConChanger.PRState.stop:
 
-                case AnimConChanger.PRState.stop:
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
 
+                    animConChanger.OpenPhone();
+                }
+
+                if (animConChanger.isHandCam == false)
+                {
                     if (Input.GetKeyDown(KeyCode.F))
                     {
-                        animConChanger.PlayerFnc(curEventTypr, () => { StartCoroutine(ObjEvent(nextMoveScenes)); });
+                        switch (curEventTypr)
+                        {
+                            case 1:
+                                animConChanger.PlayerFnc(1, () =>
+                                {
+                                    StartCoroutine(ObjEvent(nextMoveScenes));
+                                });
+
+                                break;
+                            case 2:
+                                animConChanger.PlayerFnc(0, () =>
+                                {
+                                    EventManager.Invoke("OpenUI", openUIName);
+                                });
+                                break;
+                        }
                     }
+                }
 
-                    break;
-            }
-
-            yield return null;
+                break;
         }
-
     }
 
-    private void OnTriggerStay(Collider other)
+
+    private void OnTriggerEnter(Collider other)
     {
         string _name = other.gameObject.name;
 
@@ -64,8 +82,16 @@ public class Player : MonoBehaviour
             case "MG_S_05":
                 curEventTypr = 1;
                 nextMoveScenes = _name;
+                other.transform.parent.GetComponent<Outline>().enabled = true;
+                EventManager.Invoke("ActiveFInfo", "미니게임 : " + _name);
                 break;
-
+            case "Ranking":
+            case "Friends":
+                curEventTypr = 2;
+                openUIName = _name;
+                other.transform.parent.GetComponent<Outline>().enabled = true;
+                EventManager.Invoke("ActiveFInfo", _name);
+                break;
             default:
                 curEventTypr = 0;
                 nextMoveScenes = "";
@@ -86,8 +112,17 @@ public class Player : MonoBehaviour
             case "MG_S_05":
                 curEventTypr = 0;
                 nextMoveScenes = "";
+                other.transform.parent.GetComponent<Outline>().enabled = false;
+                EventManager.Invoke("DeActiveFInfo", _name);
                 break;
 
+            case "Ranking":
+            case "Friends":
+                curEventTypr = 0;
+                openUIName = "";
+                other.transform.parent.GetComponent<Outline>().enabled = false;
+                EventManager.Invoke("DeActiveFInfo", _name);
+                break;
             default:
 
                 break;

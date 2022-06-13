@@ -31,6 +31,8 @@ public abstract class MonoSingleton<T> : CachingMonoBehaviour where T : MonoSing
         {
             m_Instance = this as T;
         }
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
     public virtual void Init()
