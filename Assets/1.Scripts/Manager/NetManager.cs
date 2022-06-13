@@ -17,6 +17,11 @@ public class NetManager : MonoSingleton<NetManager>
 
     public WebSocket m_Socket = null;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,10 +33,8 @@ public class NetManager : MonoSingleton<NetManager>
             m_Socket.OnOpen += (sender, e) =>
             {
                 JObject json = new JObject();
-                json.Add("cmd", "userEnter");
-                json.Add("ID", "1");
-                json.Add("nickName", "user");
-
+                json.Add("cmd", "ssEnter");
+                json.Add("ID", SystemInfo.deviceUniqueIdentifier);
                 CL2S_SEND(json.ToString());
             };
 
@@ -87,8 +90,9 @@ public class NetManager : MonoSingleton<NetManager>
         //string 데이터
         Debug.Log(e.Data);
 
-        //bytes 데이터
-        Debug.Log(e.RawData);
+        JObject msg = JObject.Parse(e.Data);
+
+        NatEventManager.Invoke(msg["cmd"].ToString(), msg);
     }
 
     public void DisconncectServer()
