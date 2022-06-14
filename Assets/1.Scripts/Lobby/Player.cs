@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         //animConChanger = GetComponent<AnimConChanger>();
+
     }
 
 
