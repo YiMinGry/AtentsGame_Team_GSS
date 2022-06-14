@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 public delegate void CallbackInJdata(JObject _jdata);
 
-public static class NatEventManager
+public static class NetEventManager
 {
     private static Dictionary<string, List<CallbackInJdata>> _keyPair = new Dictionary<string, List<CallbackInJdata>>();
 

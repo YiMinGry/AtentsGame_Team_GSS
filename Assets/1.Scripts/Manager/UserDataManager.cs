@@ -20,7 +20,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     {
         DontDestroyOnLoad(this.gameObject);
 
-        NatEventManager.Regist("LoginOK", S2CL_LoginOK);
+        NetEventManager.Regist("LoginOK", S2CL_LoginOK);
     }
 
     // Update is called once per frame

@@ -92,7 +92,7 @@ public class NetManager : MonoSingleton<NetManager>
 
         JObject msg = JObject.Parse(e.Data);
 
-        NatEventManager.Invoke(msg["cmd"].ToString(), msg);
+        NetEventManager.Invoke(msg["cmd"].ToString(), msg);
     }
 
     public void DisconncectServer()
