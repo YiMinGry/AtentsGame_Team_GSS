@@ -18,7 +18,7 @@ public class Ranking : MonoBehaviour
         _userData.Add("ID", UserDataManager.instance.ID);
         _userData.Add("nickName", UserDataManager.instance.nickName);
         _userData.Add("MG_NAME", "mg1rank");
-        _userData.Add("Score", "2000");
+        _userData.Add("Score", "25000");
 
         NetManager.instance.CL2S_SEND(_userData.ToString());
     }
