@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 public delegate void CallbackInJdata(JObject _jdata);
 
@@ -13,7 +14,7 @@ public static class NetEventManager
 
     public static bool Regist(string key, CallbackInJdata func)
     {
-        Debug.Log("Regist Key : " + key);
+        //Debug.Log("Regist Key : " + key);
         if (_keyPair.ContainsKey(key) == true)
         {
             if (_keyPair[key].Contains(func) == false)
@@ -69,7 +70,17 @@ public static class NetEventManager
 
             try
             {
-                func.Invoke(_jdata);
+                //현 네트워크 연결이 자체 쓰레드를 이용하고있어 데이터 
+                //유니티 메인쓰레드에서 접근이 용이하지 못함 
+                //그래서 서버에서 받아온 데이터는 메인쓰레드로 옮겨서 사용할수있게 처리
+                Thread thread = new Thread(() =>
+                {
+                    UnityMainThreadDispatcher.Instance().Enqueue(() =>
+                    {
+                        func.Invoke(_jdata);
+                    });
+                });
+                thread.Start();
             }
             catch (Exception e)
             {

@@ -10,7 +10,7 @@ public static class EventManager
 
     public static bool Regist(string key, Callback func)
     {
-        Debug.Log("Regist Key : " + key);
+        //Debug.Log("Regist Key : " + key);
         if (_keyPair.ContainsKey(key) == true)
         {
             if (_keyPair[key].Contains(func) == false)

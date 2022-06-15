@@ -15,7 +15,7 @@ public class IntroManager : MonoBehaviour
     {
         if (!loaded)
         {
-            bl_SceneLoaderManager.LoadScene("Dev_Lobby");
+            bl_SceneLoaderManager.LoadScene("Main_Lobby");
             loaded = true;
         }
     }
