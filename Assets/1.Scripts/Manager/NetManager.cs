@@ -16,7 +16,7 @@ public class NetManager : MonoSingleton<NetManager>
     private string SERVICE_NAME = "/MGServer";
 
     public WebSocket m_Socket = null;
-
+    public bool isConnect = false;
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -35,7 +35,7 @@ public class NetManager : MonoSingleton<NetManager>
                 JObject json = new JObject();
                 json.Add("cmd", "ssEnter");
                 json.Add("ID", SystemInfo.deviceUniqueIdentifier);
-                CL2S_SEND(json.ToString());
+                CL2S_SEND(json);
             };
 
             m_Socket.OnClose += CloseConnect;
@@ -68,7 +68,7 @@ public class NetManager : MonoSingleton<NetManager>
     {
         DisconncectServer();
     }
-    public void CL2S_SEND(string msg)
+    public void CL2S_SEND(JObject msg)
     {
         if (!m_Socket.IsAlive)
         {
@@ -76,7 +76,9 @@ public class NetManager : MonoSingleton<NetManager>
         }
         try
         {
-            m_Socket.Send(msg);
+            Debug.Log($"CL2S_SEND {msg["cmd"].ToString()}: " + msg);
+
+            m_Socket.Send(msg.ToString());
         }
         catch (Exception)
         {
@@ -87,10 +89,8 @@ public class NetManager : MonoSingleton<NetManager>
     }
     public void S2CL_RECV(object sender, MessageEventArgs e)
     {
-        //string 데이터
-        Debug.Log(e.Data);
-
         JObject msg = JObject.Parse(e.Data);
+        Debug.Log($"S2CL_RECV {msg["cmd"].ToString()}: " + e.Data);
 
         NetEventManager.Invoke(msg["cmd"].ToString(), msg);
     }
@@ -110,6 +110,16 @@ public class NetManager : MonoSingleton<NetManager>
         {
             Debug.Log(e.ToString());
         }
+    }
+
+    private void Update()
+    {
+        isConnect = m_Socket.IsAlive;
+
+        //if (!m_Socket.IsAlive) 
+        //{
+        //    Debug.LogWarning("서버 접속 실패");
+        //}
     }
 
     private void OnApplicationQuit()
