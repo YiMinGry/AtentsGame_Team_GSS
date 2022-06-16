@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class AnimConChanger : MonoBehaviour
 {
     public delegate void Callback();
-    public Camera handCam;
     public LookAtPlayer lookAtPlayer;
     public GameObject mainCanvas;
-
+    public Camera handCam;
+    public Camera PlayerFocusCam;
     public bool isFpsMode = false;
     public bool isHandCam = false;
 
@@ -32,6 +30,10 @@ public class AnimConChanger : MonoBehaviour
     public bool isMoveingHold = false;
 
     Vector3 tmpCamPos = new Vector3();
+
+    [Header("Cam Mode")]
+    public bool isHandCamMode = false;
+    public bool isPlayerFocusMode = false;
 
     Vector3 GetMouseScreenToWorldPoint()
     {
@@ -187,16 +189,26 @@ public class AnimConChanger : MonoBehaviour
         if (animator.GetBool("isPhoneOpen") == false)
         {
             mainCanvas.SetActive(false);
-            isHandCam = true;
-            handCam.gameObject.SetActive(true);
+            if (isHandCamMode)
+            {
+                isHandCam = true;
+                handCam.gameObject.SetActive(true);
+            }
+            else
+                PlayerFocusCam.gameObject.SetActive(true);
             isMoveingHold = true;
             animator.SetBool("isPhoneOpen", true);
         }
         else
         {
             mainCanvas.SetActive(true);
-            isHandCam = false;
-            handCam.gameObject.SetActive(false);
+            if (isHandCamMode)
+            {
+                isHandCam = false;
+                handCam.gameObject.SetActive(false);
+            }
+            else
+                PlayerFocusCam.gameObject.SetActive(false);
             isMoveingHold = false;
             animator.SetBool("isPhoneOpen", false);
         }

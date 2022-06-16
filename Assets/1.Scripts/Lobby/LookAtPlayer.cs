@@ -15,8 +15,11 @@ public class LookAtPlayer : MonoBehaviour
     public bool isFpsMode = false;
 
     [Header ("Camera Angle")] //카메라 거리 조절용
+    [Range(-1.0f, 6.0f)]
+    public float yAngle = 1.5f;
     [Range(1.5f, 6.0f)]
     public float zAngle = 1.5f; 
+
 
     void Update()
     {
@@ -78,7 +81,7 @@ public class LookAtPlayer : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
 
             //카메라 앵글
-            transform.position = new Vector3(target.position.x, transform.position.y, target.position.z + zAngle);
+            transform.position = new Vector3(target.position.x, target.position.y + yAngle, target.position.z + zAngle);
 
             transform.LookAt(target);
         }

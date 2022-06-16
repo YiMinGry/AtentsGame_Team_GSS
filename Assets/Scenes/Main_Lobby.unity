@@ -783,6 +783,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fac10a1fca5acf644887912b71d44583,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fac10a1fca5acf644887912b71d44583,
         type: 3}
       propertyPath: m_Name
@@ -919,7 +924,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.93490565, b: 0.8160377, a: 1}
+  m_Color: {r: 0.2202083, g: 0, b: 0.8113208, a: 1}
   m_Intensity: 0.8
   m_Range: 10
   m_SpotAngle: 30
@@ -1122,6 +1127,12 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
   m_PVRTiledBaking: 0
+--- !u!4 &454363598 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9159737627643082197, guid: c71719a7afb36e14981a829c02777ddb,
+    type: 3}
+  m_PrefabInstance: {fileID: 7450526643646041724}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &486259306
 GameObject:
   m_ObjectHideFlags: 0
@@ -1619,12 +1630,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea08f33eeec094c48940416ef9f1903c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1095873983}
+  target: {fileID: 454363598}
   dist: 4
   xSpeed: 220
   ySpeed: 100
   isFpsMode: 0
-  zAngle: 2.5
+  yAngle: 0.92
+  zAngle: 1.92
 --- !u!114 &615493525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1973,6 +1985,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 695780835}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &706087867 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8842156042370288161, guid: c71719a7afb36e14981a829c02777ddb,
+    type: 3}
+  m_PrefabInstance: {fileID: 7450526643646041724}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &726987413
 GameObject:
   m_ObjectHideFlags: 0
@@ -2247,7 +2265,7 @@ GameObject:
   - component: {fileID: 1013889027}
   - component: {fileID: 1013889026}
   m_Layer: 0
-  m_Name: Point Light (1)
+  m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2323,7 +2341,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1013889025}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.12, y: 1.7616808, z: 3.69}
+  m_LocalPosition: {x: -6.8, y: 1.7616808, z: 3.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2512,19 +2530,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1026859166}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.47, y: 1.7616808, z: 3.69}
+  m_LocalPosition: {x: 6.79, y: 1.7616808, z: 3.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 231039733}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1095873983 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-    type: 3}
-  m_PrefabInstance: {fileID: 1943109619529261126}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1106279055
 GameObject:
   m_ObjectHideFlags: 0
@@ -3167,6 +3179,81 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1334818368}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1339309555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1339309557}
+  - component: {fileID: 1339309556}
+  m_Layer: 0
+  m_Name: PlayerFocusCam (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!20 &1339309556
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339309555}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 27
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &1339309557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339309555}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0.16, y: 0.65, z: 10.09}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1358342463
 GameObject:
   m_ObjectHideFlags: 0
@@ -3866,7 +3953,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1719776024
 GameObject:
@@ -5503,282 +5590,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &1943109619529261126
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1912641111, guid: c71719a7afb36e14981a829c02777ddb, type: 3}
-      propertyPath: mainCanvas
-      value: 
-      objectReference: {fileID: 695780836}
-    - target: {fileID: 1912641111, guid: c71719a7afb36e14981a829c02777ddb, type: 3}
-      propertyPath: lookAtPlayer
-      value: 
-      objectReference: {fileID: 615493524}
-    - target: {fileID: 1912641113, guid: c71719a7afb36e14981a829c02777ddb, type: 3}
-      propertyPath: m_AngularDrag
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.04
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 6.59
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498164756444, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043718, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043732, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043734, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043760, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043780, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043786, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043790, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043792, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043794, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043796, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043798, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043800, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043802, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043804, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043806, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043808, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043810, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043812, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043814, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043816, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043818, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043820, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043822, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043824, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043826, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043830, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043832, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043834, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043836, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165043838, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044128, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044130, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044132, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044134, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044136, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044138, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044140, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044142, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044154, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094587498165044220, guid: c71719a7afb36e14981a829c02777ddb,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c71719a7afb36e14981a829c02777ddb, type: 3}
 --- !u!23 &2470677627172269802
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5968,6 +5779,349 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1001 &7450526643646041724
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6296304452614639137, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_Name
+      value: SM_Chr_Hair_Fringe_02___
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452614639137, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983499840, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_Name
+      value: SM_Chr_Kid_Hoodie_03___
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983499840, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983499852, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_Name
+      value: SM_Chr_Kid_Ghost_01___
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983499852, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983500230, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9048533629519804525, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: mainCanvas
+      value: 
+      objectReference: {fileID: 695780836}
+    - target: {fileID: 9048533629519804525, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: lookAtPlayer
+      value: 
+      objectReference: {fileID: 615493524}
+    - target: {fileID: 9159737627643082197, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c71719a7afb36e14981a829c02777ddb, type: 3}
+--- !u!4 &7450526643646041726 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8011399870105768864, guid: c71719a7afb36e14981a829c02777ddb,
+    type: 3}
+  m_PrefabInstance: {fileID: 7450526643646041724}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7450526643646041727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706087867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 7450526643646041726}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 2147483647
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 0
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles:
+  - assemblyQualifiedName: XPostProcessing.PixelizeCircle, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.PixelizeDiamond, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.PixelizeHexagon, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.PixelizeHexagonGrid, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.PixelizeLeaf, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.PixelizeLed, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.PixelizeQuad, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.PixelizeSector, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.PixelizeTriangle, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_AfterStackBundles:
+  - assemblyQualifiedName: XPostProcessing.AuroraVignette, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.BokehBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.BoxBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentBleachBypass, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentBrightness, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentContrast, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentContrastV2, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentContrastV3, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentHue, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentLensFilter, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentSaturation, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentTechnicolor, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentTint, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorAdjustmentWhiteBalance, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorReplace, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.ColorReplaceV2, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.DirectionalBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.DualBoxBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.DualGaussianBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.DualKawaseBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.DualTentBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.EdgeDetectionRoberts, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.EdgeDetectionRobertsNeon, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.EdgeDetectionRobertsNeonV2, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.EdgeDetectionScharr, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.EdgeDetectionScharrNeon, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.EdgeDetectionScharrNeonV2, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.EdgeDetectionSobel, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.EdgeDetectionSobelNeon, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.EdgeDetectionSobelNeonV2, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GaussianBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchAnalogNoise, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchDigitalStripe, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchImageBlock, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchImageBlockV2, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchImageBlockV3, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchImageBlockV4, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchLineBlock, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchRGBSplit, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchRGBSplitV2, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchRGBSplitV3, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchRGBSplitV4, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchRGBSplitV5, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchScanLineJitter, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchScreenJump, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchScreenShake, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchTileJitter, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GlitchWaveJitter, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.GrainyBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.IrisBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.IrisBlurV2, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.KawaseBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.RadialBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.RadialBlurV2, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.RapidOldTVVignette, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.RapidOldTVVignetteV2, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.RapidVignette, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.RapidVignetteV2, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.SharpenV1, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.SharpenV2, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.SharpenV3, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.TentBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.TiltShiftBlur, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: XPostProcessing.TiltShiftBlurV2, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &7450526643646041728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706087867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: 05d6d0fc0cf620743ac9fb0be4727707, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 0
 --- !u!33 &7751947016210046203
 MeshFilter:
   m_ObjectHideFlags: 0
