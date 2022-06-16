@@ -120,6 +120,7 @@ public class Player : MonoBehaviour
 
             case "Ranking":
             case "Friends":
+            case "Gacha":
                 curEventTypr = 0;
                 openUIName = "";
                 other.transform.parent.GetComponent<Outline>().enabled = false;
