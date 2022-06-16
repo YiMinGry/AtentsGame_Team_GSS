@@ -22,6 +22,7 @@ public class FEvent : MonoBehaviour
 
         lobbyUis.Add("Ranking", dim.transform.Find("Ranking").gameObject);
         lobbyUis.Add("Friends", dim.transform.Find("Friends").gameObject);
+        lobbyUis.Add("Gacha", dim.transform.Find("Gacha").gameObject);
 
     }
 
