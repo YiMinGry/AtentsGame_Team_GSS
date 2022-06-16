@@ -33,7 +33,6 @@ public class AnimConChanger : MonoBehaviour
 
     [Header("Cam Mode")]
     public bool isHandCamMode = false;
-    public bool isPlayerFocusMode = false;
 
     Vector3 GetMouseScreenToWorldPoint()
     {
@@ -188,9 +187,9 @@ public class AnimConChanger : MonoBehaviour
     {
         if (animator.GetBool("isPhoneOpen") == false)
         {
-            mainCanvas.SetActive(false);
             if (isHandCamMode)
             {
+                mainCanvas.SetActive(false);
                 isHandCam = true;
                 handCam.gameObject.SetActive(true);
             }
@@ -201,9 +200,10 @@ public class AnimConChanger : MonoBehaviour
         }
         else
         {
-            mainCanvas.SetActive(true);
+            
             if (isHandCamMode)
             {
+                mainCanvas.SetActive(true);
                 isHandCam = false;
                 handCam.gameObject.SetActive(false);
             }
