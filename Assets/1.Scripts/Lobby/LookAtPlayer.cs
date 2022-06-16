@@ -14,9 +14,12 @@ public class LookAtPlayer : MonoBehaviour
 
     public bool isFpsMode = false;
 
+    [Header ("Camera Angle")] 
+    [Range(1.5f, 6.0f)]
+    public float zAngle = 1.5f;
+
     void Update()
     {
-
         if (isFpsMode == true)
         {
             if (Input.GetKey(KeyCode.LeftControl))
@@ -61,9 +64,8 @@ public class LookAtPlayer : MonoBehaviour
                     Quaternion rotation;
                     Vector3 position;
 
-
                     rotation = Quaternion.Euler(y, x, 0);
-                    position = rotation * new Vector3(0, 0.0f, -dist) + target.position + new Vector3(0.0f, 1, 0.0f);
+                    position = rotation * new Vector3(0.0f, 0.0f, -dist) + target.position + new Vector3(0.0f, 1, 0.0f);
 
                     transform.rotation = rotation;
                     transform.position = position;
@@ -75,7 +77,9 @@ public class LookAtPlayer : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Confined;
 
-            transform.position = new Vector3(target.position.x - 0.52f, transform.position.y, target.position.z + 6.56f);
+            //카메라 앵글
+            //transform.position = new Vector3(target.position.x - 0.52f, transform.position.y, target.position.z + 6.56f);
+            transform.position = new Vector3(target.position.x, transform.position.y, target.position.z + zAngle);
 
             transform.LookAt(target);
         }
