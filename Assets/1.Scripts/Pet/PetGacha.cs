@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class PetGacha : MonoBehaviour
 {
-    public GameObject Pet = null;
+    public Transform petPosition = null;
+    private Animator anim = null;
+
+    public GameObject[] Pet = null;
     public GameObject appear = null, glow = null, heart = null, spark = null;
     public GameObject disappear = null;
     public GameObject canvas = null;
-    private Animator anim = null;
     public GameObject gachaCamera = null;
 
-    private void Awake()
-    {
-        anim = Pet.GetComponent<Animator>();
+    private GameObject petObj = null;
 
-    }
+    public int petNum = 0; // 펫 번호
+
     public void PetSpawnButton()
     {
         gachaCamera.SetActive(true);
@@ -35,7 +36,8 @@ public class PetGacha : MonoBehaviour
         yield return Utill.WaitForSeconds(2f);
 
         glow.SetActive(false); // glow 이펙트 꺼짐
-        Pet.SetActive(true); // 펫 오브젝트 활성화
+        petObj = Instantiate(Pet[petNum], petPosition); // 펫 생성 및 petPosition의 자식으로 설정
+        anim = petObj.GetComponent<Animator>();
         anim.SetInteger("animation", 9); // 9번 jump 애니메이션 재생
         appear.SetActive(true);
 
@@ -58,14 +60,11 @@ public class PetGacha : MonoBehaviour
         yield return Utill.WaitForSeconds(0.7f);
 
         disappear.SetActive(true);
-        Pet.SetActive(false);
+        Destroy(petObj);
 
         yield return Utill.WaitForSeconds(1f);
 
         disappear.SetActive(false);
         this.gameObject.SetActive(false);
     }
-
-    
-
 }
