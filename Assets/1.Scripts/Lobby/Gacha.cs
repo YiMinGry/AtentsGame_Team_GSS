@@ -109,7 +109,7 @@ public class Gacha : MonoBehaviour
 
     private GameObject MakeObject(GameObject effect, Transform Spawner) // 오브젝트 생성 함수
     {
-        effect = Instantiate(effect, Spawner);
+        effect = Instantiate(effect, Spawner); // 생성 후 Spawner의 자식으로 설정
         effect.SetActive(true);
         return effect;
     }
