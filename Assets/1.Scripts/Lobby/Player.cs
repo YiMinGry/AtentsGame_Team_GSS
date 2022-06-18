@@ -9,11 +9,11 @@ public class Player : MonoBehaviour
     int curEventTypr = 0;
     string nextMoveScenes = "";
     string openUIName = "";
+
     // Start is called before the first frame update
     void Start()
     {
         //animConChanger = GetComponent<AnimConChanger>();
-
     }
 
 
