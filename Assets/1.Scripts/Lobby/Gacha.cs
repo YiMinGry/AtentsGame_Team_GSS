@@ -39,7 +39,7 @@ public class Gacha : MonoBehaviour
         {
             isGachaActive = true;
             grade = Random.Range(0, 3); // C~A 등급 중에서 랜덤하게 설정
-            effectType = Random.Range(0, 2); // 이펙트 타입 현재 2개
+            effectType = Random.Range(0, 3); // 이펙트 타입 현재 3개
             petNum = Random.Range(0, petNumMax);
             /* 그레이드 확률에 따라 랜덤하게 조정
             int rand = Random.Range(0, 100);
@@ -68,17 +68,14 @@ public class Gacha : MonoBehaviour
 
     IEnumerator PetSpawn() // 펫 뽑기기계에서 소환
     {
-
         preSpawnEffect = MakeObject(preSpawn[3 * effectType + grade], effectSpawner);        
 
         yield return Utill.WaitForSeconds(2f);
 
         DeleteObject(preSpawnEffect);
-
         addedPet = MakeObject(Pets[petNum], petSpawner); // 펫 생성 및 petPosition의 자식으로 설정
         anim = addedPet.GetComponent<Animator>();
         anim.SetInteger("animation", 9); // 9번 jump 애니메이션 재생
-
         spawnEffect = MakeObject(spawn[3 * effectType + grade], effectSpawner);
 
         yield return Utill.WaitForSeconds(1f);
@@ -86,7 +83,6 @@ public class Gacha : MonoBehaviour
         anim.SetInteger("animation", 19); // 19번 IdleA 애니메이션 재생 (전투중 Idle 모션)
         postSpawnEffect = MakeObject(postSpawn[3 * effectType + grade], effectSpawner);
         additionalEffect = MakeObject(additional[3 * effectType + grade], effectSpawner);
-
         canvas.SetActive(true);
     }    
 
@@ -94,20 +90,18 @@ public class Gacha : MonoBehaviour
     {
         anim.SetInteger("animation", 9);
         canvas.SetActive(false);
-
-        DeleteObject(spawnEffect);
-        DeleteObject(postSpawnEffect);
+        DeleteObject(spawnEffect);        
         DeleteObject(additionalEffect);
 
         yield return Utill.WaitForSeconds(0.7f);
 
         deSpawnEffect = MakeObject(deSpawn[3 * effectType + grade], effectSpawner);
+        DeleteObject(postSpawnEffect);
         Destroy(addedPet);
 
         yield return Utill.WaitForSeconds(1f);
 
         DeleteObject(deSpawnEffect);
-
         gachaCamera.SetActive(false);
         this.gameObject.SetActive(false);
         isGachaActive = false;
