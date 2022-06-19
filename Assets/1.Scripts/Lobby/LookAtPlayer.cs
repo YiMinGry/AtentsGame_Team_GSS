@@ -14,9 +14,12 @@ public class LookAtPlayer : MonoBehaviour
 
     public bool isFpsMode = false;
 
-    [Header ("Camera Angle")] //카메라 거리 조절용
+    public Vector2 camXLimit;//x왼쪽으로 최대치//y오른쪽로 최대치//메인씬 : 5,-5//데브씬 :5, -5
+    public Vector2 camZLimit;//x안쪽으로 최대치//밖으로 최대치//메인씬 : 5,9.5//데브씬 : 0, 8
+
+    [Header("Camera Angle")] //카메라 거리 조절용
     [Range(1.5f, 6.0f)]
-    public float zAngle = 1.5f; 
+    public float zAngle = 1.5f;
 
     void Update()
     {
@@ -78,7 +81,32 @@ public class LookAtPlayer : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
 
             //카메라 앵글
-            transform.position = new Vector3(target.position.x, transform.position.y, target.position.z + zAngle);
+            Vector3 camPos;
+
+            camPos = new Vector3(target.position.x, transform.position.y, target.position.z + zAngle);
+
+            if (!camXLimit.Equals(Vector2.zero))
+            {
+                if (camXLimit.x < camPos.x)
+                {
+                    camPos.x = camXLimit.x;
+                }
+                if (camXLimit.y > camPos.x)
+                {
+                    camPos.x = camXLimit.y;
+                }
+
+                if (camZLimit.x > camPos.z)
+                {
+                    camPos.z = camZLimit.x;
+                }
+                if (camZLimit.y < camPos.z)
+                {
+                    camPos.z = camZLimit.y;
+                }
+            }
+
+            transform.position = camPos;
 
             transform.LookAt(target);
         }
