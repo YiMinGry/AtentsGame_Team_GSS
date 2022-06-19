@@ -23,12 +23,6 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         NetEventManager.Regist("LoginOK", S2CL_LoginOK);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void S2CL_LoginOK(JObject _jdata)
     {
 
