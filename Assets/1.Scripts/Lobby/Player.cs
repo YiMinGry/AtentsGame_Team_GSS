@@ -9,11 +9,11 @@ public class Player : MonoBehaviour
     int curEventTypr = 0;
     string nextMoveScenes = "";
     string openUIName = "";
+
     // Start is called before the first frame update
     void Start()
     {
         //animConChanger = GetComponent<AnimConChanger>();
-
     }
 
 
@@ -88,6 +88,7 @@ public class Player : MonoBehaviour
                 break;
             case "Ranking":
             case "Friends":
+            case "Gacha":
                 curEventTypr = 2;
                 openUIName = _name;
                 other.transform.parent.GetComponent<Outline>().enabled = true;
@@ -119,6 +120,7 @@ public class Player : MonoBehaviour
 
             case "Ranking":
             case "Friends":
+            case "Gacha":
                 curEventTypr = 0;
                 openUIName = "";
                 other.transform.parent.GetComponent<Outline>().enabled = false;
