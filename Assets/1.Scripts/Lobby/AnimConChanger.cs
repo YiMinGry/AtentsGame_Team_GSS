@@ -197,8 +197,8 @@ public class AnimConChanger : MonoBehaviour
             mainCanvas.SetActive(true);
             isHandCam = false;
             handCam.gameObject.SetActive(false);
-            isMoveingHold = false;
             animator.SetBool("isPhoneOpen", false);
+            isMoveingHold = false;
         }
 
     }

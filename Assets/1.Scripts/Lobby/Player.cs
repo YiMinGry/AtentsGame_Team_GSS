@@ -38,8 +38,14 @@ public class Player : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-
-                    animConChanger.OpenPhone();
+                    if (openUIName.Equals(""))
+                    {
+                        animConChanger.OpenPhone();
+                    }
+                    else
+                    {
+                        EventManager.Invoke("CloseUI", openUIName);
+                    }
                 }
 
                 if (animConChanger.isHandCam == false)
@@ -56,6 +62,8 @@ public class Player : MonoBehaviour
 
                                 break;
                             case 2:
+                                //플레이어 홀드 걸고
+
                                 animConChanger.PlayerFnc(0, () =>
                                 {
                                     EventManager.Invoke("OpenUI", openUIName);

@@ -919,7 +919,6 @@ GameObject:
   - component: {fileID: 153257353}
   - component: {fileID: 153257352}
   - component: {fileID: 153257351}
-  - component: {fileID: 153257354}
   m_Layer: 0
   m_Name: Gacha
   m_TagString: Untagged
@@ -1013,38 +1012,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153257349}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &153257354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153257349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7b81998488f4c64bb597f0efe1abaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Pets:
-  - {fileID: 1303677741880676, guid: 306f0c80c208c3b459b6cd9bbe04adea, type: 3}
-  - {fileID: 1094892881052708, guid: f528a90400683ad4ba1aaad4cd59cb42, type: 3}
-  - {fileID: 1785047037702400, guid: 665a9eb1215193d4097de2f5be3b3be7, type: 3}
-  - {fileID: 1853516268487540, guid: dec27667dfe236a4388806d601957ec4, type: 3}
-  - {fileID: 1746828927619028, guid: 1b460ff2fbb1d0e4a9f4b164b9b9b253, type: 3}
-  - {fileID: 1163936152137734, guid: fa750150b702b6843b6c68b5cdabf45c, type: 3}
-  - {fileID: 1910958790382018, guid: e72954151f4773d459bbbe7b38b59edd, type: 3}
-  - {fileID: 1472713960612558, guid: d422eb49286ae8d44a76470c669e0198, type: 3}
-  - {fileID: 1007883688953320, guid: 71e0dd87d052cac40b0ad28963736a35, type: 3}
-  - {fileID: 1671080683726492, guid: ece046792decc3845ba8a8cf751c5ee9, type: 3}
-  - {fileID: 1046185752126298, guid: 7850099e48d5e8d449040a9ad7cb65bc, type: 3}
-  - {fileID: 1748547749057024, guid: b03a1c6922e0ace46852d65bfc7d494e, type: 3}
-  - {fileID: 1249964366292818, guid: 02e61f070114df14e9a0c75584d649cc, type: 3}
-  - {fileID: 1059558216950342, guid: 9ea99ebe5e381c545bcd4809acf6c184, type: 3}
-  - {fileID: 1533625347530842, guid: f8e0c3324577d0248b496fa71bfcb309, type: 3}
-  - {fileID: 1803547439578044, guid: 9313513a4f849d748a071dd435b28cd1, type: 3}
-  - {fileID: 1752263106682934, guid: 10d12beb9d079a744814a20120534375, type: 3}
-  PetsNumber: 0
-  aaa: 3
 --- !u!1 &159872918
 GameObject:
   m_ObjectHideFlags: 0
