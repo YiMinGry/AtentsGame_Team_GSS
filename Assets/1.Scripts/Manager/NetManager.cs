@@ -156,10 +156,10 @@ public class NetManager : MonoSingleton<NetManager>
         float moveTime = 10;
 
         //사용법
-        NetManager.instance.AddRollingMSG("안녕하세요");
-        NetManager.instance.AddRollingMSG("오신걸 환영해요");
-        NetManager.instance.AddRollingMSG("12312412312412415123123");
-        NetManager.instance.AddRollingMSG("가나다라마바사아자차카타파하");
+        //NetManager.instance.AddRollingMSG("안녕하세요");
+        //NetManager.instance.AddRollingMSG("오신걸 환영해요");
+        //NetManager.instance.AddRollingMSG("12312412312412415123123");
+        //NetManager.instance.AddRollingMSG("가나다라마바사아자차카타파하");
 
         while (true)
         {

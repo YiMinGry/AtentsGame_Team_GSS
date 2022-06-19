@@ -2,17 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class AnimConChanger : MonoBehaviour
 {
     public delegate void Callback();//각종 상호작용 이벤트를 실행시키기 위한 델리게이트
-    public Camera handCam;//핸드폰 모션용 카메라
+
     public LookAtPlayer lookAtPlayer;//메인 카메라가 캐릭터를 바라보게하기위한 클래스
     public GameObject mainCanvas;//메인 캔버스
 
+    [Space(10)]
+    public Camera PhoneMode_PhoneFocus;//핸드폰 모션용 카메라
+
+    public Transform PhoneMode_PlayerFocus;
+
+    [Space(10)]
+    public bool isHandCamMode = false;
+
+    [Space(10)]
     public bool isFpsMode = false;//고정시점모드, 1인칭 캐릭터 뒷모습 모드 설정하는 변수
     public bool isHandCam = false;//핸드폰 모션 연출중인지 체크용 변수
+
+    [Space(10)]
+    public Animator animator;
+    public Rigidbody rgBody;
 
     //캐릭터가 무슨 상태인지 체크하기위한 이넘타입
     public enum PRState
@@ -22,16 +33,11 @@ public class AnimConChanger : MonoBehaviour
     //위 이넘타입을 사용하기위해 선언
     public PRState pRState = new PRState();
 
-    //캐릭터 애니메이터
-    public Animator animator;
-
-    
     float speed = 1;//캐릭터 걷기 속도
     const float minSpeed = 3;//캐릭터 걷기 기본속도 
     const float maxSpeed = 5;//캐릭터 달리기 속도
 
     float walkTime = 0;//걷기를 일정시간 지속하면 자동으로 달리기상태로 변환시키기 위한 시간저장용 변수
-    public Rigidbody rgBody;
 
     public bool isMoveingHold = false;//캐릭터가 움직이지 못하게 하기 위한 변수
 
@@ -80,7 +86,7 @@ public class AnimConChanger : MonoBehaviour
 
                 break;
 
-            case 1://앉기
+            case 1:
 
                 if (animator.GetBool("isSit") == false)
                 {
@@ -143,19 +149,17 @@ public class AnimConChanger : MonoBehaviour
             //카메라 시점 조작 모드
             if (isFpsMode == true)
             {
-                lookAtPlayer.isFpsMode = true;             
+                lookAtPlayer.isFpsMode = true;
+
                 MouseLook();
 
                 //TransformDirection 로컬의 방향벡터를 월드방향벡터로 변경하기 위해 사용
                 rgBody.velocity = transform.TransformDirection(localVelocity);
-
                 animator.SetFloat("xDir", localVelocity.x);
                 animator.SetFloat("zDir", localVelocity.z);
             }
             else
             {
-                //카메라 고정 시점모드
-
                 lookAtPlayer.isFpsMode = false;
 
                 //캐릭터 모델링의 기본 방향이 카메라를 처다보고있는 방향이므로
@@ -167,7 +171,7 @@ public class AnimConChanger : MonoBehaviour
 
                 animator.SetFloat("zDir", speed);
 
-                //움직임이 있을경우
+
                 if (rgBody.velocity != Vector3.zero)
                 {
                     //벨로시티의 방향을 아크탄젠트로 라디안값으로 변환
@@ -191,7 +195,7 @@ public class AnimConChanger : MonoBehaviour
                 Run(minSpeed);
             }
             else
-            {//움직일때
+            {
                 pRState = PRState.move;//상태를 움직임상태로 만들어줍니다.
 
                 animator.SetBool("isMove", true);
@@ -206,29 +210,44 @@ public class AnimConChanger : MonoBehaviour
         }
     }
 
-    //핸드폰 열고닫는 연출
     public void OpenPhone()
     {
-        if (animator.GetBool("isPhoneOpen") == false)//폰이 닫혀있을때 실행
+        if (animator.GetBool("isPhoneOpen") == false)
         {
-            mainCanvas.SetActive(false);//메인 ui들을 꺼주고
-            isHandCam = true;
-            handCam.gameObject.SetActive(true);//핸드폰 전용 카메라를 켜줍니다
+            if (isHandCamMode)
+            {
+                mainCanvas.SetActive(false);
+                isHandCam = true;
+                PhoneMode_PhoneFocus.gameObject.SetActive(true);
+            }
+            else
+            {
+                //PlayerFocusCam.gameObject.SetActive(true);
+                StartCoroutine(lookAtPlayer.doMove_PhoneModeOn(this.transform, PhoneMode_PlayerFocus));
+            }
             isMoveingHold = true;
             animator.SetBool("isPhoneOpen", true);
         }
-        else//폰이 켜져있을때 실행
+        else
         {
-            mainCanvas.SetActive(true);
-            isHandCam = false;
-            handCam.gameObject.SetActive(false);
-            animator.SetBool("isPhoneOpen", false);
+
+            if (isHandCamMode)
+            {
+                mainCanvas.SetActive(true);
+                isHandCam = false;
+                PhoneMode_PhoneFocus.gameObject.SetActive(false);
+            }
+            else
+            {
+                //PlayerFocusCam.gameObject.SetActive(false);
+                StartCoroutine(lookAtPlayer.doMove_PhoneModeOff());
+            }
             isMoveingHold = false;
+            animator.SetBool("isPhoneOpen", false);
         }
 
     }
 
-    //강제로 멈추게 하는 함수 테스트용
     public void ForcedStandeing()
     {
         rgBody.velocity = Vector3.zero;
