@@ -83,5 +83,4 @@ public static class EventManager
         _keyPair.Clear();
         return true;
     }
-
 }
