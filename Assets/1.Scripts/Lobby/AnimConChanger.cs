@@ -5,34 +5,40 @@ using UnityEngine;
 public class AnimConChanger : MonoBehaviour
 {
     public delegate void Callback();
+
     public LookAtPlayer lookAtPlayer;
     public GameObject mainCanvas;
-    public Camera handCam;
-    public Camera PlayerFocusCam;
+
+    [Space(10)]
+    public Camera PhoneMode_PhoneFocus;
+
+    public Transform PhoneMode_PlayerFocus;
+
+    [Space(10)]
+    public bool isHandCamMode = false;
+
+    [Space(10)]
     public bool isFpsMode = false;
     public bool isHandCam = false;
 
+    [Space(10)]
+    public Animator animator;
+    public Rigidbody rgBody;
     public enum PRState
     {
         move, stop
     }
     public PRState pRState = new PRState();
 
-    public Animator animator;
-
     float speed = 1;
     const float minSpeed = 3;
     const float maxSpeed = 5;
 
     float walkTime = 0;
-    public Rigidbody rgBody;
 
     public bool isMoveingHold = false;
 
     Vector3 tmpCamPos = new Vector3();
-
-    [Header("Cam Mode")]
-    public bool isHandCamMode = false;
 
     Vector3 GetMouseScreenToWorldPoint()
     {
@@ -191,10 +197,13 @@ public class AnimConChanger : MonoBehaviour
             {
                 mainCanvas.SetActive(false);
                 isHandCam = true;
-                handCam.gameObject.SetActive(true);
+                PhoneMode_PhoneFocus.gameObject.SetActive(true);
             }
             else
-                PlayerFocusCam.gameObject.SetActive(true);
+            {
+                //PlayerFocusCam.gameObject.SetActive(true);
+                StartCoroutine(lookAtPlayer.doMove_PhoneModeOn(this.transform, PhoneMode_PlayerFocus)); 
+            }
             isMoveingHold = true;
             animator.SetBool("isPhoneOpen", true);
         }
@@ -205,10 +214,13 @@ public class AnimConChanger : MonoBehaviour
             {
                 mainCanvas.SetActive(true);
                 isHandCam = false;
-                handCam.gameObject.SetActive(false);
+                PhoneMode_PhoneFocus.gameObject.SetActive(false);
             }
             else
-                PlayerFocusCam.gameObject.SetActive(false);
+            {
+                //PlayerFocusCam.gameObject.SetActive(false);
+                StartCoroutine(lookAtPlayer.doMove_PhoneModeOff());
+            }
             isMoveingHold = false;
             animator.SetBool("isPhoneOpen", false);
         }
