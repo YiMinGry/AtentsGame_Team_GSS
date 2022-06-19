@@ -27,20 +27,26 @@ public class LookAtPlayer : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
+                //마우스 커서 활성화
                 Cursor.lockState = CursorLockMode.Confined;
             }
             else
             {
+                //마우스 커서 숨기기
                 Cursor.lockState = CursorLockMode.Locked;
+
                 Vector3 angles = transform.eulerAngles;
                 x = angles.y;
                 y = angles.x;
 
 
+                //따라다닐 대상이 있는경우
                 if (target)
                 {
+                    //마우스 휠로 줌인 줌아웃 하기위해 저장
                     dist -= 1 * Input.mouseScrollDelta.y;
 
+                    //줌인아웃 최소최대 거리 설정
                     if (dist < 0.5f)
                     {
                         dist = 1;
@@ -51,9 +57,11 @@ public class LookAtPlayer : MonoBehaviour
                         dist = 9;
                     }
 
+                    //캐릭터의 기본 회전값에 마우스를 움직이는 만큼 메인카메라가 움직이게
                     x += Input.GetAxis("Mouse X") * xSpeed * 0.015f;
                     y -= Input.GetAxis("Mouse Y") * ySpeed * 0.015f;
 
+                    //위아래 시점 제한
                     if (y < 3)
                     {
                         y = 3;
@@ -64,6 +72,7 @@ public class LookAtPlayer : MonoBehaviour
                         y = 85;
                     }
 
+                    //위에서 계산한 결과로 카메라에 적용
                     Quaternion rotation;
                     Vector3 position;
 
@@ -85,6 +94,7 @@ public class LookAtPlayer : MonoBehaviour
 
             camPos = new Vector3(target.position.x, transform.position.y, target.position.z + zAngle);
 
+            //카메라에 제한영역이 설정되어있으면 더이상 움직이지 않게
             if (!camXLimit.Equals(Vector2.zero))
             {
                 if (camXLimit.x < camPos.x)

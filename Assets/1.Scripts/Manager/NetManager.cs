@@ -11,6 +11,8 @@ using DG.Tweening;
 
 public class NetManager : MonoSingleton<NetManager>
 {
+
+    //서버------------------------------
     //private string IP = "192.168.219.114";
     private string IP = "localhost";
 
@@ -134,6 +136,9 @@ public class NetManager : MonoSingleton<NetManager>
     {
         DisconncectServer();
     }
+
+
+    //일반-------------------------------------------------------------------
 
     //롤링 공지를 받아두어 저장하고 순서대로 출력하기 위한 큐
     public Queue<string> rollingTextQue = new Queue<string>();
