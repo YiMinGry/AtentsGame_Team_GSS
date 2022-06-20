@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class Gacha : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject petRender;
+    [SerializeField]
     private Transform petSpawner = null;
+    [SerializeField]
     private Transform effectSpawner = null;
 
     private Animator anim = null;
 
     public GameObject[] Pets = null;
 
-   
 
     private GameObject addedPet;
     public GameObject[] preSpawn, spawn, additional, postSpawn, deSpawn; // 이펙트 저장
@@ -19,7 +22,7 @@ public class Gacha : MonoBehaviour
     public GameObject canvas = null;
     public GameObject gachaCamera = null;
 
-    private enum GRADE {GRADE_C = 0, GRADE_B = 1, GRADE_A = 2};
+    private enum GRADE { GRADE_C = 0, GRADE_B = 1, GRADE_A = 2 };
 
     private int grade = 0, petNum = 0, petNumMax = 17, effectType = 0;
 
@@ -29,14 +32,15 @@ public class Gacha : MonoBehaviour
 
     private void Awake()
     {
-        petSpawner = transform.Find("PetSpawner")?.GetComponent<Transform>();
-        effectSpawner = transform.Find("EffectSpawner")?.GetComponent<Transform>();
+        //petSpawner = transform.Find("PetSpawner")?.GetComponent<Transform>();
+        //effectSpawner = transform.Find("EffectSpawner")?.GetComponent<Transform>();
     }
 
     public void PetSpawnButton()
     {
         if (!isGachaActive)
         {
+            petRender.SetActive(true);
             isGachaActive = true;
             grade = Random.Range(0, 3); // C~A 등급 중에서 랜덤하게 설정
             effectType = Random.Range(0, 3); // 이펙트 타입 현재 3개
@@ -62,13 +66,13 @@ public class Gacha : MonoBehaviour
     }
 
     public void PetDespawnButton()
-    {        
+    {
         StartCoroutine(PetDespawn());
     }
 
     IEnumerator PetSpawn() // 펫 뽑기기계에서 소환
     {
-        preSpawnEffect = MakeObject(preSpawn[3 * effectType + grade], effectSpawner);        
+        preSpawnEffect = MakeObject(preSpawn[3 * effectType + grade], effectSpawner);
 
         yield return Utill.WaitForSeconds(2f);
 
@@ -84,13 +88,13 @@ public class Gacha : MonoBehaviour
         postSpawnEffect = MakeObject(postSpawn[3 * effectType + grade], effectSpawner);
         additionalEffect = MakeObject(additional[3 * effectType + grade], effectSpawner);
         canvas.SetActive(true);
-    }    
+    }
 
     IEnumerator PetDespawn() // 펫 뽑기기계에서 소환
     {
         anim.SetInteger("animation", 9);
         canvas.SetActive(false);
-        DeleteObject(spawnEffect);        
+        DeleteObject(spawnEffect);
         DeleteObject(additionalEffect);
 
         yield return Utill.WaitForSeconds(0.7f);
@@ -100,18 +104,22 @@ public class Gacha : MonoBehaviour
         Destroy(addedPet);
 
         yield return Utill.WaitForSeconds(1f);
-
+        petRender.SetActive(false);
         DeleteObject(deSpawnEffect);
         gachaCamera.SetActive(false);
         this.gameObject.SetActive(false);
         isGachaActive = false;
+        EventManager.Invoke("CloseUI", "Gacha");
     }
 
     private GameObject MakeObject(GameObject effect, Transform Spawner) // 오브젝트 생성 함수
     {
-        effect = Instantiate(effect, Spawner); // 생성 후 Spawner의 자식으로 설정
-        effect.SetActive(true);
-        return effect;
+        //effect = Instantiate(effect, Spawner); // 생성 후 Spawner의 자식으로 설정
+        //effect.SetActive(true);
+
+        GameObject _effect = Instantiate(effect, Spawner);
+        _effect.SetActive(true);
+        return _effect;
     }
 
     private void DeleteObject(GameObject effect) // 이펙트 삭제 함수
