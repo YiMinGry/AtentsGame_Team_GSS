@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//상속용 기본 구조만 만들어두었습니다
 public class SceneInitializer : MonoBehaviour
 {
     protected GameObject mainCanvas;
