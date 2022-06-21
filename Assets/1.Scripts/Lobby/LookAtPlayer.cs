@@ -18,7 +18,7 @@ public class LookAtPlayer : MonoBehaviour
     private float x = 0.0f;
     private float y = 0.0f;
 
-    [Header ("Following Player_Fixed Angle Mode")] //카메라 거리 조절용
+    [Header("Following Player_Fixed Angle Mode")] //카메라 거리 조절용
     [Range(-1.0f, 6.0f)]
     public float yAngle = 1.5f;
     [Range(1.5f, 6.0f)]
@@ -125,13 +125,13 @@ public class LookAtPlayer : MonoBehaviour
             isPlayerOnEgdeOfMap = false;
         else
             isPlayerOnEgdeOfMap = true;
-        
+
         //카메라 앵글
         if (isPlayerOnEgdeOfMap == false)
             originPosition = new Vector3(target.position.x, target.position.y + yAngle, target.position.z + zAngle);
         else
             originPosition = new Vector3(target.position.x, transform.position.y, transform.position.z);
-        
+
         transform.position = originPosition;
         originRotation = transform.rotation;
 
@@ -140,7 +140,7 @@ public class LookAtPlayer : MonoBehaviour
     }
 
     public IEnumerator doMove_PhoneModeOn(Transform PlayerTrs, Transform TargetCamTrs)
-    { 
+    {
         isFollowingPlayerMode = false;
         transform.DOMove(PlayerTrs.position + TargetCamTrs.localPosition, animDuration).SetEase(animEase);
         transform.DORotate(TargetCamTrs.localRotation.eulerAngles, animDuration).SetEase(animEase);
