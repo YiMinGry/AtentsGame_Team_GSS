@@ -17,6 +17,8 @@ public class LobbyInitializer : SceneInitializer//상속받아와서
         AddMainCanvas("Ranking");
         AddMainCanvas("chat");
         AddMainCanvas("Gacha");
+        
+                    AddMainCanvas("PhoneModeUI");
 
     }
 
