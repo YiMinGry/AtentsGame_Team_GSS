@@ -17,9 +17,6 @@ public class OderMove : MonoBehaviour
     public Animator animator;
     CharacterActionHandle characterActionHandle;
 
-    [SerializeField]
-    GameObject beer;
-
     Vector3 xMinLmit;
     Vector3 xMaxLmit;
 
@@ -30,7 +27,6 @@ public class OderMove : MonoBehaviour
     const float maxlastWaitingTime = 5f;
     float waitingTime = 0;
     float lastWaitingTime = 0;
-    bool isGetBeer = false;
 
     private void Awake()
     {
@@ -53,16 +49,13 @@ public class OderMove : MonoBehaviour
                 case oderState.move:
                     x = Random.Range(0, 2);
                     break;
+                case oderState.getBeer:
+                    break;
                 case oderState.stop:
                     x = 0;
                     break;
-                case oderState.getBeer:
-                    x = -1;
-                    //점수 올리기
-                    break;
                 case oderState.back:
                     x = -1;
-                    //점수 내리기
                     break;
             }
             yield return Utill.WaitForSeconds(1f);
@@ -74,30 +67,22 @@ public class OderMove : MonoBehaviour
     }
     void Move()
     {
+        waitingTime += Time.deltaTime;
 
-        if (isGetBeer == false)
+
+        if (transform.position.x < xMinLmit.x)
         {
-            waitingTime += Time.deltaTime;
-
-
-            if (transform.position.x < xMinLmit.x)
-            {
-                transform.position = xMinLmit;
-            }
-            else if (transform.position.x > xMaxLmit.x)
-            {
-                transform.position = xMaxLmit;
-                state = oderState.stop;
-            }
-
-            if (waitingTime > maxWaitingTime || lastWaitingTime > maxlastWaitingTime)
-            {
-                state = oderState.back;
-            }
+            transform.position = xMinLmit;
         }
-        else
+        else if (transform.position.x > xMaxLmit.x)
         {
-            state = oderState.getBeer;
+            transform.position = xMaxLmit;
+            state = oderState.stop;
+        }
+
+        if (waitingTime > maxWaitingTime || lastWaitingTime > maxlastWaitingTime)
+        {
+            state = oderState.back;
         }
 
         if (x != 0)
@@ -119,30 +104,5 @@ public class OderMove : MonoBehaviour
 
         transform.position += (Vector3)moveVelocity;
         transform.localScale = new Vector3(prDir * -1, 1, 1) * Scale;
-    }
-
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        string tag = collision.name;
-        switch (tag)
-        {
-            case "BeerMove":
-
-                if (state == oderState.back)
-                {
-                    return;
-                }
-                if (isGetBeer == true)
-                {
-                    return;
-                }
-
-                Destroy(collision.gameObject);
-                beer.SetActive(true);
-                isGetBeer = true;
-                break;
-            default:
-                break;
-        }
     }
 }

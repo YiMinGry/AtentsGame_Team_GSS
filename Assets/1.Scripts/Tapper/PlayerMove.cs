@@ -26,8 +26,6 @@ public class PlayerMove : MonoBehaviour
     Vector3 xMaxLmit;
 
     [SerializeField]
-    Transform[] tablePos;
-    [SerializeField]
     Transform[] linePos;
 
     private void Awake()
@@ -46,13 +44,6 @@ public class PlayerMove : MonoBehaviour
             if (isTable == true && Input.GetKeyDown(KeyCode.Space))
             {
                 beerController.SetFill(0f);
-
-                beerController.gameObject.SetActive(false);
-                GameObject _beer = Instantiate(Resources.Load<GameObject>("Prefabs/Tapper/BeerMove"), tablePos[lineIdx]);
-                _beer.transform.position = new Vector3(transform.position.x, 0, 0);
-                _beer.transform.localPosition = new Vector3(_beer.transform.localPosition.x, 0.15f, 0);
-                _beer.name = "BeerMove";
-                _beer.transform.localScale = Vector3.one;
             }
         }
     }
@@ -124,14 +115,16 @@ public class PlayerMove : MonoBehaviour
     IEnumerator BeerReady()
     {
         float fillTime = 0;
-        beerController.gameObject.SetActive(true);
-        beerController.SetFill(0f);
+
         while ((fillTime / beerfillMaxTime) < 1f)
         {
             fillTime += Time.deltaTime;
             beerController.SetFill(fillTime / beerfillMaxTime);
             yield return null;
         }
+
+
+
     }
 
 
@@ -142,11 +135,6 @@ public class PlayerMove : MonoBehaviour
         switch (tag)
         {
             case "beerBox":
-
-                if (beerController.GetFill() == true)
-                {
-                    return;
-                }
 
                 if (_beerFillCor == null)
                 {
