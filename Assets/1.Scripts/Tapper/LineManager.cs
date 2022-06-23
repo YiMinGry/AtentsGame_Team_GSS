@@ -34,7 +34,7 @@ public class LineManager : MonoBehaviour
             _unit.RandomSet();
             lineOderList[_line].Add(_unit.gameObject);
 
-            _unit.GetComponent<SortingGroup>().sortingOrder = lineOderList[_line].Count + 1;
+            _unit.GetComponent<SortingGroup>().sortingOrder = lineOderList[_line].Count + 30;
 
             yield return Utill.WaitForSeconds(3f);
         }

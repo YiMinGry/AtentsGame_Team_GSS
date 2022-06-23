@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1060626822, guid: c961c25e94aa305429fce2ea78f6db3a, type: 3}
+      propertyPath: tablePos.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5049215855193605847, guid: c961c25e94aa305429fce2ea78f6db3a,
         type: 3}
       propertyPath: m_Name
@@ -117,5 +121,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7907456655525919336, guid: c961c25e94aa305429fce2ea78f6db3a,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7907456656233064436, guid: c961c25e94aa305429fce2ea78f6db3a,
+        type: 3}
+      propertyPath: fx
+      value: 
+      objectReference: {fileID: 6878854840910356861}
+    - target: {fileID: 8346239396792700715, guid: c961c25e94aa305429fce2ea78f6db3a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c961c25e94aa305429fce2ea78f6db3a, type: 3}
+--- !u!1 &6878854840910356861 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8346239396792700715, guid: c961c25e94aa305429fce2ea78f6db3a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3217072663520554582}
+  m_PrefabAsset: {fileID: 0}
