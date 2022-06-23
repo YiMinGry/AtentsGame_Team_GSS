@@ -5,14 +5,14 @@ using UnityEngine;
 public class BeerController : MonoBehaviour
 {
     [SerializeField]
-    Transform beer;
+    protected Transform beer;
     [SerializeField]
-    private SpriteRenderer sprite;
+    protected SpriteRenderer sprite;
     [SerializeField]
     Transform arm;
     [SerializeField]
     GameObject fx;
-    public void SetFill(float amount)
+    public virtual void SetFill(float amount)
     {
         if (amount > 1f)
         {
@@ -29,7 +29,7 @@ public class BeerController : MonoBehaviour
         return sprite.material.GetFloat("_Cutoff") >= 1 ? true : false;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         transform.position = arm.position;
     }
