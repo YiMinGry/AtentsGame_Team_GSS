@@ -126,6 +126,7 @@ public class PlayerMove : MonoBehaviour
         float fillTime = 0;
         beerController.gameObject.SetActive(true);
         beerController.SetFill(0f);
+
         while ((fillTime / beerfillMaxTime) < 1f)
         {
             fillTime += Time.deltaTime;

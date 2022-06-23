@@ -20,6 +20,10 @@ public class BeerController : MonoBehaviour
             fx.SetActive(false);
             fx.SetActive(true);
         }
+        else 
+        {
+            fx.SetActive(false);
+        }
 
         sprite.material.SetFloat("_Cutoff", amount);
     }
