@@ -4,52 +4,65 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField]
+    BeerController beerController;
+    [SerializeField]
+    GameObject smokeFx;
+    [SerializeField]
+    Transform smokeFxPos;
+
+    CharacterActionHandle characterActionHandle;
+    public Animator animator;
+
     [Range(0, 1f)]
     public float Scale = 1f;
     public float Speed = 3;
-    public Animator animator;
-    CharacterActionHandle characterActionHandle;
+    const float beerfillMaxTime = 2.5f;
 
     int prDir = 1;
     int lineIdx = 0;
+
+    Vector3 xMinLmit;
+    Vector3 xMaxLmit;
+
+    [SerializeField]
+    Transform[] linePos;
+
     private void Awake()
     {
         characterActionHandle = animator.GetComponent<CharacterActionHandle>();
+        xMinLmit = new Vector3(-1.7f, transform.position.y, transform.position.z);
+        xMaxLmit = new Vector3(1f, transform.position.y, transform.position.z);
     }
     // Update is called once per frame
     void Update()
     {
-        if (characterActionHandle._isAttack == false)
-        {
-            Move();
-        }
+        Move();
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (beerController.GetFill() == true)
         {
-            if (characterActionHandle._isAttack == true)
+            if (isTable == true && Input.GetKeyDown(KeyCode.Space))
             {
-                return;
+                beerController.SetFill(0f);
             }
-
-            animator.SetTrigger("Attack");
         }
     }
 
     void Move()
     {
         float x = Input.GetAxisRaw("Horizontal");
-        float y = 0;//Input.GetAxisRaw("Vertical");
+        //float y = Input.GetAxisRaw("Vertical");
 
-        if (transform.position.x < -1.7)
+        if (transform.position.x < xMinLmit.x)
         {
-            transform.position = new Vector3(-1.7f, transform.position.y, transform.position.z);
+            transform.position = xMinLmit;
         }
-        else if (transform.position.x > 1.7)
+        else if (transform.position.x > xMaxLmit.x)
         {
-            transform.position = new Vector3(1.7f, transform.position.y, transform.position.z);
+            transform.position = xMaxLmit;
         }
 
-        Vector2 moveVelocity = new Vector2(x, y) * (Speed * Scale) * Time.deltaTime;
+        Vector2 moveVelocity = new Vector2(x, 0) * (Speed * Scale) * Time.deltaTime;
 
         if (x != 0)
         {
@@ -69,42 +82,98 @@ public class PlayerMove : MonoBehaviour
         transform.localScale = new Vector3(prDir * -1, 1, 1) * Scale;
 
 
-        if (transform.position.x > 0.3f)
+        if (transform.position.x > 0.6f)
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                if (lineIdx == 3)
-                {
-                    return;
-                }
-
-                lineIdx++;
-            }
-
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 if (lineIdx == 0)
                 {
                     return;
                 }
-
+                Instantiate(smokeFx, smokeFxPos);
                 lineIdx--;
+            }
+
+            if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                if (lineIdx == 3)
+                {
+                    return;
+                }
+                Instantiate(smokeFx, smokeFxPos);
+                lineIdx++;
             }
         }
 
-        transform.position = new Vector3(transform.position.x, -0.87f + (0.5f * lineIdx), 0);
+        transform.position = new Vector3(transform.position.x, linePos[lineIdx].position.y, 0);
     }
+
+
+    bool isTable = false;
+    IEnumerator _beerFillCor;
+
+    IEnumerator BeerReady()
+    {
+        float fillTime = 0;
+
+        while ((fillTime / beerfillMaxTime) < 1f)
+        {
+            fillTime += Time.deltaTime;
+            beerController.SetFill(fillTime / beerfillMaxTime);
+            yield return null;
+        }
+
+
+
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        string tag = collision.tag;
+        string tag = collision.name;
 
         switch (tag)
         {
-            case "Rain":
-                Time.timeScale = 0;
+            case "beerBox":
+
+                if (_beerFillCor == null)
+                {
+                    _beerFillCor = BeerReady();
+                }
+
+                StartCoroutine(_beerFillCor);
+
+                break;
+            case "woodshop_1":
+            case "woodshop_2":
+            case "woodshop_3":
+            case "woodshop_4":
+                isTable = true;
                 break;
         }
-
     }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        string tag = collision.name;
+
+        switch (tag)
+        {
+            case "beerBox":
+
+                if (_beerFillCor != null)
+                {
+                    StopCoroutine(_beerFillCor);
+                    _beerFillCor = null;
+                }
+
+                break;
+            case "woodshop_1":
+            case "woodshop_2":
+            case "woodshop_3":
+            case "woodshop_4":
+                isTable = false;
+                break;
+        }
+    }
+
 }
