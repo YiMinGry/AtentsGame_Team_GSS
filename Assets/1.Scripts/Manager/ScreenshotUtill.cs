@@ -11,7 +11,7 @@ public class ScreenshotUtill : EditorWindow
     {
         ScreenshotUtill window = (ScreenshotUtill)GetWindow(typeof(ScreenshotUtill));
         window.Show();
-        window.titleContent.text = "ScreenshotUtill";
+        window.titleContent.text = "Assets/ScreenshotUtill";
         window.minSize = new Vector2(340f, 150f);
         window.maxSize = new Vector2(340f, 150f);
     }
@@ -30,7 +30,7 @@ public class ScreenshotUtill : EditorWindow
 
         try
         {
-            ScreenCapture.CaptureScreenshot($"Screenshot/{fileName}_{timestamp}" + ".png");
+            ScreenCapture.CaptureScreenshot($"Assets/Screenshot/{fileName}_{timestamp}" + ".png");
             Debug.Log("저장 성공");
 
         }
