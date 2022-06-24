@@ -11,7 +11,7 @@ public class LobbyInitializer : SceneInitializer//상속받아와서
 
     void Start()
     {
-        MapLoad("Prefabs/Lobby/3DMap" + (isDev == true ? "_Dev" : ""));//리소스 폴더에서 맵 프리펩 로드
+        MapLoad("Prefabs/Lobby/3DMap_2" + (isDev == true ? "_Dev" : ""));//리소스 폴더에서 맵 프리펩 로드
 
         AddMainCanvas("Achivement");//메인 캔버스에 팝업 추가 리소스폴더에 프리펩으로 존재해야함
         AddMainCanvas("Ranking");
