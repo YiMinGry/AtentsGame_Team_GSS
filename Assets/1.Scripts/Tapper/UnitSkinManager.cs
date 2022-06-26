@@ -6,6 +6,9 @@ using UnityEditor;
 [ExecuteInEditMode]
 public class UnitSkinManager : MonoBehaviour
 {
+    [SerializeField]
+    Transform root;
+
     public enum skinType
     {
         Human_1, Human_2, Human_3, Human_4, Human_5, Elf_1, Elf_2, Orc_1, Orc_2, Orc_3, Orc_4, Skelton_1, Devil_1,
@@ -271,7 +274,7 @@ public class UnitSkinManager : MonoBehaviour
 
     private void Awake()
     {
-        SpriteRenderer[] srArr = GetComponentsInChildren<SpriteRenderer>();
+        SpriteRenderer[] srArr = root.GetComponentsInChildren<SpriteRenderer>();
 
         _backInfo.back = srArr[0];
         _body.body = srArr[1];
@@ -308,7 +311,6 @@ public class UnitSkinManager : MonoBehaviour
         _pantInfo.left = srArr[30];
         _shadowInfo.shadow = srArr[31];
     }
-
 
     private void Update()
     {
@@ -670,5 +672,17 @@ public class UnitSkinManager : MonoBehaviour
 
         Sprite[] sprites = Resources.LoadAll<Sprite>("Cha/Units_Sprites/Items/7_Back/" + (backType)_backType);
         _backInfo.back.sprite = sprites[0];
+    }
+
+    public void RandomSet()
+    {
+        _skinType = Random.Range(0, 12);
+        _eyeType = Random.Range(0, 47);
+        _hairType = Random.Range(0, 42);
+        _faceHairType = Random.Range(0, 7);
+        _clothType = Random.Range(0, 25);
+        _pantType = Random.Range(0, 16);
+        _helmetType = Random.Range(0, 22);
+        _armorType = Random.Range(0, 21);
     }
 }
