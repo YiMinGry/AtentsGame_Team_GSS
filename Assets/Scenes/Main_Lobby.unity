@@ -925,6 +925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDev: 0
   lobbyUI: {fileID: 0}
+  MapPrefab_Name: 3DMap_2
 --- !u!1 &1286633946
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,6 +1239,11 @@ PrefabInstance:
     - target: {fileID: 6296304452983665126, guid: c71719a7afb36e14981a829c02777ddb,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8842156042370288161, guid: c71719a7afb36e14981a829c02777ddb,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9048533629519804525, guid: c71719a7afb36e14981a829c02777ddb,

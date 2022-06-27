@@ -9,17 +9,16 @@ public class LobbyInitializer : SceneInitializer//상속받아와서
     [SerializeField]
     private LobbyUI lobbyUI;//필요할지 몰라서 일단 넣어만 두었습니다
 
+    public string MapPrefab_Name = "3DMap";
+
     void Start()
     {
-        MapLoad("Prefabs/Lobby/3DMap" + (isDev == true ? "_Dev" : ""));//리소스 폴더에서 맵 프리펩 로드
+        MapLoad("Prefabs/Lobby/" + MapPrefab_Name + (isDev == true ? "_Dev" : ""));//리소스 폴더에서 맵 프리펩 로드
 
         AddMainCanvas("Achivement");//메인 캔버스에 팝업 추가 리소스폴더에 프리펩으로 존재해야함
         AddMainCanvas("Ranking");
         AddMainCanvas("chat");
         AddMainCanvas("Gacha");
-        
-                    AddMainCanvas("PhoneModeUI");
-
     }
 
     public override void MapLoad(string _path)
