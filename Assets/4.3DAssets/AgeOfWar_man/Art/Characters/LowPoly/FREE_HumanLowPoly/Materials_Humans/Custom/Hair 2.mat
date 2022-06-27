@@ -7,11 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Body 1
-  m_Shader: {fileID: 4800000, guid: c559983759736254b8a8bbf19ec1eab7, type: 3}
+  m_Name: Hair 2
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _SEGMENTED_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -57,51 +56,27 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _RampTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AmbientCol: 0
     - _BumpScale: 1
-    - _Clipped: 0
-    - _ColBright: 0
-    - _ColIntense: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.1
     - _GlossyReflections: 1
-    - _Lumin: 0
-    - _MaxLight: 1
     - _Metallic: 0
-    - _MinLight: 0.404
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Offset: -0.151
-    - _OtlWidth: 0.72
     - _Outline: 0
-    - _OutlineExtrusion: 0
-    - _OutlineWidth: 0.005
     - _Parallax: 0.02
-    - _Segmented: 1
-    - _ShnIntense: 0.295
-    - _ShnOverlap: 0
-    - _ShnRange: 0.011
-    - _ShnSmooth: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Steps: 1
-    - _StpSmooth: 0
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.8679245, g: 0.75349766, b: 0.6918832, a: 1}
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OtlColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _ShnColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
