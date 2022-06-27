@@ -8,7 +8,7 @@ public class IntroManager : MonoBehaviour
 
     private void Awake()
     {
-        Invoke("ToLobby", 1f);//함수의 이름으로 1초뒤에 해당 함수를 실행시키라는 기본 함수
+        //Invoke("ToLobby", 1f);//함수의 이름으로 1초뒤에 해당 함수를 실행시키라는 기본 함수
     }
 
     private void ToLobby()
