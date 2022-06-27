@@ -26,6 +26,9 @@ public class NetManager : MonoSingleton<NetManager>
     private GameObject RollingCavans;
     [SerializeField]
     private Text RollingText;
+    
+
+
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -173,7 +176,7 @@ public class NetManager : MonoSingleton<NetManager>
 
                 //문자의 길이가 10보다 크면
                 if (RollingText.text.Length > 10)
-                {                
+                {
                     //메세지의 문자 길이에 따라서 출력해줄 시간을 정해줌
                     //시간은 임의로 정한거라 필요에 따라서 수정해서 쓰면 됩니다
                     moveTime = moveTime + RollingText.text.Length / 2;
@@ -194,7 +197,7 @@ public class NetManager : MonoSingleton<NetManager>
                 // Utill.WaitForSeconds 함수는 WaitForSeconds를 재활용 하기 위해 만든 유틸함수
                 yield return Utill.WaitForSeconds(moveTime);
             }
-            else 
+            else
             {
                 //큐에 메세지가 없으면 캔버스 비활성화
                 RollingCavans.SetActive(false);
