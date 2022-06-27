@@ -13,8 +13,8 @@ public class NetManager : MonoSingleton<NetManager>
 {
 
     //¼­¹ö------------------------------
-    //private string IP = "192.168.219.114";
-    private string IP = "localhost";
+    private string IP = "192.168.219.111";
+    //private string IP = "localhost";
 
     private string PORT = "5641";
     private string SERVICE_NAME = "/MGServer";
