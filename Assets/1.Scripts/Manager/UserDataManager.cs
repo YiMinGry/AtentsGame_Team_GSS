@@ -7,6 +7,9 @@ using Newtonsoft.Json.Linq;
 
 public class UserDataManager : MonoSingleton<UserDataManager>
 {
+    [SerializeField]
+    private KoreaInput koreaInput;
+
     public int idx;//회원번호
     public string ssID;//세션아이디
     public string ID;//디바이스 아이디
@@ -21,6 +24,9 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         DontDestroyOnLoad(this.gameObject);
 
         NetEventManager.Regist("LoginOK", S2CL_LoginOK);
+        NetEventManager.Regist("SetUserNickName", S2CL_SetUserNickName);
+
+        ID = SystemInfo.deviceUniqueIdentifier;
     }
 
     public void S2CL_LoginOK(JObject _jdata)
@@ -33,5 +39,35 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         coin1 = long.Parse(_jdata["coin1"].ToString());
         coin2 = long.Parse(_jdata["coin1"].ToString());
 
+        bl_SceneLoaderManager.LoadScene("Main_Lobby");
+    }
+
+    public void S2CL_SetUserNickName(JObject _jdata)
+    {
+        NickNamePop();
+    }
+
+    void NickNamePop()
+    {
+        koreaInput.gameObject.SetActive(true);
+    }
+
+
+    void NickNamePopClose()
+    {
+        koreaInput.Clear();
+        koreaInput.gameObject.SetActive(false);
+    }
+
+    public void CL2S_SetUserNickName()
+    {
+        JObject _userData = new JObject();
+        _userData.Add("cmd", "SetUserNickName");
+        _userData.Add("ID", UserDataManager.instance.ID);
+        _userData.Add("nickName", koreaInput.nickText.text);
+
+        NetManager.instance.CL2S_SEND(_userData);
+
+        NickNamePopClose();
     }
 }
