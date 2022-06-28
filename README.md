@@ -5,7 +5,7 @@
 
 - Unity3D 2021.3.1
 - 게임명 : 레트로 프렌즈(Retro Friends)
-- [서버 프로젝트](https://github.com/YiMinGry/C-Server)
+- [서버 프로젝트]((https://github.com/YiMinGry/AtentsGame_Team_GSS_UServer))
 
 ## 팀원 정보
 - 팀장 - **Github** : [YiMinGry](https://github.com/YiMinGry)
