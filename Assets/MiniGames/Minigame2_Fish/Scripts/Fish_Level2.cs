@@ -15,4 +15,12 @@ public class Fish_Level2 : Fish_Enemy
         fishScore = 400;
         base.OnCollisionEnter(other);
     }
+
+    protected override void OnTriggerEnter(Collider other)
+    {
+        if (fishLevel <= MG2_GameManager.Inst.Stage)
+        {
+            base.OnTriggerEnter(other);
+        }
+    }
 }

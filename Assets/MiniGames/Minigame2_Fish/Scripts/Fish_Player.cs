@@ -7,14 +7,25 @@ public class Fish_Player : MonoBehaviour
     [Range(0, 5f)]
     public float Speed = 3;
 
+    GameObject[] playerPrefab;
 
     Vector3 xyMinLmit;
     Vector3 xyMaxLmit;
 
     private void Awake()
     {
-        xyMinLmit = new Vector3(-7.0f, -4.0f, transform.position.z);
-        xyMaxLmit = new Vector3(7.0f, 4.0f, transform.position.z);
+        playerPrefab = new GameObject[5];
+        for (int i = 0; i < 5; i++)
+        {
+            playerPrefab[i] = transform.GetChild(i).gameObject;
+        }
+        xyMinLmit = new Vector3(-8.0f, -4.0f, transform.position.z);
+        xyMaxLmit = new Vector3(8.0f, 4.0f, transform.position.z);
+    }
+
+    private void Start()
+    {
+        MG2_GameManager.Inst.playerLevelChange = PlayerLevelUp;
     }
 
     // Update is called once per frame
@@ -60,6 +71,13 @@ public class Fish_Player : MonoBehaviour
         Vector2 moveVelocity = new Vector2(x, y) * Speed * Time.deltaTime;
 
         transform.position += (Vector3)moveVelocity;
+    }
+
+    void PlayerLevelUp()
+    {
+        playerPrefab[MG2_GameManager.Inst.Stage - 1].SetActive(false);
+        playerPrefab[MG2_GameManager.Inst.Stage].SetActive(true);
+
     }
 
 }

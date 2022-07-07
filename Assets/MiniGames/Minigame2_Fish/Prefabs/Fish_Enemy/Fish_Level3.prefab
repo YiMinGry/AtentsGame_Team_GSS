@@ -171,6 +171,7 @@ GameObject:
   - component: {fileID: 5588556544650218260}
   - component: {fileID: 154055367181190889}
   - component: {fileID: 610672440715358009}
+  - component: {fileID: 2344298990377987626}
   m_Layer: 0
   m_Name: Fish_Level3
   m_TagString: MG2_Fish_Enemy
@@ -258,6 +259,20 @@ CapsuleCollider:
   m_Height: 1.4070224
   m_Direction: 2
   m_Center: {x: -7.077765e-17, y: -0.026091203, z: -0.120019436}
+--- !u!136 &2344298990377987626
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3690963254925552542}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.33841982
+  m_Height: 6.9077725
+  m_Direction: 2
+  m_Center: {x: -5.4209685e-17, y: -0.02019751, z: -0.1211853}
 --- !u!1 &5742774840262180352
 GameObject:
   m_ObjectHideFlags: 0

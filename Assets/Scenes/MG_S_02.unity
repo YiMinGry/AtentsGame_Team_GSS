@@ -248,6 +248,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 81549162}
+  - component: {fileID: 81549163}
   m_Layer: 5
   m_Name: FishBones
   m_TagString: Untagged
@@ -279,6 +280,18 @@ RectTransform:
   m_AnchoredPosition: {x: -800, y: 375}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &81549163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 81549161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c61d5e59895fc4c4a8c19c084231ad1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &210768158
 GameObject:
   m_ObjectHideFlags: 0

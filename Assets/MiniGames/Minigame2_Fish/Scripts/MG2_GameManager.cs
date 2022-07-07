@@ -9,8 +9,10 @@ public class MG2_GameManager : MonoBehaviour
     int score = 0;
     int stage = 1;
     int healthPoint = 4;
+    int[] stageScoreSet;
 
     public System.Action playerHPChange;
+    public System.Action playerLevelChange;
 
     public static MG2_GameManager Inst
     {
@@ -36,7 +38,19 @@ public class MG2_GameManager : MonoBehaviour
     public int Score
     {
         get => score;
-        set => score = value;
+        set
+        {
+            score = value;
+            NextStage(score);
+        }
+    }
+
+    void NextStage(int score)
+    {
+        if(Stage < 5 && score >= stageScoreSet[Stage-1])
+        {
+            Stage++;
+        }
     }
 
     public int Stage
@@ -44,7 +58,9 @@ public class MG2_GameManager : MonoBehaviour
         get => stage;
         set
         {
+            playerLevelChange.Invoke();
             stage = value;
+            stage = Mathf.Clamp(stage, 1, 6);
             Debug.Log($"Stage : {stage}");
         }
     }
@@ -66,5 +82,6 @@ public class MG2_GameManager : MonoBehaviour
         score = 0;
         stage = 1;
         healthPoint = 4;
+        stageScoreSet = new int[] {1000, 2000, 3000, 4000};
     }
 }
