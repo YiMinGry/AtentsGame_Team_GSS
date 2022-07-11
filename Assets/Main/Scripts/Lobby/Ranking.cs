@@ -103,4 +103,11 @@ public class Ranking : MonoBehaviour
             rinfos_Score[i].text = ($"{_arr[i]["MG_Total_Score"]}Á¡");
         }
     }
+
+    private void OnDisable()
+    {
+        NetEventManager.UnRegist("ReadRanking", S2CL_ReadRanking);
+        NetEventManager.UnRegist("UpdateRanking", S2CL_UpdateRanking);
+        NetEventManager.UnRegist("TotalRanking", S2CL_TotalRanking);
+    }
 }
