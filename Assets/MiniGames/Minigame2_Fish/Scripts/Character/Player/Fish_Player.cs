@@ -16,6 +16,8 @@ public class Fish_Player : MonoBehaviour
     {
         playerPrefab = new GameObject[5];
         for (int i = 0; i < 5; i++)
+        playerPrefab = new GameObject[transform.childCount];
+        for (int i = 0; i < transform.childCount; i++)
         {
             playerPrefab[i] = transform.GetChild(i).gameObject;
         }

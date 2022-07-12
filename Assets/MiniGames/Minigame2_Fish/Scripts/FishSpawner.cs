@@ -16,7 +16,11 @@ public class FishSpawner : MonoBehaviour
     private void Start()
     {
         waitSecond = new WaitForSeconds(spawnInterval);
-        StartCoroutine(Spawn()); 
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(Spawn());
     }
 
     IEnumerator Spawn()

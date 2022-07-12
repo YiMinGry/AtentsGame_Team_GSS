@@ -175,72 +175,86 @@ public class UnitSkinManager : MonoBehaviour
     int _shieldIdx_R = 0;
     int _backIdx = 0;
 
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string skinName = "";
     [Range(0, 12)]
     public int _skinType = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string eyeName = "";
     [Range(0, 47)]
     public int _eyeType = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string eyeColorCode = "";
     public Color eyeColors;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string hairName = "";
     [Range(0, 42)]
     public int _hairType = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string faceHairName = "";
     [Range(0, 7)]
     public int _faceHairType = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string clothName = "";
     [Range(0, 25)]
     public int _clothType = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string pantName = "";
     [Range(0, 16)]
     public int _pantType = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string helmetName = "";
     [Range(0, 22)]
     public int _helmetType = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string armorName = "";
     [Range(0, 21)]
     public int _armorType = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string weaponsName_L = "";
     [Range(0, 34)]
     public int _weaponsType_L = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string weaponsName_R = "";
     [Range(0, 34)]
     public int _weaponsType_R = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string shieldName_L = "";
     [Range(0, 10)]
     public int _shieldType_L = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string shieldName_R = "";
     [Range(0, 10)]
     public int _shieldType_R = 0;
-
+#if UNITY_EDITOR
     [ReadOnlyAttribute]
+#endif
     public string backName = "";
     [Range(0, 7)]
     public int _backType = 0;

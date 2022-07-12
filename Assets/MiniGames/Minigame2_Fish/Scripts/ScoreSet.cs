@@ -15,9 +15,9 @@ public class ScoreSet : MonoBehaviour
     }
 
 
-    private void Update()
+    public void SetScoreText(int _score)
     {
-        score.text = $"SCORE : {MG2_GameManager.Inst.Score}";
-        scoreShadow.text = $"SCORE : {MG2_GameManager.Inst.Score}";
+        score.text = $"SCORE : {_score}";
+        scoreShadow.text = $"SCORE : {_score}";
     }
 }
