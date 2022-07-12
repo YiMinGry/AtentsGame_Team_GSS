@@ -9,6 +9,8 @@ public enum oderState
 
 public class OderMove : MonoBehaviour
 {
+    public TapperGameManager tapperGameManager;
+
     public oderState state;
 
     [Range(0, 1f)]
@@ -27,7 +29,7 @@ public class OderMove : MonoBehaviour
     int prDir = 1;
 
     const float maxWaitingTime = 20f;
-    const float maxlastWaitingTime = 5f;
+    const float maxlastWaitingTime = 3f;
     float waitingTime = 0;
     float lastWaitingTime = 0;
     bool isGetBeer = false;
@@ -58,11 +60,9 @@ public class OderMove : MonoBehaviour
                     break;
                 case oderState.getBeer:
                     x = -1;
-                    //점수 올리기
                     break;
                 case oderState.back:
                     x = -1;
-                    //점수 내리기
                     break;
             }
             yield return Utill.WaitForSeconds(1f);
@@ -82,7 +82,7 @@ public class OderMove : MonoBehaviour
 
             if (transform.position.x < xMinLmit.x)
             {
-                transform.position = xMinLmit;
+                Destroy(gameObject);
             }
             else if (transform.position.x > xMaxLmit.x)
             {
@@ -92,12 +92,24 @@ public class OderMove : MonoBehaviour
 
             if (waitingTime > maxWaitingTime || lastWaitingTime > maxlastWaitingTime)
             {
-                state = oderState.back;
+                if (state != oderState.back)
+                {
+                    //점수 내리기
+                    tapperGameManager.AddBeerFail();
+                    tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "<color=red>!@#!@$@#!@#</color>");
+                    state = oderState.back;
+                }
+
             }
         }
         else
         {
             state = oderState.getBeer;
+
+            if (transform.position.x < xMinLmit.x)
+            {
+                Destroy(gameObject);
+            }
         }
 
         if (x != 0)
@@ -136,10 +148,30 @@ public class OderMove : MonoBehaviour
                 {
                     return;
                 }
+                if (collision.GetComponent<BeerMove>().isEnter == true)
+                {
+                    return;
+                }
 
+                collision.GetComponent<BeerMove>().isEnter = true;
                 Destroy(collision.gameObject);
                 beer.SetActive(true);
                 isGetBeer = true;
+
+                int rnad = Random.Range(0, 10);
+
+                if (rnad == 7)
+                {   
+                    //팁주기
+                    tapperGameManager.AddTip();
+                    tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "에잇! 기분이다 팁이야");
+                }
+                else
+                {
+                    //점수 올리기
+                    tapperGameManager.AddBeer();
+                    tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "한잔 들라고!");
+                }
                 break;
             default:
                 break;
