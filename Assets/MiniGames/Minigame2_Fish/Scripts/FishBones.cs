@@ -23,10 +23,17 @@ public class FishBones : MonoBehaviour
 
     void playerHPChange()
     {
-        if (MG2_GameManager.Inst.HealthPoint > -1)
+        for(int i = transform.childCount; i > 0; i--)
         {
-            fishBones[MG2_GameManager.Inst.HealthPoint].enabled = false;
-        }
+            if(i > MG2_GameManager.Inst.HealthPoint)
+            {
+                fishBones[i-1].enabled = false;
+            }
+            else
+            {
+                fishBones[i-1].enabled = true;
+            }
+        }        
     }
 
 }
