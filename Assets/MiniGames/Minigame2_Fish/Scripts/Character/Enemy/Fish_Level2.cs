@@ -18,7 +18,7 @@ public class Fish_Level2 : Fish_Enemy
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (fishLevel <= MG2_GameManager.Inst.Stage)
+        if (fishLevel <= MG2_GameManager.Inst.Stage) // 레벨이 스테이지보다 낮을때만 실행, 피하기만 함
         {
             base.OnTriggerEnter(other);
         }

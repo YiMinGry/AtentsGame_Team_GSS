@@ -158,7 +158,6 @@ public class MG2_GameManager : MonoBehaviour
     {
         Player.gameObject.SetActive(false);
         enemySpawner.SetActive(false);
-        mg2_UIManager.SetContinuePanel(true);
         gameOverCount = StartCoroutine(GameOverCount());
         gameContinued = StartCoroutine(GameContinued());
     }
@@ -169,6 +168,8 @@ public class MG2_GameManager : MonoBehaviour
 
     IEnumerator GameOverCount()
     {
+        yield return new WaitForSeconds(1.0f);
+        mg2_UIManager.SetContinuePanel(true);
         while (true)
         {
             yield return new WaitForSeconds(1.0f);
@@ -227,6 +228,7 @@ public class MG2_GameManager : MonoBehaviour
 
         HealthPoint = 4;
         Player.gameObject.SetActive(true);
+        Player.transform.position = new Vector3(0, 0, 0);
         enemySpawner.SetActive(true);
         mg2_UIManager.SetStartPanel(false);
         mg2_UIManager.SetContinuePanel(false);
