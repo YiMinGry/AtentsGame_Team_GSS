@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    public TapperGameManager tapperGameManager;
+
     [SerializeField]
     BeerController beerController;
     [SerializeField]
     GameObject smokeFx;
     [SerializeField]
     Transform smokeFxPos;
-
     CharacterActionHandle characterActionHandle;
-    public Animator animator;
+    [SerializeField]
+    Animator animator;
 
     [Range(0, 1f)]
     public float Scale = 1f;
@@ -36,7 +38,11 @@ public class PlayerMove : MonoBehaviour
         xMinLmit = new Vector3(-1.7f, transform.position.y, transform.position.z);
         xMaxLmit = new Vector3(1f, transform.position.y, transform.position.z);
     }
-    // Update is called once per frame
+
+    private void Start()
+    {
+        beerController.SetFill(0f);
+    }
     void Update()
     {
         Move();
@@ -126,6 +132,10 @@ public class PlayerMove : MonoBehaviour
         float fillTime = 0;
         beerController.gameObject.SetActive(true);
         beerController.SetFill(0f);
+
+        tapperGameManager.tapperTextBoxManager.SetDiaLog(transform,"한잔은 떠나버린 너를 위하여...");
+        //tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "한잔은 이미 초라해진 나를 위하여...");
+        //tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "또 한잔은 너와의 영원한 사랑을 위하여...");
 
         while ((fillTime / beerfillMaxTime) < 1f)
         {
