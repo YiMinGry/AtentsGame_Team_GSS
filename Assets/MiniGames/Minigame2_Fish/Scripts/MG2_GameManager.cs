@@ -8,8 +8,13 @@ public class MG2_GameManager : MonoBehaviour
     [SerializeField]
     MG2_UIManager _mg2_UIManager;
 
+
     [SerializeField]
-    public GameObject player;
+    MG2_EffectManager _mg2_EffectManager;
+
+    [SerializeField]
+    private Fish_Player _player;
+
     [SerializeField]
     public GameObject enemySpawner;
 
@@ -29,11 +34,24 @@ public class MG2_GameManager : MonoBehaviour
         get => instance;
     }
 
+    public Fish_Player Player
+    {
+        get => _player;
+    }
+
     public MG2_UIManager mg2_UIManager
     {
         get
         {
             return _mg2_UIManager;
+        }
+    }
+
+    public MG2_EffectManager mg2_EffectManager
+    {
+        get
+        {
+            return _mg2_EffectManager;
         }
     }
 
@@ -57,7 +75,7 @@ public class MG2_GameManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(OnGameStart());    
+        onGameStart = StartCoroutine(OnGameStart());    
     }
 
     IEnumerator OnGameStart()
@@ -138,14 +156,16 @@ public class MG2_GameManager : MonoBehaviour
 
     private void GameOver()
     {
-        player.SetActive(false);
+        Player.gameObject.SetActive(false);
         enemySpawner.SetActive(false);
         mg2_UIManager.SetContinuePanel(true);
-        StartCoroutine(GameOverCount());
-        StartCoroutine(GameContinued());
+        gameOverCount = StartCoroutine(GameOverCount());
+        gameContinued = StartCoroutine(GameContinued());
     }
 
     private int count = 30;
+
+    Coroutine gameOverCount, gameContinued, onGameStart;
 
     IEnumerator GameOverCount()
     {
@@ -162,7 +182,7 @@ public class MG2_GameManager : MonoBehaviour
     {
         while (true)
         {
-            if (Input.GetKeyDown(KeyCode.KeypadEnter))
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
                 if (isYes)
                 {
@@ -198,14 +218,18 @@ public class MG2_GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        if(gameOverCount != null)        
+            StopCoroutine(gameOverCount);        
+        if(onGameStart != null)
+            StopCoroutine(onGameStart);
+        if(gameContinued != null)
+            StopCoroutine(gameContinued);
+
         HealthPoint = 4;
-        player.SetActive(true);
+        Player.gameObject.SetActive(true);
         enemySpawner.SetActive(true);
         mg2_UIManager.SetStartPanel(false);
         mg2_UIManager.SetContinuePanel(false);
-        StopCoroutine(OnGameStart());
-        StopCoroutine(GameContinued());
-        StopCoroutine(GameOverCount());
     }
 
     public void GoToLobby()

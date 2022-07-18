@@ -16,7 +16,7 @@ public class Fish_Player : MonoBehaviour
     {
         playerPrefab = new GameObject[5];
         for (int i = 0; i < 5; i++)
-        playerPrefab = new GameObject[transform.childCount];
+            playerPrefab = new GameObject[transform.childCount];
         for (int i = 0; i < transform.childCount; i++)
         {
             playerPrefab[i] = transform.GetChild(i).gameObject;
@@ -30,10 +30,49 @@ public class Fish_Player : MonoBehaviour
         MG2_GameManager.Inst.playerLevelChange = PlayerLevelUp;
     }
 
+    float dashTime = 0.1f;
+    float dashEffectTime = 0.3f;
+    bool isDash = false;
+
     // Update is called once per frame
     void Update()
     {
         Move();
+        if (Input.GetButtonDown("Jump"))
+        {
+            Debug.Log("Dash");
+            isDash = true;
+            dashTime = 0.1f;
+            dashEffectTime = 0.3f;
+            MG2_GameManager.Inst.mg2_EffectManager.SetDashEffect(true);
+            MG2_GameManager.Inst.mg2_EffectManager.MakeDashEffect();
+        }
+        Dash();
+    }
+
+    void Dash()
+    {
+        if (isDash)
+        {
+            dashTime -= Time.deltaTime;
+            if (dashTime > 0)
+            {
+                transform.position += Vector3.Lerp(Vector3.zero, -5.0f * transform.right * transform.localScale.x, 5.0f * Time.deltaTime);
+            }
+            else
+            {
+                isDash = false;
+            }
+        }
+
+        if(dashEffectTime > 0)
+        {
+            dashEffectTime -= Time.deltaTime;
+        }
+        else
+        {
+            MG2_GameManager.Inst.mg2_EffectManager.SetDashEffect(false);
+        }
     }
 
     void Move()
@@ -44,12 +83,12 @@ public class Fish_Player : MonoBehaviour
         if(x > 0)
         {
             transform.localScale = new Vector3(-1,1,1);
-            //transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, -4.0f), Quaternion.Euler(0f,180.0f,0f));
+            MG2_GameManager.Inst.mg2_EffectManager.SetDashEffectScale(new Vector3(-1,1,1));
         }
         if(x < 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
-            //transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, 0f), Quaternion.Euler(0f, 0f, 0f));
+            MG2_GameManager.Inst.mg2_EffectManager.SetDashEffectScale(new Vector3(1, 1, 1));
         }
 
         if (transform.position.x < xyMinLmit.x)
@@ -79,7 +118,7 @@ public class Fish_Player : MonoBehaviour
     {
         playerPrefab[MG2_GameManager.Inst.Stage - 1].SetActive(false);
         playerPrefab[MG2_GameManager.Inst.Stage].SetActive(true);
-
+        MG2_GameManager.Inst.mg2_EffectManager.SetLevelUpEffect(true);
     }
 
 }
