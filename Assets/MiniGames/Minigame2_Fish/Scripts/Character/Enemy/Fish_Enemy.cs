@@ -37,11 +37,15 @@ public class Fish_Enemy : MonoBehaviour
         {
             if (MG2_GameManager.Inst.Stage < fishLevel) // 플레이어 레벨(스테이지)보다 물고기 레벨이 더 높거나 같으면 HP 1 감소 후 물고기 Destroy
             {
+                Vector3 effectPoint = other.collider.ClosestPoint(transform.position);  // 플레이어와 물고기가 닿은 지점
+                MG2_GameManager.Inst.mg2_EffectManager.MakeDamageEffect(effectPoint);   // 위 지점에 데미지 이펙트 생성
                 MG2_GameManager.Inst.HealthPoint--;
                 Destroy(this.gameObject);
             }
             else // 물고기가 더 낮으면 스코어 증가 후 물고기 Destroy
             {
+                Vector3 effectPoint = other.collider.ClosestPoint(transform.position);  // 플레이어와 물고기가 닿은 지점
+                MG2_GameManager.Inst.mg2_EffectManager.MakeEatEffect(effectPoint);   // 위 지점에 데미지 이펙트 생성
                 MG2_GameManager.Inst.Score += fishScore;
                 Destroy(this.gameObject);
             }

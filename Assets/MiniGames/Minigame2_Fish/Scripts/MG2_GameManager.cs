@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class MG2_GameManager : MonoBehaviour
 {
@@ -58,6 +60,8 @@ public class MG2_GameManager : MonoBehaviour
     private void Awake()
     {
         mg2_UIManager.mg2_GameManager = this;
+        mg2_EffectManager.mg2_GameManager = this;
+        //NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);
 
         if (instance == null)
         {
@@ -156,6 +160,8 @@ public class MG2_GameManager : MonoBehaviour
 
     private void GameOver()
     {
+        MG2_UpdateRanking(Score);
+
         Player.gameObject.SetActive(false);
         enemySpawner.SetActive(false);
         gameOverCount = StartCoroutine(GameOverCount());
@@ -192,7 +198,8 @@ public class MG2_GameManager : MonoBehaviour
                 else
                 {
                     mg2_UIManager.SetRankingPanel(true);
-                    //StartCoroutine(AfterGameOver()); 추가예정
+                    MG2_UpdateRanking(rankData);
+                    StartCoroutine(AfterGameOver());
                 }
             }
             if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
@@ -208,6 +215,41 @@ public class MG2_GameManager : MonoBehaviour
             yield return null;
         }
     }
+
+    IEnumerator AfterGameOver()
+    {
+        while (true)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                GoToLobby();
+                break;
+            }
+            yield return null;
+        }
+        yield return null;
+    }
+
+    JArray rankData = new JArray();
+
+    public void MG2_UpdateRanking(int _score)
+    {
+        JObject _userData = new JObject();
+        _userData.Add("Rank", 0);
+        //_userData.Add("nickName", UserDataManager.instance.nickName);
+        _userData.Add("nickName", "Test");
+        _userData.Add("Score", _score);
+
+        rankData.Add(_userData);
+        Debug.Log($"{rankData.ToString()}");
+        //NetManager.instance.CL2S_SEND(_userData);
+    }
+
+    public void MG2_UpdateRanking(JArray _arr)
+    {
+        mg2_UIManager.SetTop10Rank(_arr);
+    }
+
 
     public void Initialize()
     {
@@ -237,5 +279,9 @@ public class MG2_GameManager : MonoBehaviour
     public void GoToLobby()
     {
         bl_SceneLoaderManager.LoadScene("Main_Lobby");
+    }
+    private void OnDisable()
+    {
+        //NetEventManager.UnRegist("UpdateRanking", S2CL_UpdateRanking);
     }
 }

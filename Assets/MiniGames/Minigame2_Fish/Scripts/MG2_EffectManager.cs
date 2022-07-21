@@ -20,6 +20,12 @@ public class MG2_EffectManager : MonoBehaviour
     [SerializeField]
     private GameObject hpLossEffect;
 
+    [SerializeField]
+    private GameObject eatEffect;
+
+    [SerializeField]
+    private GameObject damageEffect;
+
     private void Awake()
     {
         player = mg2_GameManager.Player;
@@ -50,8 +56,15 @@ public class MG2_EffectManager : MonoBehaviour
 
     public void MakeHPLossEffect(Vector3 _pos)
     {
-        Debug.Log(_pos);
         GameObject obj = Instantiate(hpLossEffect, _pos, Quaternion.Euler(0,0,0));
     }
 
+    public void MakeDamageEffect(Vector3 _pos)
+    {
+        GameObject obj = Instantiate(damageEffect, _pos, Quaternion.Euler(0, 0, 0));
+    }
+    public void MakeEatEffect(Vector3 _pos)
+    {
+        GameObject obj = Instantiate(eatEffect, _pos, Quaternion.Euler(0, 0, 0));
+    }
 }

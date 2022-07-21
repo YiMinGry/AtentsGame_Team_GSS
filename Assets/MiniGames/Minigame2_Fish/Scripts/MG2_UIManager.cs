@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class MG2_UIManager : MonoBehaviour
 {
@@ -26,6 +28,8 @@ public class MG2_UIManager : MonoBehaviour
     [SerializeField]
     private Text no;
 
+    [SerializeField]
+    List<MG2_RankInfo> rankInfos = new List<MG2_RankInfo>();
 
     public void SetStartPanel(bool _tf)
     {
@@ -72,5 +76,12 @@ public class MG2_UIManager : MonoBehaviour
         }
     }
 
-    // --------------------------------------
+    public void SetTop10Rank(JArray _arr)
+    {
+        for (int i = 0; i < _arr.Count; i++)
+        {
+            rankInfos[i].SetRank(($"{_arr[i]["Rank"]}st"), ($"{_arr[i]["nickName"]}"), ($"{_arr[i]["Score"]}Á¡"));
+        }
+    }
+
 }
