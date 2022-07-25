@@ -39,7 +39,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         coin1 = long.Parse(_jdata["coin1"].ToString());
         coin2 = long.Parse(_jdata["coin1"].ToString());
 
-        NetManager.instance.AddRollingMSG($"환영합니다, {nickName}님.");
+        //NetManager.instance.AddRollingMSG($"환영합니다, {nickName}님.");
 
         //메인
         bl_SceneLoaderManager.LoadScene("Main_Lobby");
