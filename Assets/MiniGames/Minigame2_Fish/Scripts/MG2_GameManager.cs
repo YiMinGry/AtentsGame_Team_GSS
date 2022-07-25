@@ -61,7 +61,7 @@ public class MG2_GameManager : MonoBehaviour
     {
         mg2_UIManager.mg2_GameManager = this;
         mg2_EffectManager.mg2_GameManager = this;
-        //NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);
+        NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);
 
         if (instance == null)
         {
@@ -79,7 +79,8 @@ public class MG2_GameManager : MonoBehaviour
 
     private void Start()
     {
-        onGameStart = StartCoroutine(OnGameStart());    
+        onGameStart = StartCoroutine(OnGameStart());
+        AudioManager.Inst.PlayBGM("FishBGM");
     }
 
     IEnumerator OnGameStart()
@@ -138,7 +139,7 @@ public class MG2_GameManager : MonoBehaviour
             playerLevelChange.Invoke();
             stage = value;
             stage = Mathf.Clamp(stage, 1, 6);
-            Debug.Log($"Stage : {stage}");
+            //Debug.Log($"Stage : {stage}");
         }
     }
 
@@ -154,13 +155,14 @@ public class MG2_GameManager : MonoBehaviour
             {
                 GameOver();
             }
-            Debug.Log($"HealthPoint : {healthPoint}");
+            //Debug.Log($"HealthPoint : {healthPoint}");
         }
     }
 
     private void GameOver()
     {
-        MG2_UpdateRanking(Score);
+        //MG2_UpdateRanking(Score);
+        
 
         Player.gameObject.SetActive(false);
         enemySpawner.SetActive(false);
@@ -198,7 +200,8 @@ public class MG2_GameManager : MonoBehaviour
                 else
                 {
                     mg2_UIManager.SetRankingPanel(true);
-                    MG2_UpdateRanking(rankData);
+                    //MG2_UpdateRanking(rankData);
+                    CL2S_UpdateRanking(Score);
                     StartCoroutine(AfterGameOver());
                 }
             }
@@ -232,6 +235,7 @@ public class MG2_GameManager : MonoBehaviour
 
     JArray rankData = new JArray();
 
+    /*
     public void MG2_UpdateRanking(int _score)
     {
         JObject _userData = new JObject();
@@ -249,7 +253,26 @@ public class MG2_GameManager : MonoBehaviour
     {
         mg2_UIManager.SetTop10Rank(_arr);
     }
+    */
 
+    public void CL2S_UpdateRanking(int _score)
+    {
+        JObject _userData = new JObject();
+        _userData.Add("cmd", "UpdateRanking");
+        _userData.Add("ID", UserDataManager.instance.ID);
+        _userData.Add("nickName", UserDataManager.instance.nickName);
+        _userData.Add("MG_NAME", "MG_2");
+        _userData.Add("Score", _score);
+
+        NetManager.instance.CL2S_SEND(_userData);
+    }
+
+    public void S2CL_UpdateRanking(JObject _jdata)
+    {
+        JArray _arr = JArray.Parse(_jdata["allRankArr"].ToString());
+
+        mg2_UIManager.SetTop10Rank(_arr);
+    }
 
     public void Initialize()
     {
@@ -282,6 +305,6 @@ public class MG2_GameManager : MonoBehaviour
     }
     private void OnDisable()
     {
-        //NetEventManager.UnRegist("UpdateRanking", S2CL_UpdateRanking);
+        NetEventManager.UnRegist("UpdateRanking", S2CL_UpdateRanking);
     }
 }

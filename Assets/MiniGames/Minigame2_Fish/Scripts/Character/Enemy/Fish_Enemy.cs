@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Fish_Enemy : MonoBehaviour
 {
-    Rigidbody rigid;
-    public float moveSpeed = 10.0f;
+    protected Rigidbody rigid;
+
+    [SerializeField]
+    float moveSpeed = 10.0f;
 
     protected int fishScore = 100;
     protected int fishLevel = 1;
@@ -40,6 +42,7 @@ public class Fish_Enemy : MonoBehaviour
                 Vector3 effectPoint = other.collider.ClosestPoint(transform.position);  // 플레이어와 물고기가 닿은 지점
                 MG2_GameManager.Inst.mg2_EffectManager.MakeDamageEffect(effectPoint);   // 위 지점에 데미지 이펙트 생성
                 MG2_GameManager.Inst.HealthPoint--;
+                AudioManager.Inst.PlaySFX("Water3");
                 Destroy(this.gameObject);
             }
             else // 물고기가 더 낮으면 스코어 증가 후 물고기 Destroy
@@ -47,6 +50,7 @@ public class Fish_Enemy : MonoBehaviour
                 Vector3 effectPoint = other.collider.ClosestPoint(transform.position);  // 플레이어와 물고기가 닿은 지점
                 MG2_GameManager.Inst.mg2_EffectManager.MakeEatEffect(effectPoint);   // 위 지점에 데미지 이펙트 생성
                 MG2_GameManager.Inst.Score += fishScore;
+                AudioManager.Inst.PlaySFX("Water1");
                 Destroy(this.gameObject);
             }
         }

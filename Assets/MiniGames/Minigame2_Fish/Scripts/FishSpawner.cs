@@ -9,7 +9,8 @@ public class FishSpawner : MonoBehaviour
 
     public GameObject[] enemyFish = null; // 0 ~ 5 에 1 ~ 6 레벨 물고기 각각 들어감
 
-    public float spawnInterval = 1.0f; // 물고기 스폰간격
+    [SerializeField]
+    float spawnInterval = 1.0f; // 물고기 스폰간격
 
     WaitForSeconds waitSecond;
 
@@ -37,5 +38,25 @@ public class FishSpawner : MonoBehaviour
             }
         }
     }
+
+    //private GameObject RandomEnemySpawn(int stage)
+    //{
+    //    GameObject obj;
+    //    float rand = Random.Range(0.0f, 1.0f);
+    //    switch (stage)
+    //    {
+    //        case 1:
+    //            break;
+    //        case 2:
+    //            break;
+    //        case 3:
+    //            break;
+    //        case 4:
+    //            break;
+    //    }
+
+
+    //    return obj;
+    //}
 
 }

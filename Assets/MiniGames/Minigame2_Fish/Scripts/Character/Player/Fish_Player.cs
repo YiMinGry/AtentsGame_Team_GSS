@@ -30,20 +30,26 @@ public class Fish_Player : MonoBehaviour
         MG2_GameManager.Inst.playerLevelChange = PlayerLevelUp;
     }
 
-    float dashTime = 0.1f;
-    float dashEffectTime = 0.3f;
+    float dashTime = 0.1f;          // 대쉬 지속시간
+    float dashEffectTime = 0.3f;    // 대쉬 이펙트 지속시간
+    float dashCoolTime = 1.0f;      // 대쉬 스킬 쿨타임
+    float dashCoolTimeCheck = 1.0f; // 대쉬 스킬 쿨타임 체크
     bool isDash = false;
 
     // Update is called once per frame
     void Update()
     {
         Move();
-        if (Input.GetButtonDown("Jump"))
+        if(dashCoolTimeCheck > 0.0f)
         {
-            Debug.Log("Dash");
+            dashCoolTimeCheck -= Time.deltaTime;
+        }
+        if (Input.GetButtonDown("Jump") && dashCoolTimeCheck <= 0.0f) // Jump 버튼(스페이스바)를 눌렀을 때 대쉬
+        {
             isDash = true;
             dashTime = 0.1f;
             dashEffectTime = 0.3f;
+            dashCoolTimeCheck = dashCoolTime;
             MG2_GameManager.Inst.mg2_EffectManager.SetDashEffect(true);
             MG2_GameManager.Inst.mg2_EffectManager.MakeDashEffect();
         }
