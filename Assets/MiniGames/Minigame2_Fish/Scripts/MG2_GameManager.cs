@@ -118,7 +118,7 @@ public class MG2_GameManager : MonoBehaviour
         get => coin;
         set
         {
-            coin = value;
+            coin = Mathf.Clamp(value,0,99);
             mg2_UIManager.CoinUpdate(coin);
         }
     }
@@ -128,6 +128,7 @@ public class MG2_GameManager : MonoBehaviour
         if(Stage < 5 && score >= stageScoreSet[Stage-1])
         {
             Stage++;
+            HealthPoint++;
         }
     }
 
@@ -148,8 +149,7 @@ public class MG2_GameManager : MonoBehaviour
         get => healthPoint;
         set
         {
-            healthPoint = value;
-            healthPoint = Mathf.Clamp(healthPoint, 0, 9);
+            healthPoint = Mathf.Clamp(value, 0, 9);
             playerHPChange.Invoke();
             if(healthPoint == 0)
             {
@@ -195,6 +195,7 @@ public class MG2_GameManager : MonoBehaviour
             {
                 if (isYes)
                 {
+                    Coin--;
                     StartGame();
                 }
                 else

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class CoinSet : MonoBehaviour
 {
     Text coin, coinShadow;
@@ -17,7 +16,7 @@ public class CoinSet : MonoBehaviour
 
     public void SetCoinText(int _coin)
     {
-        coin.text = $"{_coin}";
-        coinShadow.text = $"{_coin}";
+        coin.text = $"X{_coin}";
+        coinShadow.text = $"X{_coin}";
     }
 }
