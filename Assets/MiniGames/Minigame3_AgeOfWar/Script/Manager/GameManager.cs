@@ -6,10 +6,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     UnitDataManager unitDataMgr;
+    TurretDataManager turretDataMgr;
     private int gold = 200;
     private int exp = 0;
     private int revolution = 0;
-
+    Menu menu;
     public int Gold
     {get{ return gold;} set{gold = value;}}
     public int Exp { get { return exp; } set { exp = value; } }
@@ -38,12 +39,17 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    //---------------------------------
+    //프로퍼티 -----------------------------------------------------
     public UnitDataManager UnitDataMgr => unitDataMgr;
+    public TurretDataManager TurretDataMgr => turretDataMgr;
+    public Menu Menu => menu;
     //--------------------------------------------------------------------------
     private void Initialize()
     {
-       unitDataMgr=GetComponent<UnitDataManager>();
+        menu=FindObjectOfType<Menu>();
+        turretDataMgr=GetComponent<TurretDataManager>();
+        unitDataMgr=GetComponent<UnitDataManager>();
+
     }
     public void Revol()
     {
