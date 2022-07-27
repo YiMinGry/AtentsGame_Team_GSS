@@ -14,6 +14,4 @@ public class Fish_Level1 : Fish_Enemy
         fishScore = 200;
         base.OnCollisionEnter(other);
     }
-
-
 }

@@ -15,6 +15,10 @@ public class MG2_UIManager : MonoBehaviour
     private GameObject continuePanel;
     [SerializeField]
     private GameObject rankingPanel;
+    [SerializeField]
+    private GameObject pausePanel;
+    [SerializeField]
+    private GameObject[] soundOnOff = new GameObject[2]; // 0번째가 On, 1번째가 Off
 
     [SerializeField]
     private ScoreSet scoreSet;
@@ -43,6 +47,48 @@ public class MG2_UIManager : MonoBehaviour
     public void SetRankingPanel(bool _tf)
     {
         rankingPanel.SetActive(_tf);
+    }
+    /// <summary>
+    /// PausePanel 게임 오브젝트를 활성화
+    /// </summary>
+    /// <param name="_tf">true를 받으면 활성화, false를 받으면 비활성화</param>
+    public void SetPausePanel(bool _tf)
+    {
+        pausePanel.SetActive(_tf);
+    }
+
+    /// <summary>
+    /// PausePanel이 활성화상태일 때 비활성화, 비활성화상태일 때 활성화
+    /// </summary>
+    /// <returns>PausePanel을 비활성화 하면 false, 활성화 하면 true 리턴</returns>
+    public bool SetPausePanel()
+    {
+        bool result;
+        if (pausePanel.activeSelf)
+        {
+            pausePanel.SetActive(false);
+            result = false;
+        }
+        else
+        {
+            pausePanel.SetActive(true);
+            result = true;
+        }
+        return result;
+    }
+
+    public void SetSoundOnOffImage(bool _tf)
+    {
+        if (_tf)
+        {
+            soundOnOff[0].SetActive(true);
+            soundOnOff[1].SetActive(false);
+        }
+        else
+        {
+            soundOnOff[0].SetActive(false);
+            soundOnOff[1].SetActive(true);
+        }
     }
 
     public void ScoreUpdate(int _score)

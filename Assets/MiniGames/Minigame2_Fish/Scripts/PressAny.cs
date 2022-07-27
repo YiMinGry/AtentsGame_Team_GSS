@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class PressAny : MonoBehaviour
 {
     Text text;
-
     private void Awake()
     {
         text = GetComponent<Text>();
@@ -27,6 +26,5 @@ public class PressAny : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             text.enabled = true;
         }
-
     }
 }

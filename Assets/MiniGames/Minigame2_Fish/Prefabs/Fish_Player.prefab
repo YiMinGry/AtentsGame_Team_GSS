@@ -241,7 +241,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3897374035882959460
 Transform:
   m_ObjectHideFlags: 0
@@ -714,7 +714,7 @@ PrefabInstance:
     - target: {fileID: 4998932567900269555, guid: f4706e47df7c6ca4fad4bd46ff701676,
         type: 3}
       propertyPath: m_Name
-      value: BubbleTrail
+      value: DashBubbleTrail
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4706e47df7c6ca4fad4bd46ff701676, type: 3}
@@ -1001,10 +1001,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelUpEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 4288104818218254998, guid: 7a38d7f291660f041ad889a8336d2bc4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4288104818218522364, guid: 7a38d7f291660f041ad889a8336d2bc4,
         type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4288104818218522364, guid: 7a38d7f291660f041ad889a8336d2bc4,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4288104818218522364, guid: 7a38d7f291660f041ad889a8336d2bc4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4288104818218522364, guid: 7a38d7f291660f041ad889a8336d2bc4,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4288104818218522364, guid: 7a38d7f291660f041ad889a8336d2bc4,
         type: 3}

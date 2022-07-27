@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Fish_Player : MonoBehaviour
 {
+    [SerializeField]
     [Range(0, 5f)]
-    public float Speed = 3;
+    float Speed = 3;
+    float dashTime = 0.1f;          // 대쉬 지속시간
+    float dashEffectTime = 0.3f;    // 대쉬 이펙트 지속시간
+    float dashCoolTime = 1.0f;      // 대쉬 스킬 쿨타임
+    float dashCoolTimeCheck = 1.0f; // 대쉬 스킬 쿨타임 체크
+    bool isDash = false;
 
     GameObject[] playerPrefab;
 
@@ -14,10 +20,8 @@ public class Fish_Player : MonoBehaviour
 
     private void Awake()
     {
-        playerPrefab = new GameObject[5];
+        playerPrefab = new GameObject[5]; // 프리팹 개수 레벨1~레벨5 까지 다섯 개
         for (int i = 0; i < 5; i++)
-            playerPrefab = new GameObject[transform.childCount];
-        for (int i = 0; i < transform.childCount; i++)
         {
             playerPrefab[i] = transform.GetChild(i).gameObject;
         }
@@ -27,20 +31,13 @@ public class Fish_Player : MonoBehaviour
 
     private void Start()
     {
-        MG2_GameManager.Inst.playerLevelChange = PlayerLevelUp;
+        MG2_GameManager.Inst.playerLevelChange = SetPlayerPrefab;
     }
 
-    float dashTime = 0.1f;          // 대쉬 지속시간
-    float dashEffectTime = 0.3f;    // 대쉬 이펙트 지속시간
-    float dashCoolTime = 1.0f;      // 대쉬 스킬 쿨타임
-    float dashCoolTimeCheck = 1.0f; // 대쉬 스킬 쿨타임 체크
-    bool isDash = false;
-
-    // Update is called once per frame
     void Update()
     {
         Move();
-        if(dashCoolTimeCheck > 0.0f)
+        if(dashCoolTimeCheck > 0.0f) // 대쉬 쿨타임 체크 변수가 0보다 클 때만 줄어들게 하기
         {
             dashCoolTimeCheck -= Time.deltaTime;
         }
@@ -52,6 +49,10 @@ public class Fish_Player : MonoBehaviour
             dashCoolTimeCheck = dashCoolTime;
             MG2_GameManager.Inst.mg2_EffectManager.SetDashEffect(true);
             MG2_GameManager.Inst.mg2_EffectManager.MakeDashEffect();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape)) // ESC 키로 일시정지
+        {
+            MG2_GameManager.Inst.PauseGame();
         }
         Dash();
     }
@@ -119,11 +120,16 @@ public class Fish_Player : MonoBehaviour
 
         transform.position += (Vector3)moveVelocity;
     }
-
-    void PlayerLevelUp()
+    /// <summary>
+    /// 현재 Stage에 맞게 플레이어 프리팹 설정
+    /// </summary>
+    void SetPlayerPrefab()
     {
-        playerPrefab[MG2_GameManager.Inst.Stage - 1].SetActive(false);
-        playerPrefab[MG2_GameManager.Inst.Stage].SetActive(true);
+        for (int i = 0; i < playerPrefab.Length; i++)
+        {
+            playerPrefab[i].SetActive(false);
+        }
+        playerPrefab[MG2_GameManager.Inst.Stage-1].SetActive(true);
         MG2_GameManager.Inst.mg2_EffectManager.SetLevelUpEffect(true);
     }
 
