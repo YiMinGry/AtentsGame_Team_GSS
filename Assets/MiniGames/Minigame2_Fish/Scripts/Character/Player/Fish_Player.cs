@@ -55,6 +55,8 @@ public class Fish_Player : MonoBehaviour
             MG2_GameManager.Inst.PauseGame();
         }
         Dash();
+        Vector3 _pos = Camera.main.WorldToScreenPoint(transform.position * 1.3f);
+        MG2_GameManager.Inst.mg2_UIManager.LocatePlayerArrow(_pos);
     }
 
     void Dash()

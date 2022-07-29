@@ -18,12 +18,17 @@ public class MG2_UIManager : MonoBehaviour
     [SerializeField]
     private GameObject pausePanel;
     [SerializeField]
+    private GameObject dashPanel;
+
+    [SerializeField]
     private GameObject[] soundOnOff = new GameObject[2]; // 0번째가 On, 1번째가 Off
+    [SerializeField]
+    private GameObject playerArrow; // 플레이어 위에 떠있는 화살표
 
     [SerializeField]
     private ScoreSet scoreSet;
     [SerializeField]
-    private CoinSet coinSet;
+    private CoinSet[] coinSet;
 
     [SerializeField]
     private Text count;
@@ -34,6 +39,11 @@ public class MG2_UIManager : MonoBehaviour
 
     [SerializeField]
     List<MG2_RankInfo> rankInfos = new List<MG2_RankInfo>();
+
+    public void LocatePlayerArrow(Vector3 pos)
+    {
+        playerArrow.transform.position = pos;
+    }
 
     public void SetStartPanel(bool _tf)
     {
@@ -55,6 +65,10 @@ public class MG2_UIManager : MonoBehaviour
     public void SetPausePanel(bool _tf)
     {
         pausePanel.SetActive(_tf);
+    }
+    public void SetDashPanel(bool _tf)
+    {
+        dashPanel.SetActive(_tf);
     }
 
     /// <summary>
@@ -98,10 +112,13 @@ public class MG2_UIManager : MonoBehaviour
 
     public void CoinUpdate(int _coin)
     {
-        coinSet.SetCoinText(_coin);
+        foreach (var coin in coinSet)
+        {
+            coin.SetCoinText(_coin);
+        }
     }
 
-    // Continue Panel -----------------------
+    // Continue Panel -----------------------------------------------------------
 
     public void SetCountText(int _count)
     {

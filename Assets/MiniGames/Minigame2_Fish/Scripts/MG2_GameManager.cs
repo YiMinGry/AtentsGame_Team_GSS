@@ -23,7 +23,7 @@ public class MG2_GameManager : MonoBehaviour
 
     // 변수 ----------------------------------------------------------------------------------------
 
-    int coin = 5;
+    int coin = 2;
     int score = 0;
     int stage = 1; 
     int count = 30;
@@ -59,23 +59,26 @@ public class MG2_GameManager : MonoBehaviour
             mg2_UIManager.CoinUpdate(coin);
         }
     }
+
+
     public int Stage
     {
         get => stage;
         set
         {
             stage = value;
-            stage = Mathf.Clamp(stage, 1, 6);
-            playerLevelChange.Invoke();
+            stage = Mathf.Clamp(stage, 1, 6);   // 스테이지 1~5까지인데 6으로 해놓음
+            playerLevelChange.Invoke();         // 스테이지 변할 때 마다(레벨업 or 다시하기) 플레이어 프리팹 변경
         }
     }
+
     public int HealthPoint
     {
         get => healthPoint;
         set
         {
-            healthPoint = Mathf.Clamp(value, 0, 9);
-            playerHPChange.Invoke();
+            healthPoint = Mathf.Clamp(value, 0, 4);     // HP 최대 4
+            playerHPChange.Invoke();                    // HP 변할 때 마다 FishBone UI 변경
             if (healthPoint == 0)
             {
                 GameOver();
@@ -128,6 +131,7 @@ public class MG2_GameManager : MonoBehaviour
 
     private void Start()
     {
+        Coin = 2;
         onGameStart = StartCoroutine(OnGameStart());
         AudioManager.Inst.PlayBGM("FishBGM");
     }       
@@ -267,16 +271,20 @@ public class MG2_GameManager : MonoBehaviour
             if (Input.anyKeyDown)
             {
                 StartGame();
+                mg2_UIManager.SetDashPanel(true);
                 break;
             }
             yield return null;
         }
         yield return null;
     }
+
+
     IEnumerator GameOverCount()
     {
         yield return new WaitForSeconds(1.0f);
         mg2_UIManager.SetContinuePanel(true);
+        mg2_UIManager.CoinUpdate(Coin);
         while (true)
         {
             yield return new WaitForSeconds(1.0f);
@@ -290,10 +298,17 @@ public class MG2_GameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
-                if (isYes) // Continue에서 Yes 선택하면 코인 1개 감소 후 게임 시작
+                if (isYes) // Continue에서 Yes 선택
                 {
-                    Coin--;
-                    StartGame();
+                    if (Coin > 0)   // 코인이 있으면 코인 1개 감소 후 게임 시작
+                    {
+                        Coin--;
+                        StartGame();
+                    }
+                    else            // 코인이 없으면
+                    {
+                        Debug.Log("No Coin");
+                    }
                 }
                 else
                 {
@@ -353,6 +368,8 @@ public class MG2_GameManager : MonoBehaviour
 
     public void GoToLobby()
     {
+        AudioManager.Inst.IsMusicOn = false;
+        AudioManager.Inst.IsSoundOn = false;
         TimeStop(false);
         StopAllCoroutines();
         bl_SceneLoaderManager.LoadScene("Main_Lobby");

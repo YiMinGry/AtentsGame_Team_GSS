@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PressAny : MonoBehaviour
+public class PressAnyKey : MonoBehaviour
 {
     Text text;
     private void Awake()

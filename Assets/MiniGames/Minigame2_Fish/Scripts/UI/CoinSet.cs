@@ -16,7 +16,10 @@ public class CoinSet : MonoBehaviour
 
     public void SetCoinText(int _coin)
     {
-        coin.text = $"X{_coin}";
-        coinShadow.text = $"X{_coin}";
+        if (coin != null)
+        {
+            coin.text = $"X{_coin}";
+            coinShadow.text = $"X{_coin}";
+        }
     }
 }
