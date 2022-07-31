@@ -13,14 +13,35 @@ public class ButtonDetail : MonoBehaviour
         textDetail=GetComponent<Text>();
     }
 
-    public void expose(UnitData _unitdata)
+    public void Expose(UnitData _unitdata)
     {
         textDetail.text = $"{_unitdata.UnitName} - ${_unitdata.cost}";
     }
-    public void expose(TurretData turretData)
+    public void Expose(TurretData turretData)
     {
         textDetail.text = $"{turretData.turretName} - ${turretData.cost}";
     }
+    public void ExposeAddSlotCost()
+    {
+        if(GameManager.Inst.NumTurretSlot>1)
+        {
+            textDetail.text = "No more Add Slot";
+        }
+        else
+        {
+            textDetail.text = $"Add Turret Slot - ${GameManager.Inst.AddSlotCost}";
+        }
+    }
+    public void ExposeSellTurret(TurretData _turretData)
+    {
+        
+        textDetail.text = $"Sell {_turretData.turretName} ${_turretData.cost/2}  ";
+    }
+    public void ExposeSellTurret()
+    {
+        textDetail.text = "Sell Turret";
+    }
+
     public void hide()
     {
         textDetail.text = "";

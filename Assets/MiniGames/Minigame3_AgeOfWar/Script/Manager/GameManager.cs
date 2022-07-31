@@ -10,12 +10,21 @@ public class GameManager : MonoBehaviour
     private int gold = 200;
     private int exp = 0;
     private int revolution = 0;
+    private int numTurretSlot=0;
+    private int[] addSlotCosts = new int[] { 3000, 8000 };
     Menu menu;
-    public int Gold
-    {get{ return gold;} set{gold = value;}}
+
+
+
+    //프로퍼티 -----------------------------------------------------
+    public int Gold { get { return gold; } set { gold = value; } }
     public int Exp { get { return exp; } set { exp = value; } }
     public int Revolution { get => revolution; }
-
+    public int NumTurretSlot => numTurretSlot;
+    public UnitDataManager UnitDataMgr => unitDataMgr;
+    public TurretDataManager TurretDataMgr => turretDataMgr;
+    public Menu Menu => menu;
+    public int AddSlotCost => addSlotCosts[Math.Min(1, numTurretSlot)];
     //싱글톤--------------------------------------------------------------
     static GameManager instance = null;
     public static GameManager Inst
@@ -39,10 +48,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    //프로퍼티 -----------------------------------------------------
-    public UnitDataManager UnitDataMgr => unitDataMgr;
-    public TurretDataManager TurretDataMgr => turretDataMgr;
-    public Menu Menu => menu;
+    
     //--------------------------------------------------------------------------
     private void Initialize()
     {
@@ -59,7 +65,17 @@ public class GameManager : MonoBehaviour
             revolution = 2;
         else if(Exp > 1)
             revolution = 1;
-        
+    }
+    public void AddTurretSlot()
+    {if(numTurretSlot<2&&gold>=AddSlotCost)
+        {
+            gold -= AddSlotCost;
+            
+            numTurretSlot++;
+            
+            
+        }
+
         
     }
 }

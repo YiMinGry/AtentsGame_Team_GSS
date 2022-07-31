@@ -27,14 +27,7 @@ public class UnitSpawner : MonoBehaviour
     {
         SpawnUnit(0);
     }
-    public void SpawnRangeUnit()
-    {
-        SpawnUnit(1);
-    }
-    public void SpawnEliteUnit()
-    {
-        SpawnUnit(2);
-    }
+    
     public void SpawnUnit(int unitType)
     {
         revolNum = GameManager.Inst.Revolution;
