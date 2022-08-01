@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : UnitSpawner
 {
+    GameStart gameStart;
     //private void Awake()
     //{
        
@@ -12,8 +13,10 @@ public class EnemySpawner : UnitSpawner
     override protected void Start()
     {
         isEnemy = true;
-        base.Start();
-        StartCoroutine(spawnEnemy());
+        base.Start();// units[,]이거 설정해줌
+        //StartCoroutine(spawnEnemy());
+        gameStart=FindObjectOfType<GameStart>();
+        gameStart.OnClickStart += StartSpawnEnemy;
         
     }
     IEnumerator spawnEnemy()
@@ -25,5 +28,9 @@ public class EnemySpawner : UnitSpawner
             yield return new WaitForSeconds(5.0f);
         }
         
+    }
+    public void StartSpawnEnemy()
+    {
+        StartCoroutine(spawnEnemy());
     }
 }

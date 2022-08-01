@@ -47,7 +47,7 @@ public class Unit : MonoBehaviour
     public bool IsMelee { get => isMelee; }
     public bool IsRange { set => isRange = value; }
     public int Cost { get => cost; }
-    public int Hp
+    public virtual int Hp
     {
         get => hp;
         set
@@ -116,7 +116,7 @@ public class Unit : MonoBehaviour
         Hp -= _attack;
         
     }
-    void SetHpBar()
+    protected void SetHpBar()
     {
         uiCanvas = GameObject.Find("UI Canvas").GetComponent<Canvas>();
         GameObject hpBar = Instantiate<GameObject>(hpBarPrefabs, uiCanvas.transform);
@@ -130,7 +130,7 @@ public class Unit : MonoBehaviour
     
     //이벤트 함수 ---------------------------------------------------------------------------------
 
-    private void Awake()
+    virtual protected void Awake()
     {
         hp = hpMax;
         SetHpBar();
@@ -145,18 +145,18 @@ public class Unit : MonoBehaviour
         
     }
 
-    private void Start()
+    virtual protected void Start()
     {
         blood =transform.Find("blood").gameObject.GetComponent<ParticleSystem>();
         blood.Stop();
         anim.SetInteger("State", (int)UnitState.walk);
     }
-    private void FixedUpdate()
+    virtual protected void FixedUpdate()
     {
         rigid.MovePosition(transform.position + nowMoveSpeed * transform.forward * Time.fixedDeltaTime);
     }
-    
-    private void OnTriggerEnter(Collider other)
+
+    virtual protected void OnTriggerEnter(Collider other)
     {
         Unit unitOther = other.GetComponent<Unit>();
         if (other.CompareTag(this.gameObject.tag))//같은 태그면
@@ -180,7 +180,7 @@ public class Unit : MonoBehaviour
             isMelee = true;
         }
     }
-    private void OnTriggerExit(Collider other)
+    virtual protected void OnTriggerExit(Collider other)
     {
         Unit unitOther = other.GetComponent<Unit>();
         if ((other.CompareTag(this.gameObject.tag))&& (unitNum > unitOther.UnitNum))//같은 태그이고 나보다 선봉이 exit하면
@@ -207,7 +207,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    virtual protected void OnTriggerStay(Collider other)
     {
         Unit unitOther = other.GetComponent<Unit>();
 
