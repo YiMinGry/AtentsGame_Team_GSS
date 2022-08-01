@@ -53,6 +53,6 @@ public class GameManager_00run : MonoBehaviour
 
     void Inintialize()
     {
-
+        
     }
 }

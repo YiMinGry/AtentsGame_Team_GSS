@@ -62,7 +62,7 @@ public class Player_00run : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground_00run"))
+        if (collision.transform.parent.CompareTag("Ground"))
         {
             if (isJumping == true)
             {
