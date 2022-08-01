@@ -16,7 +16,8 @@ public class NetManager : MonoSingleton<NetManager>
 
     //서버------------------------------
     // 기본 호스트/ 포트번호
-    string ip = "125.176.151.114";
+    //string ip = "localhost";
+    string ip = "125.186.0.177";
     int port = 5641;
 
     public bool isConnect = false;
@@ -50,7 +51,16 @@ public class NetManager : MonoSingleton<NetManager>
         // 소켓 생성
         try
         {
-            socket = new TcpClient(ip, port);
+            if (SystemInfo.deviceUniqueIdentifier == "39e35f22fd9aebfc2bb8973e7a925ba0ffe77760")
+            {
+                socket = new TcpClient("localhost", port);
+
+            }
+            else 
+            {
+                socket = new TcpClient(ip, port);
+            }
+
             stream = socket.GetStream();
             writer = new StreamWriter(stream);
             reader = new StreamReader(stream);

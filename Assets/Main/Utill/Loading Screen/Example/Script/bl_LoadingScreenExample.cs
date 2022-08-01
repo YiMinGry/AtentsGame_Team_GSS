@@ -3,20 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Scene로딩할때 테스트용
 public class bl_LoadingScreenExample : MonoBehaviour
 {
     public string SceneName = "LoadExample";
 
     private bool loaded = false;
-
-    private void Update()
-    {
-        if (!loaded && Input.GetKeyDown(KeyCode.Space))
-        {
-            bl_SceneLoaderManager.LoadScene(SceneName);
-            loaded = true;
-        }
-    }
 
     public void ToLobby()
     {
@@ -25,6 +17,15 @@ public class bl_LoadingScreenExample : MonoBehaviour
             bl_SceneLoaderManager.LoadScene(SceneName);
             loaded = true;
 
+        }
+    }
+
+    public void LoadScene() //스페이스바
+    {
+        if (!loaded)
+        {
+            bl_SceneLoaderManager.LoadScene(SceneName);
+            loaded = true;
         }
     }
 }
