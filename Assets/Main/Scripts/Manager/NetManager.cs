@@ -17,7 +17,7 @@ public class NetManager : MonoSingleton<NetManager>
     //서버------------------------------
     // 기본 호스트/ 포트번호
     //string ip = "localhost";
-    string ip = "125.176.151.114";
+    string ip = "125.186.0.177";
     int port = 5641;
 
     public bool isConnect = false;
