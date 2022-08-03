@@ -23,12 +23,12 @@ public class MG2_GameManager : MonoBehaviour
 
     // 변수 ----------------------------------------------------------------------------------------
 
-    int coin = 2;
-    int score = 0;
-    int stage = 1; 
-    int count = 30;
-    int healthPoint = 4;
-    int[] stageScoreSet = new int[] { 1000, 2000, 3000, 4000 };
+    int coin = 2;           // 가지고 있는 코인 개수(continue하면 1개씩 감소)
+    int score = 0;          // 현재 점수
+    int stage = 1;          // 현재 스테이지
+    int count = 30;         // continue 할 때 카운트
+    int healthPoint = 4;    // 현재 hp
+    int[] stageScoreSet = new int[] { 1000, 2000, 3000, 4000 }; // 다음 스테이지로 넘어가는 점수
 
     bool isYes = true; // GameOver 화면에서 Continue 할 건지 묻는 변수
 

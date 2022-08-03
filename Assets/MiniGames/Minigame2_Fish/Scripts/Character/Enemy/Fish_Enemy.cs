@@ -60,7 +60,7 @@ public class Fish_Enemy : MonoBehaviour
     {
         if (other.CompareTag("Player")) // 플레이어를 피해 달아남
         {            
-            //moveSpeed *= 2;
+            moveSpeed *= 2;
             direction = transform.position - other.transform.position;
             direction.Normalize(); 
             if (transform.position.x > other.transform.position.x) // 물고기가 플레이어의 오른쪽에 있을 때
