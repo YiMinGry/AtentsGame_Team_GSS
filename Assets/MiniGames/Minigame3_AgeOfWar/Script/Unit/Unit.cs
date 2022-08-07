@@ -29,7 +29,7 @@ public class Unit : MonoBehaviour
     Rigidbody rigid;
     private Animator anim;
     protected Unit targetUnit;
-    protected BoxCollider[] unitBox = new BoxCollider[2];
+    protected BoxCollider[] unitBox=new BoxCollider[3];
     protected ParticleSystem blood;
     //hpbar-----------------------------------------------------------------
     public GameObject hpBarPrefabs;
@@ -102,9 +102,9 @@ public class Unit : MonoBehaviour
     IEnumerator Die()
     {
         anim.SetTrigger("Dead");
-        for(int i=0;i<2;i++)
+        for(int i=0;i<unitBox.Length;i++)
         {
-            unitBox[i].center = new Vector3(0, 10, 0);
+            unitBox[i].center = new Vector3(0, 100, 0);
         }
         yield return new WaitForSeconds(1.0f);
         Destroy(this.gameObject);
@@ -139,8 +139,13 @@ public class Unit : MonoBehaviour
         anim = GetComponent<Animator>();
         unitRange = GetComponentInChildren<UnitRange>();
         attackCool = meleeTime;
-        unitBox[0] = GetComponent<BoxCollider>();
-        unitBox[1] = GetComponentInChildren<UnitRange>().gameObject.GetComponent<BoxCollider>();
+        //unitBox[0] = GetComponent<BoxCollider>();
+        //if(unitRange!=null)
+        //{
+        //    unitBox[1] = GetComponentInChildren<UnitRange>().gameObject.GetComponent<BoxCollider>();
+        //}
+        unitBox=GetComponentsInChildren<BoxCollider>();
+        
         
         
     }

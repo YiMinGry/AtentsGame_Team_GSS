@@ -16,7 +16,8 @@ public class EnemySpawner : UnitSpawner
         base.Start();// units[,]이거 설정해줌
         //StartCoroutine(spawnEnemy());
         gameStart=FindObjectOfType<GameStart>();
-        gameStart.OnClickStart += StartSpawnEnemy;
+        if(gameStart!=null)
+            gameStart.OnClickStart += StartSpawnEnemy;
         
     }
     IEnumerator spawnEnemy()
