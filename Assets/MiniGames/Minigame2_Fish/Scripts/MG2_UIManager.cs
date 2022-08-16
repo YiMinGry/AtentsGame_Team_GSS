@@ -19,6 +19,8 @@ public class MG2_UIManager : MonoBehaviour
     private GameObject pausePanel;
     [SerializeField]
     private GameObject dashPanel;
+    [SerializeField]
+    private GameObject levelUpUI;
 
     [SerializeField]
     private GameObject[] soundOnOff = new GameObject[2]; // 0번째가 On, 1번째가 Off
@@ -70,6 +72,11 @@ public class MG2_UIManager : MonoBehaviour
     {
         dashPanel.SetActive(_tf);
     }
+    public void SetLevelUpUI(bool _tf)
+    {
+        levelUpUI.SetActive(_tf);
+    }
+
 
     /// <summary>
     /// PausePanel이 활성화상태일 때 비활성화, 비활성화상태일 때 활성화

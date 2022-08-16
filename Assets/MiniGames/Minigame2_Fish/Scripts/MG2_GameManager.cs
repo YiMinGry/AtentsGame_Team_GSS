@@ -66,6 +66,10 @@ public class MG2_GameManager : MonoBehaviour
         get => stage;
         set
         {
+            if(stage < value) // 레벨업 했을 때만
+            {
+                mg2_UIManager.SetLevelUpUI(true);
+            }
             stage = value;
             stage = Mathf.Clamp(stage, 1, 6);   // 스테이지 1~5까지인데 6으로 해놓음
             playerLevelChange.Invoke();         // 스테이지 변할 때 마다(레벨업 or 다시하기) 플레이어 프리팹 변경
