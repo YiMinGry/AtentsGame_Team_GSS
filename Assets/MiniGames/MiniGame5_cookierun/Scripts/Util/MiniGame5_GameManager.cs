@@ -28,8 +28,9 @@ public class MiniGame5_GameManager : MonoBehaviour
         get => runnerData;
         set
         {
-            if (value != runnerData && runnerData == null)
+            if (value != runnerData || runnerData == null)
             {
+                //Debug.Log("RunnerData Refreshed");
                 runnerData = value;
                 //데이터가 바뀌었을 시 씬에서 갱신하는 함수
                 MiniGame5_SceneManager.Inst.ChangeRunner();
@@ -44,7 +45,7 @@ public class MiniGame5_GameManager : MonoBehaviour
         get => nextRunnerData;
         set
         {
-            if (value != nextRunnerData && nextRunnerData == null)
+            if (value != nextRunnerData || nextRunnerData == null)
             {
                 nextRunnerData = value;
                 //데이터가 바뀌었을 시 씬에서 갱신하는 함수
@@ -59,7 +60,7 @@ public class MiniGame5_GameManager : MonoBehaviour
         get => petData;
         set
         {
-            if (value != petData && petData == null)
+            if (value != petData || petData == null)
             {
                 petData = value;
                 //데이터가 바뀌었을 시 씬에서 갱신하는 함수
