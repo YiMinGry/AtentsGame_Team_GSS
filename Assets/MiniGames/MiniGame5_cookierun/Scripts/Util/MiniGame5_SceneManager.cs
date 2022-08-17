@@ -35,11 +35,6 @@ public class MiniGame5_SceneManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        MiniGame5_GameManager.Inst.Player.OnPlayerReady += OnPlayStart;
-    }
-
     public void Inintialize()
     {
         // GetComponent, FindTypeOf<> : 비활성화 된 컴포넌트는 찾을 수 없음
@@ -172,5 +167,27 @@ public class MiniGame5_SceneManager : MonoBehaviour
     public void OnGoMainRoom()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void ChangeRunner()
+    {
+        sceneList[(int)SceneState.StartScene].ChangeCharator(ChoiceState.RunFriend);
+        sceneList[(int)SceneState.MainScene].ChangeCharator(ChoiceState.RunFriend);
+
+        uiList[(int)UIState.StartChoiceUI].Refresh(ChoiceState.RunFriend);
+        uiList[(int)UIState.StartUI].Refresh(ChoiceState.RunFriend);
+    }
+    public void ChangeNextRunner()
+    {
+        uiList[(int)UIState.StartChoiceUI].Refresh(ChoiceState.NextRunFriend);
+        uiList[(int)UIState.StartUI].Refresh(ChoiceState.NextRunFriend);
+    }
+    public void ChangePet()
+    {
+        sceneList[(int)SceneState.StartScene].ChangeCharator(ChoiceState.BuffFriend);
+        sceneList[(int)SceneState.MainScene].ChangeCharator(ChoiceState.BuffFriend);
+
+        uiList[(int)UIState.StartChoiceUI].Refresh(ChoiceState.BuffFriend);
+        uiList[(int)UIState.StartUI].Refresh(ChoiceState.BuffFriend);
     }
 }

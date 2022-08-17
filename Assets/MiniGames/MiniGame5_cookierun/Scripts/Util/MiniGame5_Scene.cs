@@ -40,4 +40,9 @@ public class MiniGame5_Scene : MonoBehaviour
     {
 
     }
+
+    public virtual void ChangeCharator(ChoiceState state)
+    {
+
+    }
 }

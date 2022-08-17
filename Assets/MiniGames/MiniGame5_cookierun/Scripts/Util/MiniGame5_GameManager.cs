@@ -9,7 +9,67 @@ public class MiniGame5_GameManager : MonoBehaviour
     MiniGame5_SceneManager sceneManager;
 
     MiniGame5_Player player;
-    public MiniGame5_Player Player => player;
+    public MiniGame5_Player Player
+    {
+        get => player;
+        set { player = value; }
+    }
+
+
+    //==============================================================
+    //==============================================================
+
+    MiniGame5_DataManager miniFriendData;
+    public MiniGame5_DataManager MiniFriendData => miniFriendData;
+
+    MiniFriendData runnerData;
+    public MiniFriendData RunnerData
+    {
+        get => runnerData;
+        set
+        {
+            if (value != runnerData && runnerData == null)
+            {
+                runnerData = value;
+                //데이터가 바뀌었을 시 씬에서 갱신하는 함수
+                MiniGame5_SceneManager.Inst.ChangeRunner();
+
+            }
+        }
+    }
+
+    MiniFriendData nextRunnerData;
+    public MiniFriendData NextRunnerData
+    {
+        get => nextRunnerData;
+        set
+        {
+            if (value != nextRunnerData && nextRunnerData == null)
+            {
+                nextRunnerData = value;
+                //데이터가 바뀌었을 시 씬에서 갱신하는 함수
+                MiniGame5_SceneManager.Inst.ChangeNextRunner();
+            }
+        }
+    }
+
+    MiniFriendData petData;
+    public MiniFriendData PetData
+    {
+        get => petData;
+        set
+        {
+            if (value != petData && petData == null)
+            {
+                petData = value;
+                //데이터가 바뀌었을 시 씬에서 갱신하는 함수
+                MiniGame5_SceneManager.Inst.ChangePet();
+            }
+        }
+    }
+
+    //==============================================================
+    //==============================================================
 
     bool isGameStart;
     public bool IsGameStart
@@ -107,6 +167,9 @@ public class MiniGame5_GameManager : MonoBehaviour
 
     public System.Action OnBonusTimeChange;
 
+    //==============================================================
+    //==============================================================
+
     static MiniGame5_GameManager instance;
     public static MiniGame5_GameManager Inst { get => instance; }
 
@@ -115,8 +178,8 @@ public class MiniGame5_GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            instance.Inintialize();
             DontDestroyOnLoad(this.gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -128,14 +191,28 @@ public class MiniGame5_GameManager : MonoBehaviour
         }
     }
 
-    void Inintialize()
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        sceneManager = FindObjectOfType<MiniGame5_SceneManager>();
-        player = GameObject.Find("LoadScene").transform.Find("Main").Find("Player").GetComponent<MiniGame5_Player>();
+        Initialize();
+    }
 
-        sceneManager.Inintialize();
+    private void Start()
+    {
         GameSet();
     }
+
+    void Initialize()
+    {
+        miniFriendData = GetComponent<MiniGame5_DataManager>();
+
+        sceneManager = FindObjectOfType<MiniGame5_SceneManager>();
+        player = GameObject.Find("LoadScene").transform.Find("Main").Find("PlayerPos").Find("Player").GetComponent<MiniGame5_Player>();
+
+        sceneManager.Inintialize();
+    }
+    
+    //==============================================================
+    //==============================================================
 
     public void GameSet()
     {
@@ -149,7 +226,30 @@ public class MiniGame5_GameManager : MonoBehaviour
             bonusTime[i] = false;
         }
 
-        Debug.Log("GameManager Init");
+        for (int i = 0; i < miniFriendData.runnerLength; i++)
+        {
+            if (miniFriendData.runnerData[i].isHave)
+            {
+                RunnerData = miniFriendData.runnerData[i];
+                break;
+            }
+        }
+        for (int i = 0; i < miniFriendData.runnerLength; i++)
+        {
+            if (miniFriendData.runnerData[i].isHave && miniFriendData.runnerData[i] != runnerData)
+            {
+                NextRunnerData = miniFriendData.runnerData[i];
+                break;
+            }
+        }
+        for (int i = 0; i < miniFriendData.petLength; i++)
+        {
+            if (miniFriendData.petData[i].isHave)
+            {
+                PetData = miniFriendData.petData[i];
+                break;
+            }
+        }
     }
 
     void LifeTimer()

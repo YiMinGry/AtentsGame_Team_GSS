@@ -37,7 +37,7 @@ public class MiniGame5_UI : MonoBehaviour
 
     }
 
-    public virtual void Refresh()
+    public virtual void Refresh(ChoiceState state)
     {
 
     }

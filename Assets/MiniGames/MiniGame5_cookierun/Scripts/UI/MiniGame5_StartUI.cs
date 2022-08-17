@@ -28,8 +28,8 @@ public class MiniGame5_StartUI : MiniGame5_UI
         nextRunFriendBtn = transform.Find("NextRunBtn").GetComponent<Button>();
         buffFriendBtn = transform.Find("BuffFriendBtn").GetComponent<Button>();
 
-        runFriendBuffTxt = transform.Find("CharactorBuffTxt").GetComponent<Text>();
-        nextRunFriendImg = transform.Find("NextRunBtn").Find("Mask").GetComponentInChildren<Image>();
+        runFriendBuffTxt = transform.Find("CharactorBuffTxt").GetChild(0).GetComponent<Text>();
+        nextRunFriendImg = transform.Find("NextRunBtn").Find("Mask").Find("NextFriend").GetComponent<Image>();
 
         bestScore = transform.Find("ScoreBoard").Find("BestScore").GetComponent<Text>();
         practiceBtn = transform.Find("ScoreBoard").Find("PracticeBtn").GetComponent<Button>();
@@ -46,25 +46,42 @@ public class MiniGame5_StartUI : MiniGame5_UI
 
         practiceBtn.onClick.AddListener(() => MiniGame5_SceneManager.Inst.OnPlay(true));
         playBtn.onClick.AddListener(() => MiniGame5_SceneManager.Inst.OnPlay(false));
+
+        ReSet();
     }
 
-    public void Refresh_BestScore()
+    public override void Refresh(ChoiceState state)
     {
-        // bestScore = 서버에서 MiniGame5 캐릭터의 최고점수 받아와서 적용
+        switch (state)
+        {
+            case ChoiceState.RunFriend:
+                break;
+            case ChoiceState.NextRunFriend:
+                Refresh_NextRunImg();
+                break;
+            case ChoiceState.BuffFriend:
+                Refresh_BuffTxt();
+                break;
+        }
     }
 
-    public void Refresh_RunFriendBuffTxt()
+    public void Refresh_BuffTxt()
     {
-        // runFriendBuffTxt = 선택한 플레이어 효과 MiniGame5_GameManager - 미니친구 스크립터블오브젝트 정보에서 받아와서 변경
+        runFriendBuffTxt.text = MiniGame5_GameManager.Inst.PetData.buff_MiniGame5;
     }
 
     public void Refresh_NextRunImg()
     {
-        // nextRunFriendImg = 이어달리기 바뀌면 MiniGame5_GameManager 에서 받아와서 수정
+        nextRunFriendImg.sprite = MiniGame5_GameManager.Inst.NextRunnerData.sprite;
     }
 
     public override void ReSet()
     {
         Refresh_BestScore();
+    }
+
+    public void Refresh_BestScore()
+    {
+        // bestScore = 서버에서 MiniGame5 캐릭터의 최고점수 받아와서 적용
     }
 }

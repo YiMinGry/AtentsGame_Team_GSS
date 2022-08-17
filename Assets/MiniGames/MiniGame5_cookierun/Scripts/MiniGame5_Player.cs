@@ -19,14 +19,14 @@ public class MiniGame5_Player : MonoBehaviour
         {
             isReady = value;
             Debug.Log("Player Ready");
-            OnPlayerReady?.Invoke();
+            MiniGame5_SceneManager.Inst.OnPlayStart();
         }
     }
     public System.Action OnPlayerReady;
 
     public float startPosY = 10.0f;
 
-    public float jumpPower = 3.0f;
+    public float jumpPower = 8.0f;
     public bool isJumping = false;
     int jumpCount = 0;
 
@@ -59,8 +59,6 @@ public class MiniGame5_Player : MonoBehaviour
         anim.SetBool("isJumping", false);
         anim.SetBool("isSlide", false);
         transform.localScale = 4.0f * Vector3.one;
-
-        Debug.Log("Player Init");
     }
 
     private void OnEnable()

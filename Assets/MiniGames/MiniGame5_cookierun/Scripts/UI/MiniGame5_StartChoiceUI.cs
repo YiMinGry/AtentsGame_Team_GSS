@@ -9,6 +9,15 @@ public class MiniGame5_StartChoiceUI : MiniGame5_UI
     Button[] choiceTabBtn;
     Transform[] choiceCutList;
 
+    Transform[] runnerList;
+    public Transform[] RunnerList { get => runnerList; }
+    
+    Transform[] nextRunnerList;
+    public Transform[] NextRunnerList { get => nextRunnerList; }
+
+    Transform[] petList;
+    public Transform[] PetList { get => petList; }
+
     public override void Init()
     {
         //Debug.Log($"StartChoiceUI state = {(UIState)Id}");
@@ -31,6 +40,14 @@ public class MiniGame5_StartChoiceUI : MiniGame5_UI
         choiceTabBtn[0].onClick.AddListener(() => OpenScene(ChoiceState.RunFriend));
         choiceTabBtn[1].onClick.AddListener(() => OpenScene(ChoiceState.NextRunFriend));
         choiceTabBtn[2].onClick.AddListener(() => OpenScene(ChoiceState.BuffFriend));
+
+        CreateMiniFriendList();
+        ShowHaveFriend();
+    }
+
+    private void Start()
+    {
+        ShowChenkedFriend();
     }
 
     public void OpenScene(ChoiceState state)
@@ -47,6 +64,132 @@ public class MiniGame5_StartChoiceUI : MiniGame5_UI
         choiceCutList[(int)state].gameObject.SetActive(true);
     }
 
-    // 이후 캐릭터 선택시 게임메니저나 씬매니저에 연결해서 씬&게임 화면에도 선택한 캐릭터가 적용되도록
-    // 캐릭터들을 스크립터블 오브젝트로 만들 필요성
+    public override void Refresh(ChoiceState state)
+    {
+        switch (state)
+        {
+            case ChoiceState.RunFriend:
+                for (int i = runnerList.Length - 1; i >= 0; i--)
+                {
+                    if (runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked == true)
+                    {
+                        runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked = false;
+                    }
+                }
+                break;
+            case ChoiceState.NextRunFriend:
+                for (int i = nextRunnerList.Length - 1; i >= 0; i--)
+                {
+                    if (nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked == true)
+                    {
+                        nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked = false;
+                    }
+                }
+                break;
+            case ChoiceState.BuffFriend:
+                for (int i = petList.Length - 1; i >= 0; i--)
+                {
+                    if (petList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked == true)
+                    {
+                        petList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked = false;
+                    }
+                }
+                break;
+        }
+    }
+
+    void CreateMiniFriendList()
+    {
+        MiniGame5_DataManager data = MiniGame5_GameManager.Inst.MiniFriendData;
+
+        Transform runParent = transform.Find("ActiveTabs").Find("RunFriendBtn").Find("Scroll").GetChild(0).GetChild(0);
+        runnerList = new Transform[data.runnerLength];
+        for (int i = 0; i < data.runnerLength; i++)
+        {
+            GameObject obj = Instantiate(data.choiceContentUI, runParent);
+            obj.GetComponent<MiniGame5_ChoiceContentUI>().Data = data.runnerData[i];
+            obj.GetComponent<MiniGame5_ChoiceContentUI>().State = ChoiceState.RunFriend;
+            obj.GetComponent<MiniGame5_ChoiceContentUI>().Init();
+            runnerList[i] = obj.transform;
+        }
+
+        Transform nextRunParent = transform.Find("ActiveTabs").Find("NextRunFriendBtn").Find("Scroll").GetChild(0).GetChild(0);
+        nextRunnerList = new Transform[data.runnerLength];
+        for (int i = 0; i < data.runnerLength; i++)
+        {
+            GameObject obj = Instantiate(data.choiceContentUI, nextRunParent);
+            obj.GetComponent<MiniGame5_ChoiceContentUI>().Data = data.runnerData[i];
+            obj.GetComponent<MiniGame5_ChoiceContentUI>().State = ChoiceState.NextRunFriend;
+            obj.GetComponent<MiniGame5_ChoiceContentUI>().Init();
+            nextRunnerList[i] = obj.transform;
+        }
+
+        Transform petParent = transform.Find("ActiveTabs").Find("BuffFriendBtn").Find("Scroll").GetChild(0).GetChild(0);
+        petList = new Transform[data.petLength];
+        for (int i = 0; i < data.runnerLength; i++)
+        {
+            GameObject obj = Instantiate(data.choiceContentUI, petParent);
+            obj.GetComponent<MiniGame5_ChoiceContentUI>().Data = data.petData[i];
+            obj.GetComponent<MiniGame5_ChoiceContentUI>().State = ChoiceState.BuffFriend;
+            obj.GetComponent<MiniGame5_ChoiceContentUI>().Init();
+            petList[i] = obj.transform;
+        }
+    }
+
+    void ShowHaveFriend()
+    {
+        for (int i = runnerList.Length-1; i >= 0; i--)
+        {
+            if (runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data.isHave == true)
+            {
+                runnerList[i].transform.SetAsFirstSibling();
+            }
+        }
+        
+        for (int i = nextRunnerList.Length - 1; i >= 0; i--)
+        {
+            if (nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data.isHave == true)
+            {
+                nextRunnerList[i].transform.SetAsFirstSibling();
+            }
+        }
+
+        for (int i = petList.Length - 1; i >= 0; i--)
+        {
+            if (petList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data.isHave == true)
+            {
+                petList[i].transform.SetAsFirstSibling();
+            }
+        }
+    }
+
+    void ShowChenkedFriend()
+    {
+        for (int i = 0; i < runnerList.Length; i++)
+        {
+            if (runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data == MiniGame5_GameManager.Inst.RunnerData)
+            {
+                runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck();
+                break;
+            }
+        }
+
+        for (int i = 0; i < nextRunnerList.Length; i++)
+        {
+            if (nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data == MiniGame5_GameManager.Inst.NextRunnerData)
+            {
+                nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck();
+                break;
+            }
+        }
+
+        for (int i = 0; i < petList.Length; i++)
+        {
+            if (petList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data == MiniGame5_GameManager.Inst.PetData)
+            {
+                petList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck();
+                break;
+            }
+        }
+    }
 }
