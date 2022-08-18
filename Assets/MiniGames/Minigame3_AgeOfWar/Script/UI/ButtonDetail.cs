@@ -23,25 +23,62 @@ public class ButtonDetail : MonoBehaviour
     }
     public void ExposeAddSlotCost()
     {
-        if(GameManager.Inst.NumTurretSlot>1)
-        {
-            textDetail.text = "No more Add Slot";
-        }
-        else
-        {
-            textDetail.text = $"Add Turret Slot - ${GameManager.Inst.AddSlotCost}";
-        }
+        
     }
     public void ExposeSellTurret(TurretData _turretData)
     {
-        
-        textDetail.text = $"Sell {_turretData.turretName} ${_turretData.cost/2}  ";
+
+        textDetail.text = $"Sell {_turretData.turretName} ${_turretData.cost / 2}  ";
     }
     public void ExposeSellTurret()
     {
-        textDetail.text = "Sell Turret";
+       
     }
-
+    public void ExposeDetail(int id)
+    {
+        if(id==4)
+        {
+            if (GameManager.Inst.NumTurretSlot > 1)
+            {
+                textDetail.text = "No more Add Slot";
+            }
+            else
+            {
+                textDetail.text = $"Add Turret Slot - ${GameManager.Inst.AddSlotCost}";
+            }
+        }
+        if(id==5)
+        {
+            textDetail.text = "Sell Turret";
+        }
+        if(id==6)
+        {
+            textDetail.text = "Spawn Unit";
+        }
+        if (id == 7)
+        {
+            textDetail.text = "Build Turret";
+        }
+        if(id==8)
+        {
+            if (GameManager.Inst.Revolution < 2)
+            {
+                if (GameManager.Inst.Exp >= GameManager.Inst.RevolExps[GameManager.Inst.Revolution])
+                {
+                    textDetail.text = "Revolution";
+                }
+                else
+                {
+                    textDetail.text = $"{GameManager.Inst.RevolExps[GameManager.Inst.Revolution]}EXP Required";
+                }
+            }
+            else
+            {
+                textDetail.text = "No more Revolution";
+            }
+               
+        }
+    }
     public void hide()
     {
         textDetail.text = "";

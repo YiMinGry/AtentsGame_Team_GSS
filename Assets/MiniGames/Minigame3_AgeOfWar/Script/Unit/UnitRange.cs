@@ -6,35 +6,42 @@ public class UnitRange : MonoBehaviour
 {
     private Unit unit;
     [SerializeField]
-    private int targetNum;
-    const int TARGETNUM = 10000;
-    private float attackCool = 0;
-    private Unit targetUnit;
-    Animator anim;
-    protected ParticleSystem fire;
+    protected int targetNum;
+    protected const int WRONGTARGETNUM = 10000;
+    protected float attackCool = 0;
+    protected Unit targetUnit;
+    protected Animator anim;
+    private ParticleSystem fire;
+    public AudioClip arrowClip;
+    public AudioClip gunClip;
+    private int revol;
+    private int waitingNum=0;
+    protected bool attackStart = false;
+    private float realattackCool=0;
 
     public void TargetReset()
     {
-        targetNum = TARGETNUM;
+        targetNum = WRONGTARGETNUM;
     }
-
-    private void Start()
+    
+    protected virtual void Start()
     {
-        targetNum = TARGETNUM;
+        revol = GameManager.Inst.Revolution;
+        if(transform.parent.CompareTag("Enemy"))
+        {
+            revol = GameManager.Inst.EnemyRevol;
+        }
+        targetNum = WRONGTARGETNUM;
         unit = transform.parent.GetComponent<Unit>();
-        attackCool = unit.RangeInterval-0.5f;
+        attackCool = unit.RangeInterval;
         anim = unit.GetComponent<Animator>();
         fire = unit.transform.Find("fire").gameObject.GetComponent<ParticleSystem>();
         fire.Stop();
     }
 
-    private void FixedUpdate()
-    {
-        //anim.SetInteger("State", (int)UnitState.walk);
-        //anim.SetBool("isRangeAttack", false);
-    }
+    
 
-    private void OnTriggerStay(Collider other)
+    protected virtual void OnTriggerStay(Collider other)
     {
         
         Unit unitOther = other.GetComponent<Unit>();
@@ -42,29 +49,44 @@ public class UnitRange : MonoBehaviour
         {
             if ((other.CompareTag("Unit") || other.CompareTag("Enemy"))&& (unit.tag != other.tag)) //적이면
             {
-                Debug.Log("원거리 온");
+                
                 if (targetNum >= unitOther.UnitNum) //targetNum은 초기:10000 or 선봉의 unitNum 고로 후방은 저 조건에 만족 못 함(움직일 때 리셋하면 안되네)
                 {
-                    if(targetNum==TARGETNUM)        //타겟이 초기화 됐다면
+                    if(targetNum==WRONGTARGETNUM)        //타겟이 초기화 됐다면
                     {
                         targetNum = unitOther.UnitNum;
                         attackCool = unit.RangeInterval;
+                        attackStart = true;
+                        realattackCool = unit.RangeDelay;
                     }
                     
                     attackCool -= Time.fixedDeltaTime;
-                    anim.SetInteger("State", (int)UnitState.range);
-                    //anim.SetBool("isRangeAttack", true);
-                    unit.IsRange = true;
-
+                    
+                    
                     if (attackCool < 0)
                     {
-                        unitOther.TakeDamage(unit.Attack);
+                        
                         attackCool = unit.RangeInterval;
-                        if(this.CompareTag("Enemy"))
+                        attackStart = true;
+                        realattackCool=unit.RangeDelay;
+                        
+                    }
+                    if(attackStart)
+                    {
+                        realattackCool -= Time.fixedDeltaTime;
+                        if(realattackCool < 0)
                         {
-                            
+                            attackStart = false;
+                            if (revol > 1)
+                            {
+                                SoundManager.instance.SFXPlay("gun", gunClip);
+                            }
+                            else
+                            {
+                                SoundManager.instance.SFXPlay("arrow", arrowClip);
+                            }
+                            unitOther.TakeDamage(unit.Attack);
                         }
-                        fire.Play();
                     }
 
                 }
@@ -72,9 +94,29 @@ public class UnitRange : MonoBehaviour
         }
         
     }
-    private void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
-        TargetReset();
+        if ((other.CompareTag("Unit") || other.CompareTag("Enemy")) && (!transform.parent.CompareTag(other.tag)))
+        {
+            waitingNum++;
+            anim.SetInteger("State", (int)UnitState.range);
+            unit.IsRange = true;
+
+        }
+    }
+    protected virtual void OnTriggerExit(Collider other)
+    {
+        if ((other.CompareTag("Unit") || other.CompareTag("Enemy")) && (!transform.parent.CompareTag(other.tag)))
+        {
+            TargetReset();
+            waitingNum--;
+            if(waitingNum == 0)
+            {
+                anim.SetInteger("State", (int)UnitState.walk);
+            }
+            
+        }
+        
     }
 
 }

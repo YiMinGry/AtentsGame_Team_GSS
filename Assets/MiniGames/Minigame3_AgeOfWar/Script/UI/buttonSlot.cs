@@ -20,15 +20,22 @@ public class buttonSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             TurretData turretData=GameManager.Inst.TurretDataMgr[GameManager.Inst.Revolution];
             GameManager.Inst.Menu.Detail.Expose(turretData);
         }
-        else if(id<5)
+        else
         {
-           GameManager.Inst.Menu.Detail.ExposeAddSlotCost();
+            GameManager.Inst.Menu.Detail.ExposeDetail(id);
         }
-        else if(id<6)
-        {
-            GameManager.Inst.Menu.Detail.ExposeSellTurret();
-            
-        }
+        //else if(id<5)
+        //{
+        //   GameManager.Inst.Menu.Detail.ExposeAddSlotCost();
+        //}
+        //else if(id<6)
+        //{
+        //    GameManager.Inst.Menu.Detail.ExposeSellTurret();
+        //}
+        //else if (id < 7)
+        //{
+        //    GameManager.Inst.
+        //}
     }
 
     public void OnPointerExit(PointerEventData eventData)
