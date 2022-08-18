@@ -23,23 +23,23 @@ public class SpawnResevation : MonoBehaviour
     void ReserveSpawn(int _unitType)
     {
         unitQueue.Enqueue(_unitType);
-        int unitNum = _unitType + 3 * GameManager.Inst.Revolution;
-        buildTimeQueue.Enqueue(GameManager.Inst.UnitDataMgr[unitNum].buildTime);
+        
+        buildTimeQueue.Enqueue(GameManager.Inst.UnitDataMgr[_unitType].buildTime);
         resevImage.fillAmount = unitQueue.Count * 0.25f;
         isSpawning = true;
     }
 
     public void SpawnMeleeUnit()
     {
-        ReserveSpawn(0);
+        ReserveSpawn(GameManager.Inst.Revolution*3);
     }
     public void SpawnRangeUnit()
     {
-        ReserveSpawn(1);
+        ReserveSpawn(1+ GameManager.Inst.Revolution * 3);
     }
     public void SpawnEliteUnit()
     {
-        ReserveSpawn(2);
+        ReserveSpawn(2+ GameManager.Inst.Revolution * 3);
     }
     private void Update()
     {
@@ -48,9 +48,9 @@ public class SpawnResevation : MonoBehaviour
             coolTime -= Time.deltaTime;
             
 
-            if (coolTime < 0.0f)
+            if (coolTime < 0.0f) 
             {
-                Debug.Log("ÄðÅ¸ÀÓ0");
+                //Debug.Log("ÄðÅ¸ÀÓ0");
                 
                 if (unitQueue.Count > buildTimeQueue.Count)
                 {

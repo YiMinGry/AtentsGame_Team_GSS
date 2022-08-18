@@ -10,17 +10,22 @@ public class Unit : MonoBehaviour
     [SerializeField] protected int unitNum = 0;
     [SerializeField] protected int hp;
     protected float attackCool = 0.0f;
-    protected int waitingNum = 0;
+    protected float realattackCool = 1.0f;
+    public int waitingNum = 0;
     protected bool isMelee = false;
     protected bool isRange = false;
     private float nowMoveSpeed;
+    protected bool attackStart = true;
+    public AudioClip swingClip;
     //유닛별 차등----------------------------------------------------------
     [SerializeField] protected int attack = 5;
     [SerializeField] protected int hpMax = 20;
     [SerializeField] protected int cost = 15;
     [SerializeField] protected int exp = 15;
-    [SerializeField] protected float meleeTime = 1.3f;
+    [SerializeField] protected float meleeTime = 1.5f;
+    [SerializeField] protected float meleedelay = 0.3f;
     [SerializeField] protected float rangeTime = 1.0f;
+    [SerializeField] protected float rangedelay = 0.3f;
     [SerializeField] protected float buildTime  = 3.0f;
 
 
@@ -46,6 +51,7 @@ public class Unit : MonoBehaviour
     //프로퍼티-----------------------------------------------------------------------------------------------------------------
     public bool IsMelee { get => isMelee; }
     public bool IsRange { set => isRange = value; }
+    public float RangeDelay { get => rangedelay; }
     public int Cost { get => cost; }
     public virtual int Hp
     {
@@ -63,7 +69,7 @@ public class Unit : MonoBehaviour
                 if(this.CompareTag("Enemy"))
                 {
                     GameManager.Inst.Gold += cost; 
-                    GameManager.Inst.Exp += cost;
+                    GameManager.Inst.Exp += exp;
                 }
             }
                 
@@ -79,21 +85,13 @@ public class Unit : MonoBehaviour
     }
 
     // 함수부------------------------------------------------------------------
-    public void SetUnitStat(int _attack, int _hpMax, int _cost, int _exp,float _buildTime, float _melee, float _range = 1.0f)
-    {
-        attack = _attack;
-        hpMax = _hpMax;
-        cost = _cost;
-        exp = _exp;
-        buildTime = _buildTime;
-        meleeTime = _melee;
-        rangeTime = _range;
-    }
+   
     public void SetUnitStat(UnitData unitData)
     {
         attack=unitData.attack;
         hpMax= unitData.hpMax;  
-        cost=unitData.cost;
+        hp= unitData.hpMax;
+        cost =unitData.cost;
         exp= unitData.exp;
         buildTime= unitData.buildTime;
         meleeTime= unitData.meleeTime;
@@ -139,6 +137,7 @@ public class Unit : MonoBehaviour
         anim = GetComponent<Animator>();
         unitRange = GetComponentInChildren<UnitRange>();
         attackCool = meleeTime;
+        realattackCool = meleedelay;
         //unitBox[0] = GetComponent<BoxCollider>();
         //if(unitRange!=null)
         //{
@@ -203,7 +202,7 @@ public class Unit : MonoBehaviour
                 waitingNum--;
             }
         }
-        else if (other.CompareTag("Enemy") || other.CompareTag("Unit")) //적이 exit 하면(죽으면)
+        else if ((other.CompareTag("Enemy") || other.CompareTag("Unit"))&& waitingNum <= 1) //적이 exit 하면(죽으면)
         {
             nowMoveSpeed = moveSpeed;
             anim.SetInteger("State", (int)UnitState.walk);
@@ -222,12 +221,26 @@ public class Unit : MonoBehaviour
             {
                 targetUnit = unitOther;
                 attackCool = meleeTime+Random.Range(-0.1f,0.1f);
+                attackStart = true;
+                realattackCool = meleedelay;
             }
             attackCool -= Time.fixedDeltaTime;
             if (attackCool < 0)
             {
-                unitOther.TakeDamage(Attack);
+               // unitOther.TakeDamage(Attack);
                 attackCool = meleeTime;
+                attackStart = true;
+                realattackCool = meleedelay;
+            }
+            if(attackStart)
+            {
+                realattackCool -= Time.fixedDeltaTime;
+                if(realattackCool < 0)
+                {
+                    attackStart = false;
+                    SoundManager.instance.SFXPlay("swing", swingClip);
+                    unitOther.TakeDamage(Attack);
+                }
             }
         }
     }

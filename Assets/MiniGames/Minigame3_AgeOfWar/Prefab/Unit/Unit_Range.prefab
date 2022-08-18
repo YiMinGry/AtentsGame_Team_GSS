@@ -3135,6 +3135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetNum: 100000
+  arrowClip: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
+  gunClip: {fileID: 8300000, guid: 6dd7024f00606b44eb5884197a66a893, type: 3}
 --- !u!54 &3359024962166336698
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3438,12 +3440,16 @@ MonoBehaviour:
   moveSpeed: 1
   unitNum: 0
   hp: 0
+  waitingNum: 0
+  swingClip: {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
   attack: 5
   hpMax: 20
   cost: 15
   exp: 15
   meleeTime: 1.3
+  meleedelay: 0.3
   rangeTime: 1
+  rangedelay: 0.3
   buildTime: 3
   hpBarPrefabs: {fileID: 3798385721537438874, guid: e40032b42af769447a0e9af0bc9c5436,
     type: 3}
@@ -3539,8 +3545,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.8, z: 0.5}
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Size: {x: 0.5, y: 1.8, z: 0.5}
+  m_Center: {x: 0.25, y: 1, z: 0}
 --- !u!1 &5282101493891466137
 GameObject:
   m_ObjectHideFlags: 0

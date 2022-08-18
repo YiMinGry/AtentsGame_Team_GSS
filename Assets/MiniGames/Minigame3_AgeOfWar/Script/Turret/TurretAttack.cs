@@ -13,9 +13,14 @@ public class TurretAttack : UnitRange
     Transform projectileTr;
     public float attackDelay = 0.3f;
     public float attackDelayTimer = 0.3f;
-    bool attackStart=false;
     
+    public AudioClip turretClip;
+    GameObject projectileDomy;
 
+    private void Awake()
+    {
+        projectileDomy = transform.GetChild(0).GetChild(2).gameObject;
+    }
     protected override void Start()
     {
         targetNum = WRONGTARGETNUM;
@@ -24,13 +29,13 @@ public class TurretAttack : UnitRange
         
         projectileTr = transform.GetChild(0).Find("ProjectileTr");
         attackDelayTimer = attackDelay;
-
+       
     }
     protected override void OnTriggerStay(Collider other)
     {
         Unit unitOther = other.GetComponent<Unit>();
         
-        if ((other.CompareTag("Unit") || other.CompareTag("Enemy")) && (!transform.parent.CompareTag(other.tag))) //적이면
+        if ((other.CompareTag("Unit") || other.CompareTag("Enemy")) && (!transform.parent.parent.CompareTag(other.tag))) //적이면
         {
             //적이 사정거리내로 왔다
             if (targetNum >= unitOther.UnitNum) //targetNum은 초기:10000 or 선봉의 unitNum 고로 후방은 저 조건에 만족 못 함(움직일 때 리셋하면 안되네)
@@ -51,27 +56,38 @@ public class TurretAttack : UnitRange
                 {
                     //공격 애니메이션 실행
                     //Debug.Log("폭탄받아라!!!!!!!!!!!");
+                    SoundManager.instance.SFXPlay("turret", turretClip);
+
                     attackCool = attackInterval;
                     anim.SetTrigger("Shoot");
                     attackStart = true;
+                    projectileDomy.SetActive(false);
+                }
+                if(attackCool<1.0f)
+                {
+                    projectileDomy.SetActive(true);
                 }
                 if(attackStart)
                 {
                     attackDelayTimer -= Time.fixedDeltaTime;
+                    
                 }
                 if(attackDelayTimer < 0)
                 {
+                    
                     attackDelayTimer = attackDelay;
                     TurretShot(target);
-                    Debug.Log("빵!!!!!!");
+                    //Debug.Log("빵!!!!!!");
                     attackStart=false;
                 }
                 LookAtSlow(target);
-                double a = Math.Round((double)attackCool, 2);
-                double b = Math.Round((double)attackDelayTimer, 2);
-                Debug.Log($"cool={a},delay={b},{attackStart}"  );
+               
             }
         }
+        
+    }
+    protected override void OnTriggerEnter(Collider other)
+    {
         
     }
     protected override void OnTriggerExit(Collider other)

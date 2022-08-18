@@ -26,7 +26,7 @@ public class CameraMover : MonoBehaviour,IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("³ª°«³×");
+        //Debug.Log("³ª°«³×");
         ismove = false;
     }
     private void Update()
