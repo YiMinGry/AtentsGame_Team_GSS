@@ -15,7 +15,7 @@ public class Ranking : MonoBehaviour
     [SerializeField]
     Text[] rinfos_Score;
 
-    private void Awake()
+    private void OnEnable()
     {
         NetEventManager.Regist("ReadRanking", S2CL_ReadRanking);//서버에서 ReadRanking 커멘드로 패킷이 올경우 실행
         NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);//서버에서 UpdateRanking 커멘드로 패킷이 올경우 실행
