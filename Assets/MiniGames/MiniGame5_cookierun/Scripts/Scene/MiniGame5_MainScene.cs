@@ -38,7 +38,7 @@ public class MiniGame5_MainScene : MiniGame5_Scene
 
     public override void ReSet()
     {
-        MiniGame5_GameManager.Inst.Player.transform.localPosition = MiniGame5_GameManager.Inst.Player.startPosY * Vector3.up;
+        MiniGame5_GameManager.Inst.Player.Init();
 
         mapScroll.isStop = true;
         mapScroll.transform.localPosition = mapPos;
@@ -68,20 +68,21 @@ public class MiniGame5_MainScene : MiniGame5_Scene
         GameObject obj = Instantiate(MiniGame5_GameManager.Inst.RunnerData.prefab, playerPos);
 
         obj.AddComponent<MiniGame5_Player>();
+
+        obj.GetComponent<Animator>().runtimeAnimatorController = MiniGame5_GameManager.Inst.MiniFriendData.mainAnimCon;
+        playerAnim = obj.GetComponent<Animator>();
+        
         MiniGame5_GameManager.Inst.Player = obj.GetComponent<MiniGame5_Player>();
         MiniGame5_GameManager.Inst.Player = MiniGame5_GameManager.Inst.Player;
 
-        obj.GetComponent<Animator>().runtimeAnimatorController = MiniGame5_GameManager.Inst.MiniFriendData.startAnimCon;
-        playerAnim = obj.GetComponent<Animator>();
-
         obj.AddComponent<CapsuleCollider>();
-        obj.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.27f, 0.04f);
-        obj.GetComponent<CapsuleCollider>().radius = 0.19f;
+        //obj.GetComponent<CapsuleCollider>().material = MiniGame5_GameManager.Inst.MiniFriendData.coliMat;
+        obj.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.27f, 0f);
+        obj.GetComponent<CapsuleCollider>().radius = 0.1f;
         obj.GetComponent<CapsuleCollider>().height = 0.54f;
 
         obj.AddComponent<Rigidbody>();
-        obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
-        obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+        obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
     }
 
     public void ChangePet()

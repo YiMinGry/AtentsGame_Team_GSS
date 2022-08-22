@@ -65,7 +65,7 @@ public class MiniGame5_MainPlayingUI : MiniGame5_UI
     }
     void RefreshScoreUI()
     {
-        scoreTxt.text = MiniGame5_GameManager.Inst.Score.ToString();
+        scoreTxt.text = MiniGame5_GameManager.Inst.Score.ToString("N0");
     }
     void RefreshLifeBarUI()
     {

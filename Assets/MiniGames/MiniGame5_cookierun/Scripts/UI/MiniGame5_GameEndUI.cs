@@ -24,7 +24,7 @@ public class MiniGame5_GameEndUI : MiniGame5_UI
 
     public override void StartScene()
     {
-        scoreTxt.text = MiniGame5_GameManager.Inst.Score.ToString();
+        scoreTxt.text = MiniGame5_GameManager.Inst.Score.ToString("N0");
         // 서버의 최고 점수와 현재점수 비교하여 isBest 표기
         coinTxt.text = MiniGame5_GameManager.Inst.Coin.ToString();
     }
