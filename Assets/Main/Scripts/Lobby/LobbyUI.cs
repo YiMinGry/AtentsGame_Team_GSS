@@ -22,7 +22,7 @@ public class LobbyUI : MonoBehaviour
 
         lobbyUis.Add("Achivement", transform.Find("Achivement").gameObject);
         lobbyUis.Add("Ranking", transform.Find("Ranking").gameObject);
-        lobbyUis.Add("chat", transform.Find("chat").gameObject);
+        lobbyUis.Add("GSS_Desktop", transform.Find("GSS_Desktop").gameObject);
         lobbyUis.Add("Gacha", transform.Find("Gacha").gameObject);  
 
     }
