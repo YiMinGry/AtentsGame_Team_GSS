@@ -2,31 +2,37 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using WebSocketSharp;
 using System.Threading;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DG.Tweening;
+using System.Collections;
+using System.Net.Sockets;
+using System.IO;
 
 public class NetManager : MonoSingleton<NetManager>
 {
 
     //서버------------------------------
-    private string IP = "192.168.219.111";
-    //private string IP = "localhost";
-
-    private string PORT = "5641";
-    private string SERVICE_NAME = "/MGServer";
-
-    private WebSocket m_Socket = null;
+    // 기본 호스트/ 포트번호
+    //string ip = "localhost";
+    string ip = "125.186.0.177";
+    int port = 5641;
 
     public bool isConnect = false;
     [SerializeField]
     private GameObject RollingCavans;
     [SerializeField]
     private Text RollingText;
-    
+
+    bool socketReady;
+    TcpClient socket;
+    NetworkStream stream;
+    StreamWriter writer;
+    StreamReader reader;
+
+    public string uuid;
 
 
     private void Awake()
@@ -34,64 +40,83 @@ public class NetManager : MonoSingleton<NetManager>
         DontDestroyOnLoad(this.gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        try
-        {
-            m_Socket = new WebSocket("ws://" + IP + ":" + PORT + SERVICE_NAME);
-            m_Socket.OnMessage += S2CL_RECV;
-
-            m_Socket.OnOpen += (sender, e) =>
-            {
-                JObject json = new JObject();
-                json.Add("cmd", "ssEnter");
-                json.Add("ID", SystemInfo.deviceUniqueIdentifier);
-                CL2S_SEND(json);
-            };
-
-            m_Socket.OnClose += CloseConnect;
-        }
-        catch
-        {
-        }
-
-        Connect();
-
-        StartCoroutine(RollIngMSG());
+        ConnectToServer();
     }
 
-    public void Connect()
+    public void ConnectToServer()
     {
+        // 이미 연결되었다면 함수 무시
+        if (socketReady) return;
+
+        // 소켓 생성
         try
         {
-            if (m_Socket == null || !m_Socket.IsAlive)
+            if (SystemInfo.deviceUniqueIdentifier == "39e35f22fd9aebfc2bb8973e7a925ba0ffe77760")
             {
-                m_Socket.Connect();
+                socket = new TcpClient("localhost", port);
+
+            }
+            else 
+            {
+                socket = new TcpClient(ip, port);
             }
 
+            stream = socket.GetStream();
+            writer = new StreamWriter(stream);
+            reader = new StreamReader(stream);
+            socketReady = true;
+
+            JObject json = new JObject();
+            json.Add("cmd", "ssEnter");
+            json.Add("ID", uuid.Equals("") ? SystemInfo.deviceUniqueIdentifier : uuid);
+            CL2S_SEND(json);
         }
         catch (Exception e)
         {
-            Debug.Log(e.ToString());
+            Debug.Log(e.Message);
         }
     }
 
-    private void CloseConnect(object sender, CloseEventArgs e)
+    void Update()
     {
-        DisconncectServer();
+        if (socketReady && stream.DataAvailable)
+        {
+            string data = reader.ReadLine();
+            if (data != null)
+            {
+                OnMessage(data);
+            }
+        }
     }
-    public void CL2S_SEND(JObject msg)
+
+    void OnMessage(string data)
     {
-        if (!m_Socket.IsAlive)
+        JObject msg = JObject.Parse(data);
+        Debug.Log($"S2CL_RECV {msg["cmd"].ToString()}: " + data);
+
+        NetEventManager.Invoke(msg["cmd"].ToString(), msg);
+    }
+
+    void Send(string data)
+    {
+        if (!socketReady)
         {
             return;
         }
+        string str = data;
+        str = str.Replace("\r\n", "");
+
+        writer.WriteLine(str);
+        writer.Flush();
+    }
+    public void CL2S_SEND(JObject msg)
+    {
         try
         {
             Debug.Log($"CL2S_SEND {msg["cmd"].ToString()}: " + msg);
-
-            m_Socket.Send(msg.ToString());
+            Send(msg.ToString());
         }
         catch (Exception)
         {
@@ -100,45 +125,22 @@ public class NetManager : MonoSingleton<NetManager>
         }
 
     }
-    public void S2CL_RECV(object sender, MessageEventArgs e)
+    void OnApplicationQuit()
     {
-        JObject msg = JObject.Parse(e.Data);
-        Debug.Log($"S2CL_RECV {msg["cmd"].ToString()}: " + e.Data);
-
-        NetEventManager.Invoke(msg["cmd"].ToString(), msg);
+        CloseSocket();
     }
 
-    public void DisconncectServer()
+    void CloseSocket()
     {
-        try
-        {
-            if (m_Socket == null)
-                return;
+        if (!socketReady) return;
 
-            if (m_Socket.IsAlive)
-                m_Socket.Close();
-
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e.ToString());
-        }
+        writer.Close();
+        reader.Close();
+        socket.Close();
+        socketReady = false;
     }
 
-    private void Update()
-    {
-        isConnect = m_Socket.IsAlive;
 
-        //if (!m_Socket.IsAlive) 
-        //{
-        //    Debug.LogWarning("서버 접속 실패");
-        //}
-    }
-
-    private void OnApplicationQuit()
-    {
-        DisconncectServer();
-    }
 
 
     //일반-------------------------------------------------------------------
