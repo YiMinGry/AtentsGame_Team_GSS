@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
                     if (openUIName.Equals(""))
                     {                    
                         //ÇÚµåÆù on off
-                        animConChanger.OpenPhone();
+                        animConChanger.TogglePhone();
                     }
                     else
                     {
