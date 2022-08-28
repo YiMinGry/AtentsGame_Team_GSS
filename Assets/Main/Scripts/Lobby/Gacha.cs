@@ -38,34 +38,64 @@ public class Gacha : MonoBehaviour
         petNumMax = Pets.Length;
     }
 
-    public void PetSpawnButton()
+    private void SetNormalGrade()
+    {
+        int rand = Random.Range(0, 100);
+        if (rand < 50)
+        {
+            grade = (int)GRADE.GRADE_C;
+        }
+        else if (rand < 85)
+        {
+            grade = (int)GRADE.GRADE_B;
+        }
+        else
+        {
+            grade = (int)GRADE.GRADE_A;
+        }
+    }
+    private void SetRareGrade()
+    {
+        int rand = Random.Range(0, 100);
+        if (rand < 10)
+        {
+            grade = (int)GRADE.GRADE_C;
+        }
+        else if (rand < 55)
+        {
+            grade = (int)GRADE.GRADE_B;
+        }
+        else
+        {
+            grade = (int)GRADE.GRADE_A;
+        }
+    }
+
+    private void PetSpawnButton()
     {
         if (!isGachaActive)
         {
             petRender.SetActive(true);
             isGachaActive = true;
-            grade = Random.Range(0, 3); // C~A 등급 중에서 랜덤하게 설정
             effectType = Random.Range(0, 3); // 이펙트 타입 현재 3개
             petNum = Random.Range(0, petNumMax);
-            /* 그레이드 확률에 따라 랜덤하게 조정
-            int rand = Random.Range(0, 100);
-            if (rand < 50)
-            {
-                grade = (int)GRADE.GRADE_C;
-            }
-            else if (rand < 85)
-            {
-                grade = (int)GRADE.GRADE_B;
-            }
-            else
-            {
-                grade = (int)GRADE.GRADE_A;
-            }
-            */
             gachaCamera.SetActive(true);
             StartCoroutine(PetSpawn());
         }
     }
+
+    public void NormalPetSpawnButton()
+    {
+        SetNormalGrade();
+        PetSpawnButton();
+    }
+
+    public void RarePetSpawnButton()
+    {
+        SetRareGrade();
+        PetSpawnButton();
+    }
+
 
     public void PetDespawnButton()
     {
