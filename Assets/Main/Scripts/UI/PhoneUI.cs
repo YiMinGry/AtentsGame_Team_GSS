@@ -75,7 +75,7 @@ public class PhoneUI : MonoBehaviour
         page2_MiniList = pages[1].Find("MiniList");
 
         //Page3=================================================
-        page3_AchiveCount = pages[2].Find("Achivements").GetComponent<Text>();
+        page3_AchiveCount = pages[2].Find("Achievements").GetComponent<Text>();
         page3_TotalScore = pages[2].Find("Ranking").Find("TotalScore").GetComponent<Text>();
         page3_TotalRank = pages[2].Find("Ranking").Find("TotalRank").GetComponent<Text>();
     }
@@ -140,7 +140,7 @@ public class PhoneUI : MonoBehaviour
     {
         // 미니게임들 완성되고 넣어야할듯한...
 
-        //page3_AchiveCount = 
+        //page3_AchieveCount = 
         //page3_TotalScore =
         //page3_TotalRank = 
 
