@@ -51,5 +51,4 @@ public class LobbyUI : MonoBehaviour
         dim.SetActive(false);
         lobbyUis[_str].SetActive(false);
     }
-
 }

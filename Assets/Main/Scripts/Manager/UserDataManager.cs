@@ -18,6 +18,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     public long coin2;//특수재화
 
 
+
     // Start is called before the first frame update
     void Awake()
     {
