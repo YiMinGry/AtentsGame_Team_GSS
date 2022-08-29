@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
                     if (openUIName.Equals(""))
                     {                    
                         //핸드폰 on off
-                        animConChanger.OpenPhone();
+                        animConChanger.TogglePhone();
                     }
                     else
                     {
@@ -104,6 +104,7 @@ public class Player : MonoBehaviour
             case "Friends":
             case "Gacha":
             case "Achivement":
+            case "GSS_Desktop":       
                 curEventTypr = 2;//모션없이 디폴트로 2 이후 다른 모션 생기면 변경 예정
                 openUIName = _name;
                 other.transform.parent.GetComponent<Outline>().enabled = true;
@@ -139,6 +140,7 @@ public class Player : MonoBehaviour
             case "Friends":
             case "Gacha":
             case "Achivement":
+            case "GSS_Desktop":
                 curEventTypr = 0;
                 openUIName = "";
                 other.transform.parent.GetComponent<Outline>().enabled = false;

@@ -32,6 +32,8 @@ public class NetManager : MonoSingleton<NetManager>
     StreamWriter writer;
     StreamReader reader;
 
+    public string uuid;
+
 
     private void Awake()
     {
@@ -68,7 +70,7 @@ public class NetManager : MonoSingleton<NetManager>
 
             JObject json = new JObject();
             json.Add("cmd", "ssEnter");
-            json.Add("ID", SystemInfo.deviceUniqueIdentifier);
+            json.Add("ID", uuid.Equals("") ? SystemInfo.deviceUniqueIdentifier : uuid);
             CL2S_SEND(json);
         }
         catch (Exception e)
