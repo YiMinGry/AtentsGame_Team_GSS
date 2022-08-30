@@ -16,7 +16,7 @@ public class Gacha : MonoBehaviour
 
     public MiniFriendData[] Pets = null;
     [SerializeField]
-    Text nameText, gradeText, abilityText;
+    Text nameText, gradeText;
 
     private GameObject addedPet;
     public GameObject[] preSpawn, spawn, additional, postSpawn, deSpawn; // ¿Ã∆Â∆Æ ¿˙¿Â
@@ -105,8 +105,22 @@ public class Gacha : MonoBehaviour
     IEnumerator PetSpawn() // ∆Í ªÃ±‚±‚∞Ëø°º≠ º“»Ø
     {
         nameText.text = Pets[petNum].friendName;
-        gradeText.text = grade.ToString();
-        abilityText.text = Pets[petNum].buff_MiniGame5;
+        switch (grade)
+        {
+            case (int)GRADE.GRADE_C:
+                gradeText.text = "C";
+                break;
+            case (int)GRADE.GRADE_B:
+                gradeText.text = "B";
+                break;
+            case (int)GRADE.GRADE_A:
+                gradeText.text = "A";
+                break;
+            default:
+                gradeText.text = "Error";
+                Debug.Log("grade Error");
+                break;
+        }
         preSpawnEffect = MakeObject(preSpawn[3 * effectType + grade], effectSpawner);
 
         yield return Utill.WaitForSeconds(2f);
