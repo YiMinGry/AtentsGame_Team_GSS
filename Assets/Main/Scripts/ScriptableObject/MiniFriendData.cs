@@ -20,6 +20,7 @@ public class MiniFriendData : ScriptableObject
     public string friendName = "미니친구1";
     public GameObject prefab;
     public bool isHave = false;
+    public bool isChoose = false;
 
     [Header("미니게임1")]
     public string buff_MiniGame1 = "";
