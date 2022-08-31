@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     public AnimConChanger animConChanger;
+    [SerializeField] Text titleText;
 
     int curEventTypr = 0;//플레이어가 상호작용할때 어떤 애니메이션을 실행해야할지 저장
     string nextMoveScenes = "";//씬이동할때 다음씬이 무엇인지 이름저장
     string openUIName = "";//상호작용으로 ui를 열고 닫기 위해 이름 저장
 
+    
 
     public void Update()
     {
@@ -98,6 +101,12 @@ public class Player : MonoBehaviour
                 nextMoveScenes = _name;//이동할 씬이름
                 other.transform.parent.GetComponent<Outline>().enabled = true;//닿은 오브젝트의 아웃라인을 활성화
                 EventManager.Invoke("ActiveFInfo", "미니게임 : " + _name);//툴팁표시
+
+                if (titleText != null)
+                {
+                    titleText.enabled = true;
+                    titleText.text = other.transform.GetChild(0).gameObject.name;
+                }
                 break;
                 //팝업
             case "Ranking":
@@ -109,6 +118,13 @@ public class Player : MonoBehaviour
                 openUIName = _name;
                 other.transform.parent.GetComponent<Outline>().enabled = true;
                 EventManager.Invoke("ActiveFInfo", _name);
+                if(titleText!=null)
+                {
+                    titleText.enabled = true;
+                    titleText.text = other.transform.GetChild(0).gameObject.name;
+                }
+                
+
                 break;
             //위 이름이 아닌 다른오브젝트면 무시
             default:
@@ -132,8 +148,10 @@ public class Player : MonoBehaviour
             case "MG_S_05":
                 curEventTypr = 0;
                 nextMoveScenes = "";
-                other.transform.parent.GetComponent<Outline>().enabled = false;
                 EventManager.Invoke("DeActiveFInfo", _name);
+                other.transform.parent.GetComponent<Outline>().enabled = false;
+                if(titleText!=null)
+                    titleText.enabled = false;
                 break;
 
             case "Ranking":
@@ -145,6 +163,9 @@ public class Player : MonoBehaviour
                 openUIName = "";
                 other.transform.parent.GetComponent<Outline>().enabled = false;
                 EventManager.Invoke("DeActiveFInfo", _name);
+                other.transform.parent.GetComponent<Outline>().enabled = false;
+                if(titleText != null)
+                    titleText.enabled = false;
                 break;
             default:
 
