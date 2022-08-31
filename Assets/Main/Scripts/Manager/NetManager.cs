@@ -94,8 +94,6 @@ public class NetManager : MonoSingleton<NetManager>
     void OnMessage(string data)
     {
         JObject msg = JObject.Parse(data);
-        Debug.Log($"S2CL_RECV {msg["cmd"].ToString()}: " + data);
-
         NetEventManager.Invoke(msg["cmd"].ToString(), msg);
     }
 

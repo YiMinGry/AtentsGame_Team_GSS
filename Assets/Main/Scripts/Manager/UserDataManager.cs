@@ -16,7 +16,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     public string nickName;//닉네임
     public long coin1;//일반재화
     public long coin2;//특수재화
-
+    public string mfList;
 
 
     // Start is called before the first frame update
@@ -39,6 +39,12 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         nickName = _jdata["nickName"].ToString();
         coin1 = long.Parse(_jdata["coin1"].ToString());
         coin2 = long.Parse(_jdata["coin1"].ToString());
+        mfList = _jdata["MFList"].ToString();
+
+        JObject _list = new JObject();
+        _list = JObject.Parse(mfList);
+
+        MFDataManager.instance.SetAllMF(_list);
 
         //NetManager.instance.AddRollingMSG($"환영합니다, {nickName}님.");
 
