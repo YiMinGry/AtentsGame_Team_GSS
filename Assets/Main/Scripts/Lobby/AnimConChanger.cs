@@ -20,6 +20,7 @@ public class AnimConChanger : MonoBehaviour
     [Space(10)]
     public bool isFpsMode = false;//고정시점모드, 1인칭 캐릭터 뒷모습 모드 설정하는 변수
     public bool isHandCam = false;//핸드폰 모션 연출중인지 체크용 변수
+    public System.Action<bool> PhoneAnim;
 
     [Space(10)]
     public Animator animator;
@@ -210,43 +211,47 @@ public class AnimConChanger : MonoBehaviour
         }
     }
 
-    public void OpenPhone()
+    public void TogglePhone()
     {
+        // 폰 닫혀있으면 열고
         if (animator.GetBool("isPhoneOpen") == false)
         {
             if (isHandCamMode)
             {
-                mainCanvas.SetActive(false);
+                
                 isHandCam = true;
                 PhoneMode_PhoneFocus.gameObject.SetActive(true);
             }
             else
             {
+                PhoneAnim?.Invoke(true);
                 //PlayerFocusCam.gameObject.SetActive(true);
                 StartCoroutine(lookAtPlayer.doMove_PhoneModeOn(this.transform, PhoneMode_PlayerFocus));
             }
             isMoveingHold = true;
             animator.SetBool("isPhoneOpen", true);
         }
-        else
+        else //열려있으면 닫음
         {
 
             if (isHandCamMode)
             {
-                mainCanvas.SetActive(true);
                 isHandCam = false;
                 PhoneMode_PhoneFocus.gameObject.SetActive(false);
             }
             else
             {
+                PhoneAnim?.Invoke(false);
                 //PlayerFocusCam.gameObject.SetActive(false);
                 StartCoroutine(lookAtPlayer.doMove_PhoneModeOff());
             }
             isMoveingHold = false;
             animator.SetBool("isPhoneOpen", false);
         }
-
+        StopAllCoroutines();
     }
+
+    
 
     public void ForcedStandeing()
     {

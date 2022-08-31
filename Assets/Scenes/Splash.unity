@@ -3283,6 +3283,7 @@ MonoBehaviour:
   isConnect: 0
   RollingCavans: {fileID: 234993209}
   RollingText: {fileID: 1217064181}
+  uuid: 
 --- !u!4 &1174127135
 Transform:
   m_ObjectHideFlags: 0
@@ -4011,45 +4012,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8700920060424109311, guid: 010d95610c805ab459f5741c7e437f7b,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 3.3000488
-      objectReference: {fileID: 0}
-    - target: {fileID: 8700920060436158539, guid: 010d95610c805ab459f5741c7e437f7b,
-        type: 3}
-      propertyPath: SkipType
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8700920060436158539, guid: 010d95610c805ab459f5741c7e437f7b,
-        type: 3}
-      propertyPath: useTimeScale
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8700920060436158539, guid: 010d95610c805ab459f5741c7e437f7b,
-        type: 3}
-      propertyPath: ShowDescription
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8700920060436158539, guid: 010d95610c805ab459f5741c7e437f7b,
-        type: 3}
-      propertyPath: LoadingCircleSpeed
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 8700920060436158539, guid: 010d95610c805ab459f5741c7e437f7b,
-        type: 3}
-      propertyPath: FadeLoadingBarOnFinish
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8700920060445833959, guid: 010d95610c805ab459f5741c7e437f7b,
         type: 3}
       propertyPath: m_Name
       value: SceneLoader 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 8700920060445839211, guid: 010d95610c805ab459f5741c7e437f7b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 010d95610c805ab459f5741c7e437f7b, type: 3}
@@ -5773,7 +5739,11 @@ MonoBehaviour:
   _useSfxVolOnStart: 0
   _soundFxMixerGroup: {fileID: 0}
   _volumeOfSFXMixer: 
-  _playlist: []
+  _playlist:
+  - {fileID: 8300000, guid: 08e6ed6bc6c280d459fcbe7bb209331f, type: 3}
+  - {fileID: 8300000, guid: 44c88266cf090dd4297b2db88164927e, type: 3}
+  - {fileID: 8300000, guid: bbd38bedecfcf7745b4abe91a19b6b36, type: 3}
+  - {fileID: 8300000, guid: 6385eb121128ce640860665c6d6d3770, type: 3}
 --- !u!82 &2142776086
 AudioSource:
   m_ObjectHideFlags: 0

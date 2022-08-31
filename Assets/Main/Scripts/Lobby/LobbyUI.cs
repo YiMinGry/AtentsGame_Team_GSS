@@ -22,9 +22,11 @@ public class LobbyUI : MonoBehaviour
 
         lobbyUis.Add("Achivement", transform.Find("Achivement").gameObject);
         lobbyUis.Add("Ranking", transform.Find("Ranking").gameObject);
-        lobbyUis.Add("chat", transform.Find("chat").gameObject);
-        lobbyUis.Add("Gacha", transform.Find("Gacha").gameObject);  
+        lobbyUis.Add("GSS_Desktop", transform.Find("GSS_Desktop").gameObject);
+        lobbyUis.Add("Gacha", transform.Find("Gacha").gameObject);
 
+        lobbyUis.Add("MainUI", transform.Find("MainUI").gameObject);
+        lobbyUis.Add("PhoneUI", transform.Find("PhoneModeUI").gameObject);
     }
 
     public void ActiveFInfo(string _str)
@@ -49,5 +51,4 @@ public class LobbyUI : MonoBehaviour
         dim.SetActive(false);
         lobbyUis[_str].SetActive(false);
     }
-
 }
