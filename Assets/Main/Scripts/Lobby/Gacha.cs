@@ -87,13 +87,16 @@ public class Gacha : MonoBehaviour
     {
         if (!isGachaActive)
         {
-            petRender.SetActive(true);
-            isGachaActive = true;
-            effectType = Random.Range(0, 3); // 이펙트 타입 현재 3개
-            //petNum = Random.Range(0, petNumMax);
             petNum = SetPetNumber();
-            gachaCamera.SetActive(true);
-            StartCoroutine(PetSpawn());
+            if (petNum > -1)    // petNum에 -1이 리턴되면 뽑기 불가능
+            {
+                petRender.SetActive(true);
+                isGachaActive = true;
+                effectType = Random.Range(0, 3); // 이펙트 타입 현재 3개
+                //petNum = Random.Range(0, petNumMax);
+                gachaCamera.SetActive(true);
+                StartCoroutine(PetSpawn());
+            }
         }
     }
 
@@ -117,7 +120,7 @@ public class Gacha : MonoBehaviour
         else
         {
             Debug.Log("이미 모든 친구를 가지고 있습니다.");
-            return 0;
+            return -1;  // 뽑기가 불가능하면 -1 리턴
         }
     }
 
