@@ -28,6 +28,10 @@ public class PhoneUI : MonoBehaviour
     GameObject page2_MiniDetail_Check;
     GameObject page2_MiniDetail_NotCheck;
     Transform page2_MiniList;
+    [SerializeField]
+    GameObject _mfItem;
+    [SerializeField]
+    List<MFItemInfo> _mfs;
 
     //Page3================
     Text page3_AchiveCount;
@@ -73,6 +77,51 @@ public class PhoneUI : MonoBehaviour
         page2_MiniDetail_Check = page2_MiniDetail_Data.Find("Check").gameObject;
         page2_MiniDetail_NotCheck = page2_MiniDetail_Data.Find("NotCheck").gameObject;
         page2_MiniList = pages[1].Find("MiniList");
+
+        _mfs = new List<MFItemInfo>();
+
+        for (int i = 0; i < MFDataManager.instance.mfarr.Length; i++)
+        {
+            GameObject _mf = Instantiate(_mfItem, page2_MiniList);
+            _mfs.Add(_mf.GetComponent<MFItemInfo>());
+            _mfs[i].Init(ref MFDataManager.instance.mfarr[i], page2_MiniDetail_Check, page2_MiniDetail_NotCheck);
+
+            int idx = i;
+
+            _mfs[idx].SetCallBack(
+                (string str) =>
+                {
+                    page2_MiniDetail_NotData.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? false : true);//미소유
+                    page2_MiniDetail_Data.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? true : false);//소유
+
+                    page2_MiniDetail_Image.sprite = MFDataManager.instance.mfarr[idx].sprite;
+                    page2_MiniDetail_Name.text = MFDataManager.instance.mfarr[idx].friendName;
+                    page2_MiniDetail_Buff.text = MFDataManager.instance.mfarr[idx].buff_MiniGame5;
+                    page2_MiniDetail_Check.SetActive(MFDataManager.instance.mfarr[idx].isChoose == true ? true : false);
+                    page2_MiniDetail_NotCheck.SetActive(MFDataManager.instance.mfarr[idx].isChoose == true ? false : true);
+
+                    page2_MiniDetail_Check.GetComponent<Button>().onClick.RemoveAllListeners();
+                    page2_MiniDetail_Check.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        MFDataManager.instance.Send_HaveMF(MFDataManager.instance.mfarr[idx].id);
+
+                        SetPage2_Refresh();
+
+                    });
+
+
+                    page2_MiniDetail_NotCheck.GetComponent<Button>().onClick.RemoveAllListeners();
+                    page2_MiniDetail_NotCheck.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        MFDataManager.instance.Send_ChoiceMF(MFDataManager.instance.mfarr[idx].id);
+
+                        SetPage2_Refresh();
+                    });
+
+                }
+                );
+        }
+
 
         //Page3=================================================
         page3_AchiveCount = pages[2].Find("Achievements").GetComponent<Text>();
@@ -131,10 +180,19 @@ public class PhoneUI : MonoBehaviour
         {
             page2_MiniDetail_NotData.gameObject.SetActive(false);
             page2_MiniDetail_Data.gameObject.SetActive(true);
-            
+
             // page2_MiniDetail 에 들어갈 요소 채우기
         }
     }
+
+    public void SetPage2_Refresh()
+    {
+        for (int i = 0; i < _mfs.Count; i++)
+        {
+            _mfs[i].Refresh();
+        }
+    }
+
 
     public void SetPage3()
     {

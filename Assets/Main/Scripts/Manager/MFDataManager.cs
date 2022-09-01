@@ -22,7 +22,7 @@ public class MFDataManager : MonoSingleton<MFDataManager>
         for (int i = 0; i < mfarr.Length; i++)
         {
             mfarr[i].isHave = int.Parse(_list["friend_" + i].ToString()) == 0 ? false : true;
-            mfarr[i].isChoose = int.Parse(_list["friend_" + i].ToString()) == 3 ? true : false;
+            mfarr[i].isChoose = int.Parse(_list["friend_" + i].ToString()) == 2 ? true : false;
 
         }
     }
@@ -85,7 +85,12 @@ public class MFDataManager : MonoSingleton<MFDataManager>
     {
         Debug.Log(_jdata);
         FindMF(int.Parse(_jdata["MFIdx"].ToString())).isHave = int.Parse(_jdata["MFState"].ToString()) == 0 ? false : true;
-        FindMF(int.Parse(_jdata["MFIdx"].ToString())).isChoose = int.Parse(_jdata["MFState"].ToString()) == 3 ? true : false;
+        FindMF(int.Parse(_jdata["MFIdx"].ToString())).isChoose = int.Parse(_jdata["MFState"].ToString()) == 2 ? true : false;
+
+        EventManager.Invoke("RefreshMF_" + _jdata["MFIdx"].ToString(), "");
+
+        EventManager.Invoke("MF_Refresh", "");
+
     }
 
     public void Send_HaveMF(int _idx) //뽑기, 착용 해제로 소유중인 상태로 변경하는 용도

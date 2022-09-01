@@ -10,6 +10,68 @@ public class Player : MonoBehaviour
     string nextMoveScenes = "";//씬이동할때 다음씬이 무엇인지 이름저장
     string openUIName = "";//상호작용으로 ui를 열고 닫기 위해 이름 저장
 
+    [SerializeField]
+    private Transform[] mfPos;
+    [SerializeField]
+    private bool[] mfPosCheck = new bool[3];
+    public GameObject[] mfs = new GameObject[3];
+
+    private void Awake()
+    {
+        EventManager.Regist("MF_Refresh", MF_Refresh);
+
+
+        MFInit();
+    }
+
+    public void MFInit()
+    {
+        //로비 진입시 미니친구 생성
+        int _idx = 0;
+        foreach (var _data in MFDataManager.instance.Ret3MF())
+        {
+            if (_data != null)
+            {
+                GameObject _mf = Instantiate(_data.prefab);
+                _mf.transform.position = mfPos[_idx].transform.position;
+                _mf.AddComponent<FollowPet>().target = mfPos[_idx];
+                _mf.transform.localScale = mfPos[_idx].localScale;
+                _mf.name = _data.id.ToString();
+                mfPosCheck[_idx] = true;
+                mfs[_idx] = _mf;
+
+                _idx++;
+            }
+        }
+    }
+
+
+    public void MF_Refresh(string _str = "")
+    {
+        for (int i = 0; i < mfs.Length; i++)
+        {
+            mfPosCheck[i] = false;
+            Destroy(mfs[i]);
+        }
+
+        int _idx = 0;
+        foreach (var _data in MFDataManager.instance.Ret3MF())
+        {
+            if (_data != null)
+            {
+                GameObject _mf = Instantiate(_data.prefab);
+                _mf.transform.position = mfPos[_idx].transform.position;
+                _mf.AddComponent<FollowPet>().target = mfPos[_idx];
+                _mf.transform.localScale = mfPos[_idx].localScale;
+                _mf.name = _data.id.ToString();
+                mfPosCheck[_idx] = true;
+                mfs[_idx] = _mf;
+
+                _idx++;
+            }
+        }
+    }
+
 
     public void Update()
     {
@@ -38,7 +100,7 @@ public class Player : MonoBehaviour
                 {
                     //열려있는 팝업이 없을때
                     if (openUIName.Equals(""))
-                    {                    
+                    {
                         //핸드폰 on off
                         animConChanger.TogglePhone();
                     }
@@ -99,12 +161,12 @@ public class Player : MonoBehaviour
                 other.transform.parent.GetComponent<Outline>().enabled = true;//닿은 오브젝트의 아웃라인을 활성화
                 EventManager.Invoke("ActiveFInfo", "미니게임 : " + _name);//툴팁표시
                 break;
-                //팝업
+            //팝업
             case "Ranking":
             case "Friends":
             case "Gacha":
             case "Achivement":
-            case "GSS_Desktop":       
+            case "GSS_Desktop":
                 curEventTypr = 2;//모션없이 디폴트로 2 이후 다른 모션 생기면 변경 예정
                 openUIName = _name;
                 other.transform.parent.GetComponent<Outline>().enabled = true;
