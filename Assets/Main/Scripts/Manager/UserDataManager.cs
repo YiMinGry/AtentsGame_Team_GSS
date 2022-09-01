@@ -16,6 +16,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     public string nickName;//닉네임
     public long coin1;//일반재화
     public long coin2;//특수재화
+    public string mfList;
 
 
     // Start is called before the first frame update
@@ -38,15 +39,21 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         nickName = _jdata["nickName"].ToString();
         coin1 = long.Parse(_jdata["coin1"].ToString());
         coin2 = long.Parse(_jdata["coin1"].ToString());
+        mfList = _jdata["MFList"].ToString();
+
+        JObject _list = new JObject();
+        _list = JObject.Parse(mfList);
+
+        MFDataManager.instance.SetAllMF(_list);
 
         //NetManager.instance.AddRollingMSG($"환영합니다, {nickName}님.");
 
         //메인
-        //bl_SceneLoaderManager.LoadScene("Main_Lobby");
+        bl_SceneLoaderManager.LoadScene("Main_Lobby");
 
         //테스트용 Dev_Lobby 진입이 필요하면 위 메인로비 부분 주석하고 아래 데브로비 주석 풀기
 
-        bl_SceneLoaderManager.LoadScene("Dev_Lobby");
+        //bl_SceneLoaderManager.LoadScene("Dev_Lobby");
     }
 
     public void S2CL_SetUserNickName(JObject _jdata)
