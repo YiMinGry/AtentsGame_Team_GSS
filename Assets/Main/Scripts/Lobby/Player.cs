@@ -7,11 +7,10 @@ public class Player : MonoBehaviour
 {
     public AnimConChanger animConChanger;
     [SerializeField] Text titleText;
-
     int curEventTypr = 0;//플레이어가 상호작용할때 어떤 애니메이션을 실행해야할지 저장
     string nextMoveScenes = "";//씬이동할때 다음씬이 무엇인지 이름저장
     string openUIName = "";//상호작용으로 ui를 열고 닫기 위해 이름 저장
-
+    MinigameImageUI minigameImageUI;
     
 
     public void Update()
@@ -101,12 +100,17 @@ public class Player : MonoBehaviour
                 nextMoveScenes = _name;//이동할 씬이름
                 other.transform.parent.GetComponent<Outline>().enabled = true;//닿은 오브젝트의 아웃라인을 활성화
                 EventManager.Invoke("ActiveFInfo", "미니게임 : " + _name);//툴팁표시
-
+                
                 if (titleText != null)
                 {
                     titleText.enabled = true;
                     titleText.text = other.transform.GetChild(0).gameObject.name;
                 }
+                if(minigameImageUI==null)
+                {
+                    minigameImageUI=FindObjectOfType<MinigameImageUI>();
+                }
+                minigameImageUI.PopUpImage(other.transform.parent.transform,_name);
                 break;
                 //팝업
             case "Ranking":
@@ -152,6 +156,10 @@ public class Player : MonoBehaviour
                 other.transform.parent.GetComponent<Outline>().enabled = false;
                 if(titleText!=null)
                     titleText.enabled = false;
+                if(minigameImageUI!=null)
+                {
+                    minigameImageUI.HideImage();
+                }
                 break;
 
             case "Ranking":
