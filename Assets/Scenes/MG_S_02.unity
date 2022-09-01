@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: b4f48e963f042784c974594eafc4cd7b,
+  m_LightingDataAsset: {fileID: 112000000, guid: 1d571f572d2bc644095ff0cfad4cd9f3,
     type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
@@ -2034,7 +2034,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &654485950
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9203,6 +9203,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Fish_Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3897374035882959461, guid: d3a1f33ed12ea8b4192a65dd3c11d332,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3a1f33ed12ea8b4192a65dd3c11d332, type: 3}

@@ -28,7 +28,7 @@ public class MG2_GameManager : MonoBehaviour
     int stage = 1;          // 현재 스테이지
     int count = 30;         // continue 할 때 카운트
     int healthPoint = 4;    // 현재 hp
-    int[] stageScoreSet = new int[] { 1000, 2000, 3000, 4000 }; // 다음 스테이지로 넘어가는 점수
+    int[] stageScoreSet = new int[] { 2000, 4000, 8000, 16000 }; // 다음 스테이지로 넘어가는 점수
 
     bool isYes = true; // GameOver 화면에서 Continue 할 건지 묻는 변수
 
@@ -119,6 +119,7 @@ public class MG2_GameManager : MonoBehaviour
         mg2_UIManager.mg2_GameManager = this;
         mg2_EffectManager.mg2_GameManager = this;
         NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);
+        NetEventManager.Regist("ReadRanking", S2CL_ReadRanking);
 
         if (instance == null)
         {
@@ -317,6 +318,7 @@ public class MG2_GameManager : MonoBehaviour
                 else
                 {
                     CL2S_UpdateRanking(Score);
+
                     mg2_UIManager.SetRankingPanel(true);
                     StartCoroutine(AfterGameOver());
                 }
@@ -342,6 +344,7 @@ public class MG2_GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 GoToLobby();
+                //RestartGame(); 디버그용
                 break;
             }
             yield return null;
@@ -368,7 +371,15 @@ public class MG2_GameManager : MonoBehaviour
         JArray _arr = JArray.Parse(_jdata["allRankArr"].ToString());
 
         mg2_UIManager.SetTop10Rank(_arr);
-    }    
+    }
+
+    public void S2CL_ReadRanking(JObject _jdata)
+    {
+        Debug.Log(_jdata);
+        JArray _arr = JArray.Parse(_jdata["Top10"].ToString());
+
+        mg2_UIManager.SetTop10Rank(_arr);
+    }
 
     public void GoToLobby()
     {
@@ -381,5 +392,6 @@ public class MG2_GameManager : MonoBehaviour
     private void OnDisable()
     {
         NetEventManager.UnRegist("UpdateRanking", S2CL_UpdateRanking);
+        NetEventManager.UnRegist("ReadRanking", S2CL_ReadRanking);
     }
 }
