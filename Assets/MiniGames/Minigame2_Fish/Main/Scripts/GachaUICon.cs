@@ -37,5 +37,6 @@ public class GachaUICon : MonoBehaviour
     private void OnDisable()
     {
         transform.position = idealPos;
+        textObj.SetActive(false);
     }
 }

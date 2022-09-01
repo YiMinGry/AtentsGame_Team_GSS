@@ -14,9 +14,9 @@ public class Gacha : MonoBehaviour
 
     private Animator anim = null;
 
-    public MiniFriendData[] Pets = null;
+    //public MiniFriendData[] Pets = null;
     [SerializeField]
-    Text nameText, gradeText;
+    Text nameText, gradeText, normalCoinText, rareCoinText;
 
     private GameObject addedPet;
     public GameObject[] preSpawn, spawn, additional, postSpawn, deSpawn; // 이펙트 저장
@@ -29,13 +29,25 @@ public class Gacha : MonoBehaviour
     private int grade = 0, petNum = 0, petNumMax = 17, effectType = 0;
 
     bool isGachaActive = false; // 가챠 실행 중에 또다른 가챠 실행 방지
-
-    float time = 1.0f;
+    bool isSpawnEnd = false;    // 스폰 끝나기 전에 디스폰 방지
+    bool isDespawned = false;   // 디스폰 후에 다시 디스폰 방지
 
 
     private void Start()
     {
-        petNumMax = Pets.Length;
+        //petNumMax = Pets.Length;
+        petNumMax = MFDataManager.instance.mfarr.Length;        
+    }
+
+    private void OnEnable()
+    {
+        coinTextUpdate();
+    }
+
+    private void OnDisable()
+    {
+        isSpawnEnd = false;
+        isDespawned = false;
     }
 
     private void SetNormalGrade()
@@ -78,33 +90,86 @@ public class Gacha : MonoBehaviour
             petRender.SetActive(true);
             isGachaActive = true;
             effectType = Random.Range(0, 3); // 이펙트 타입 현재 3개
-            petNum = Random.Range(0, petNumMax);
+            //petNum = Random.Range(0, petNumMax);
+            petNum = SetPetNumber();
             gachaCamera.SetActive(true);
             StartCoroutine(PetSpawn());
         }
     }
 
+    private int SetPetNumber()
+    {
+        int[] unHavePets = new int[petNumMax];  // 안 가진 펫 인덱스만 넣을 배열
+        int count = 0;  // 안 가진 펫 개수
+
+        for (int i = 0; i < petNumMax; i++)
+        {
+            if(MFDataManager.instance.mfarr[i].isHave == false && MFDataManager.instance.mfarr[i].isChoose == false)
+            {
+                unHavePets[count] = i;
+                count++;
+            }
+        }
+        if(count > 0)
+        {
+            return unHavePets[Random.Range(0, count)];
+        }
+        else
+        {
+            Debug.Log("이미 모든 친구를 가지고 있습니다.");
+            return 0;
+        }
+    }
+
+    private void coinTextUpdate()
+    {
+        normalCoinText.text = $"X {UserDataManager.instance.coin1}";
+        rareCoinText.text = $"X {UserDataManager.instance.coin2}";
+    }
+
     public void NormalPetSpawnButton()
     {
-        SetNormalGrade();
-        PetSpawnButton();
+        if (UserDataManager.instance.coin1 >= 50)
+        {
+            UserDataManager.instance.coin1 -= 50;
+            SetNormalGrade();
+            PetSpawnButton();
+        }
+        else
+        {
+            Debug.Log("코인이 부족합니다.");
+        }
     }
 
     public void RarePetSpawnButton()
     {
-        SetRareGrade();
-        PetSpawnButton();
+        if (UserDataManager.instance.coin2 >= 50)
+        {
+            UserDataManager.instance.coin2 -= 50;
+            SetRareGrade();
+            PetSpawnButton();
+        }
+        else
+        {
+            Debug.Log("코인이 부족합니다.");
+        }
     }
 
 
     public void PetDespawnButton()
     {
-        StartCoroutine(PetDespawn());
+        if(isSpawnEnd && !isDespawned)
+        {
+            StartCoroutine(PetDespawn());
+        }
     }
 
     IEnumerator PetSpawn() // 펫 뽑기기계에서 소환
     {
-        nameText.text = Pets[petNum].friendName;
+        //nameText.text = Pets[petNum].friendName;
+        nameText.text = MFDataManager.instance.mfarr[petNum].friendName;
+        MFDataManager.instance.mfarr[petNum].isHave = true;
+
         switch (grade)
         {
             case (int)GRADE.GRADE_C:
@@ -126,7 +191,8 @@ public class Gacha : MonoBehaviour
         yield return Utill.WaitForSeconds(2f);
 
         DeleteObject(preSpawnEffect);
-        addedPet = MakeObject(Pets[petNum].prefab, petSpawner); // 펫 생성 및 petPosition의 자식으로 설정
+        //addedPet = MakeObject(Pets[petNum].prefab, petSpawner); // 펫 생성 및 petPosition의 자식으로 설정
+        addedPet = MakeObject(MFDataManager.instance.mfarr[petNum].prefab, petSpawner); // 펫 생성 및 petPosition의 자식으로 설정
         anim = addedPet.GetComponentInChildren<Animator>();
         anim.SetBool("Spawn", true); // 9번 jump 애니메이션 재생
         spawnEffect = MakeObject(spawn[3 * effectType + grade], effectSpawner);
@@ -136,10 +202,12 @@ public class Gacha : MonoBehaviour
         postSpawnEffect = MakeObject(postSpawn[3 * effectType + grade], effectSpawner);
         additionalEffect = MakeObject(additional[3 * effectType + grade], effectSpawner);
         canvas.SetActive(true);
+        isSpawnEnd = true;
     }
 
     IEnumerator PetDespawn() // 펫 뽑기기계에서 소환
     {
+        isDespawned = true;
         anim.SetBool("Despawn", true);
         canvas.SetActive(false);
         DeleteObject(spawnEffect);
@@ -162,9 +230,6 @@ public class Gacha : MonoBehaviour
 
     private GameObject MakeObject(GameObject effect, Transform Spawner) // 오브젝트 생성 함수
     {
-        //effect = Instantiate(effect, Spawner); // 생성 후 Spawner의 자식으로 설정
-        //effect.SetActive(true);
-
         GameObject _effect = Instantiate(effect, Spawner);
         _effect.SetActive(true);
         return _effect;
@@ -172,7 +237,7 @@ public class Gacha : MonoBehaviour
 
     private void DeleteObject(GameObject effect) // 이펙트 삭제 함수
     {
-        effect.SetActive(false);
+        effect?.SetActive(false);
         Destroy(effect);
     }
 }

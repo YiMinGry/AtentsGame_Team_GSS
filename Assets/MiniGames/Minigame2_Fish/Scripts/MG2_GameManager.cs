@@ -55,7 +55,7 @@ public class MG2_GameManager : MonoBehaviour
         get => coin;
         set
         {
-            coin = Mathf.Clamp(value, 0, 99);
+            coin = Mathf.Clamp(value, 0, 9999);
             mg2_UIManager.CoinUpdate(coin);
         }
     }
@@ -119,7 +119,6 @@ public class MG2_GameManager : MonoBehaviour
         mg2_UIManager.mg2_GameManager = this;
         mg2_EffectManager.mg2_GameManager = this;
         NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);
-        NetEventManager.Regist("ReadRanking", S2CL_ReadRanking);
 
         if (instance == null)
         {
@@ -136,7 +135,9 @@ public class MG2_GameManager : MonoBehaviour
 
     private void Start()
     {
-        Coin = 2;
+        Coin = (int)UserDataManager.instance.coin1;
+        AudioManager.Inst.IsMusicOn = true;
+        AudioManager.Inst.IsSoundOn = true;
         onGameStart = StartCoroutine(OnGameStart());
         AudioManager.Inst.PlayBGM("FishBGM");
     }       
@@ -318,7 +319,6 @@ public class MG2_GameManager : MonoBehaviour
                 else
                 {
                     CL2S_UpdateRanking(Score);
-
                     mg2_UIManager.SetRankingPanel(true);
                     StartCoroutine(AfterGameOver());
                 }
@@ -387,11 +387,11 @@ public class MG2_GameManager : MonoBehaviour
         AudioManager.Inst.IsSoundOn = false;
         TimeStop(false);
         StopAllCoroutines();
-        bl_SceneLoaderManager.LoadScene("Main_Lobby");
+        //bl_SceneLoaderManager.LoadScene("Main_Lobby");    // 메인로비
+        bl_SceneLoaderManager.LoadScene("Dev_Lobby");       // 디버그용 로비
     }
     private void OnDisable()
     {
         NetEventManager.UnRegist("UpdateRanking", S2CL_UpdateRanking);
-        NetEventManager.UnRegist("ReadRanking", S2CL_ReadRanking);
     }
 }
