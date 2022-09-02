@@ -32,6 +32,9 @@ public class Gacha : MonoBehaviour
     bool isSpawnEnd = false;    // 스폰 끝나기 전에 디스폰 방지
     bool isDespawned = false;   // 디스폰 후에 다시 디스폰 방지
 
+    Coroutine NoCoinCoroutine;
+    float noCoinCount = 0.0f;
+    const int startCoinFontSize = 35;
 
     private void Start()
     {
@@ -140,6 +143,13 @@ public class Gacha : MonoBehaviour
         }
         else
         {
+            if (NoCoinCoroutine != null)
+            {
+                StopCoroutine(NoCoinCoroutine);
+            }
+            normalCoinText.fontSize = startCoinFontSize;
+            noCoinCount = 0.0f;
+            NoCoinCoroutine = StartCoroutine(NoCoin(normalCoinText));
             Debug.Log("코인이 부족합니다.");
         }
     }
@@ -154,8 +164,37 @@ public class Gacha : MonoBehaviour
         }
         else
         {
+            if (NoCoinCoroutine != null)
+            {
+                StopCoroutine(NoCoinCoroutine);
+            }
+            normalCoinText.fontSize = startCoinFontSize;
+            noCoinCount = 0.0f;
+            NoCoinCoroutine = StartCoroutine(NoCoin(rareCoinText));
             Debug.Log("코인이 부족합니다.");
         }
+    }    
+
+    IEnumerator NoCoin(Text text)
+    {
+        while (true)
+        {            
+            // 글자 색깔 흰색 <-> 빨간색 반복
+            text.color = new Color(1, Mathf.Abs(Mathf.Cos(noCoinCount)), Mathf.Abs(Mathf.Cos(noCoinCount)));
+            // 글자 사이즈 35 ~ 45 반복
+            text.fontSize = Mathf.FloorToInt(startCoinFontSize + 15.0f * Mathf.Abs(Mathf.Sin(noCoinCount)));
+            noCoinCount += Time.deltaTime * 10.0f;
+            // noCoinCount가 파이의 2배가 되면(2번 반복하면) 코루틴 종료
+            if (noCoinCount > Mathf.PI * 2)
+            {
+                break;
+            }
+            yield return null;
+        }
+        // 코루틴 종료 시 글자 색, 크기 초기화
+        text.color = Color.white;
+        text.fontSize = startCoinFontSize;
+        yield return null;
     }
 
 
