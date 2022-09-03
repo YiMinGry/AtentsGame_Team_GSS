@@ -19,7 +19,7 @@ public class Gacha : MonoBehaviour
     Text nameText, gradeText, normalCoinText, rareCoinText;
 
     private GameObject addedPet;
-    public GameObject[] preSpawn, spawn, additional, postSpawn, deSpawn; // ����Ʈ ����
+    public GameObject[] preSpawn, spawn, additional, postSpawn, deSpawn; // 이펙트 저장
     private GameObject preSpawnEffect, spawnEffect, additionalEffect, postSpawnEffect, deSpawnEffect; // ����Ʈ ���� ���� �Ҵ�
     public GameObject canvas = null;
     public GameObject gachaCamera = null;
@@ -28,7 +28,7 @@ public class Gacha : MonoBehaviour
 
     private int grade = 0, petNum = 0, petNumMax = 17, effectType = 0;
 
-    bool isGachaActive = false; // ��í ���� �߿� �Ǵٸ� ��í ���� ����
+    bool isGachaActive = false; // 가챠 실행 중에 또다른 가챠 실행 방지
     bool isSpawnEnd = false;    // ���� ������ ���� ���� ����
     bool isDespawned = false;   // ���� �Ŀ� �ٽ� ���� ����
 
@@ -135,9 +135,9 @@ public class Gacha : MonoBehaviour
 
     public void NormalPetSpawnButton()
     {
-        if (UserDataManager.instance.coin1 >= 50)
+        if (UserDataManager.instance.CL2S_UserCoinUpdate(0, -50))
         {
-            UserDataManager.instance.coin1 -= 50;
+            //UserDataManager.instance.coin1 -= 50;
             SetNormalGrade();
             PetSpawnButton();
         }
@@ -150,15 +150,15 @@ public class Gacha : MonoBehaviour
             normalCoinText.fontSize = startCoinFontSize;
             noCoinCount = 0.0f;
             NoCoinCoroutine = StartCoroutine(NoCoin(normalCoinText));
-            Debug.Log("������ �����մϴ�.");
+            Debug.Log("소지금이 부족합니다.");
         }
     }
 
     public void RarePetSpawnButton()
     {
-        if (UserDataManager.instance.coin2 >= 50)
+        if (UserDataManager.instance.CL2S_UserCoinUpdate(1, -50))
         {
-            UserDataManager.instance.coin2 -= 50;
+            //UserDataManager.instance.coin2 -= 50;
             SetRareGrade();
             PetSpawnButton();
         }
@@ -171,7 +171,7 @@ public class Gacha : MonoBehaviour
             normalCoinText.fontSize = startCoinFontSize;
             noCoinCount = 0.0f;
             NoCoinCoroutine = StartCoroutine(NoCoin(rareCoinText));
-            Debug.Log("������ �����մϴ�.");
+            Debug.Log("소지금이 부족합니다.");
         }
     }    
 
@@ -206,7 +206,7 @@ public class Gacha : MonoBehaviour
         }
     }
 
-    IEnumerator PetSpawn() // �� �̱��迡�� ��ȯ
+    IEnumerator PetSpawn() // 펫 뽑기기계에서 소환
     {
         //nameText.text = Pets[petNum].friendName;
         nameText.text = MFDataManager.instance.mfarr[petNum].friendName;
@@ -233,10 +233,9 @@ public class Gacha : MonoBehaviour
         yield return Utill.WaitForSeconds(2f);
 
         DeleteObject(preSpawnEffect);
-        //addedPet = MakeObject(Pets[petNum].prefab, petSpawner); // �� ���� �� petPosition�� �ڽ����� ����
-        addedPet = MakeObject(MFDataManager.instance.mfarr[petNum].prefab, petSpawner); // �� ���� �� petPosition�� �ڽ����� ����
+        addedPet = MakeObject(MFDataManager.instance.mfarr[petNum].prefab, petSpawner); // 펫 생성 및 petPosition의 자식으로 설정
         anim = addedPet.GetComponentInChildren<Animator>();
-        anim.SetBool("Spawn", true); // 9�� jump �ִϸ��̼� ���
+        anim.SetBool("Spawn", true);
         spawnEffect = MakeObject(spawn[3 * effectType + grade], effectSpawner);
 
         yield return Utill.WaitForSeconds(1f);
@@ -247,7 +246,7 @@ public class Gacha : MonoBehaviour
         isSpawnEnd = true;
     }
 
-    IEnumerator PetDespawn() // �� �̱��迡�� ��ȯ
+    IEnumerator PetDespawn()
     {
         isDespawned = true;
         anim.SetBool("Despawn", true);
@@ -270,14 +269,14 @@ public class Gacha : MonoBehaviour
         EventManager.Invoke("CloseUI", "Gacha");
     }
 
-    private GameObject MakeObject(GameObject effect, Transform Spawner) // ������Ʈ ���� �Լ�
+    private GameObject MakeObject(GameObject effect, Transform Spawner) // 오브젝트 생성 함수
     {
         GameObject _effect = Instantiate(effect, Spawner);
         _effect.SetActive(true);
         return _effect;
     }
 
-    private void DeleteObject(GameObject effect) // ����Ʈ ���� �Լ�
+    private void DeleteObject(GameObject effect) // 이펙트 삭제 함수
     {
         effect?.SetActive(false);
         Destroy(effect);
