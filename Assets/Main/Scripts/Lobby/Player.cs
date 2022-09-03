@@ -14,11 +14,10 @@ public class Player : MonoBehaviour
     
 
     [SerializeField]
-    public GameObject[] mfs = new GameObject[3];
-    [SerializeField]
     private Transform[] mfPos;
+    [SerializeField]
     private bool[] mfPosCheck = new bool[3];
-
+    public GameObject[] mfs = new GameObject[3];
     private void Awake()
     {
         EventManager.Regist("MF_Refresh", MF_Refresh);
@@ -35,8 +34,8 @@ public class Player : MonoBehaviour
         {
             if (_data != null)
             {
-                _mf.transform.position = mfPos[_idx].transform.position;
                 GameObject _mf = Instantiate(_data.prefab);
+                _mf.transform.position = mfPos[_idx].transform.position;
                 _mf.AddComponent<FollowPet>().target = mfPos[_idx];
                 _mf.transform.localScale = mfPos[_idx].localScale;
                 _mf.name = _data.id.ToString();
