@@ -7,25 +7,88 @@ public class Player : MonoBehaviour
 {
     public AnimConChanger animConChanger;
     [SerializeField] Text titleText;
-    int curEventTypr = 0;//ÇÃ·¹ÀÌ¾î°¡ »óÈ£ÀÛ¿ëÇÒ¶§ ¾î¶² ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ½ÇÇàÇØ¾ßÇÒÁö ÀúÀå
-    string nextMoveScenes = "";//¾ÀÀÌµ¿ÇÒ¶§ ´ÙÀ½¾ÀÀÌ ¹«¾ùÀÎÁö ÀÌ¸§ÀúÀå
-    string openUIName = "";//»óÈ£ÀÛ¿ëÀ¸·Î ui¸¦ ¿­°í ´Ý±â À§ÇØ ÀÌ¸§ ÀúÀå
+    int curEventTypr = 0;//ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½È£ï¿½Û¿ï¿½ï¿½Ò¶ï¿½ ï¿½î¶² ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    string nextMoveScenes = "";//ï¿½ï¿½ï¿½Ìµï¿½ï¿½Ò¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½
+    string openUIName = "";//ï¿½ï¿½È£ï¿½Û¿ï¿½ï¿½ï¿½ï¿½ï¿½ uiï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     MinigameImageUI minigameImageUI;
     
 
+    [SerializeField]
+    public GameObject[] mfs = new GameObject[3];
+    [SerializeField]
+    private Transform[] mfPos;
+    private bool[] mfPosCheck = new bool[3];
+
+    private void Awake()
+    {
+        EventManager.Regist("MF_Refresh", MF_Refresh);
+
+
+        MFInit();
+    }
+
+    public void MFInit()
+    {
+        //ï¿½Îºï¿½ ï¿½ï¿½ï¿½Ô½ï¿½ ï¿½Ì´ï¿½Ä£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        int _idx = 0;
+        foreach (var _data in MFDataManager.instance.Ret3MF())
+        {
+            if (_data != null)
+            {
+                _mf.transform.position = mfPos[_idx].transform.position;
+                GameObject _mf = Instantiate(_data.prefab);
+                _mf.AddComponent<FollowPet>().target = mfPos[_idx];
+                _mf.transform.localScale = mfPos[_idx].localScale;
+                _mf.name = _data.id.ToString();
+                mfPosCheck[_idx] = true;
+                mfs[_idx] = _mf;
+
+                _idx++;
+            }
+        }
+    }
+
+
+    public void MF_Refresh(string _str = "")
+    {
+        for (int i = 0; i < mfs.Length; i++)
+        {
+            mfPosCheck[i] = false;
+            Destroy(mfs[i]);
+        }
+
+        int _idx = 0;
+        foreach (var _data in MFDataManager.instance.Ret3MF())
+        {
+            if (_data != null)
+            {
+                GameObject _mf = Instantiate(_data.prefab);
+                _mf.transform.position = mfPos[_idx].transform.position;
+                _mf.AddComponent<FollowPet>().target = mfPos[_idx];
+                _mf.transform.localScale = mfPos[_idx].localScale;
+                _mf.name = _data.id.ToString();
+                mfPosCheck[_idx] = true;
+                mfs[_idx] = _mf;
+
+            }
+                _idx++;
+        }
+    }
+
+
     public void Update()
     {
-        //¿òÁ÷ÀÌ±â À§ÇÑ ÇÔ¼ö
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
         animConChanger.Walk(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
 
-        //animConChangerÀÇ »óÅÂ¿¡ µû¶ó¼­ Á¦ÇÑÀûÀ¸·Î ½ÇÇàÇÏ±â À§ÇÑ ½ºÀ§Ä¡¹®
-        //FSM ¾ß¸Å ¹öÀü °°Àº ´À³¦À¸·Î »ý°¢ÇÏ½Ã¸é µÉµíÇÕ´Ï´Ù.
+        //animConChangerï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½
+        //FSM ï¿½ß¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã¸ï¿½ ï¿½Éµï¿½ï¿½Õ´Ï´ï¿½.
         switch (animConChanger.pRState)
         {
-            case AnimConChanger.PRState.move://¿òÁ÷ÀÏ¶§
+            case AnimConChanger.PRState.move://ï¿½ï¿½ï¿½ï¿½ï¿½Ï¶ï¿½
 
-                //±¸¸£±â
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     animConChanger.Roll();
@@ -33,36 +96,36 @@ public class Player : MonoBehaviour
 
                 break;
 
-            case AnimConChanger.PRState.stop://¸ØÃçÀÖÀ»¶§
+            case AnimConChanger.PRState.stop://ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    //¿­·ÁÀÖ´Â ÆË¾÷ÀÌ ¾øÀ»¶§
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ë¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     if (openUIName.Equals(""))
-                    {                    
-                        //ÇÚµåÆù on off
+                    {
+                        //ï¿½Úµï¿½ï¿½ï¿½ on off
                         animConChanger.TogglePhone();
                     }
                     else
                     {
-                        //ÆË¾÷ÀÌ ¿­·ÁÀÖÀ¸¸é ´Ý±â
+                        //ï¿½Ë¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý±ï¿½
                         EventManager.Invoke("CloseUI", openUIName);
                     }
                 }
 
-                //ÇÚµåÆùÀÌ ¾È¿­·ÁÀÖÀ»¶§//Áßº¹½ÇÇà ¹æÁö
+                //ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//ï¿½ßºï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (animConChanger.isHandCam == false)
                 {
                     if (Input.GetKeyDown(KeyCode.F))
                     {
-                        switch (curEventTypr)//1¾É±â 2ÁÝ±â
+                        switch (curEventTypr)//1ï¿½É±ï¿½ 2ï¿½Ý±ï¿½
                         {
                             case 1:
                                 animConChanger.PlayerFnc(1, () =>
                                 {
-                                    //¹Ì´Ï°ÔÀÓ ¾ÆÄÉÀÌµå ¸Ó½Å¿¡ ¾ÉÀ»°æ¿ì¸¦ »óÁ¤ÇÏ¿©
-                                    //ÇØ´ç ¾ÀÀ¸·Î ÀÌµ¿ÇÏ°Ô
+                                    //ï¿½Ì´Ï°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ó½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½
+                                    //ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½
                                     StartCoroutine(GotoNextScene(nextMoveScenes));
                                 });
 
@@ -70,7 +133,7 @@ public class Player : MonoBehaviour
                             case 2:
                                 animConChanger.PlayerFnc(0, () =>
                                 {
-                                    //uiÆË¾÷ È°¼ºÈ­
+                                    //uiï¿½Ë¾ï¿½ È°ï¿½ï¿½È­
                                     EventManager.Invoke("OpenUI", openUIName);
                                 });
                                 break;
@@ -85,21 +148,21 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //ÇÃ·¹ÀÌ¾î°¡ ´êÀº ÄÝ¶óÀÌ¾îÀÇ ¿ÀºêÁ§Æ® ÀÌ¸§À» ¹Þ¾Æ¿Í¼­ ÀÌ¸§¿¡ ¸Â´Â ÀÌº¥Æ® ½ÇÇà
+        //ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿Í¼ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Â´ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         string _name = other.gameObject.name;
 
         switch (_name)
         {
-            //¹Ì´Ï°ÔÀÓµé
+            //ï¿½Ì´Ï°ï¿½ï¿½Óµï¿½
             case "MG_S_01":
             case "MG_S_02":
             case "MG_S_03":
             case "MG_S_04":
             case "MG_S_05":
-                curEventTypr = 1;//¾É±â
-                nextMoveScenes = _name;//ÀÌµ¿ÇÒ ¾ÀÀÌ¸§
-                other.transform.parent.GetComponent<Outline>().enabled = true;//´êÀº ¿ÀºêÁ§Æ®ÀÇ ¾Æ¿ô¶óÀÎÀ» È°¼ºÈ­
-                EventManager.Invoke("ActiveFInfo", "¹Ì´Ï°ÔÀÓ : " + _name);//ÅøÆÁÇ¥½Ã
+                curEventTypr = 1;//ï¿½É±ï¿½
+                nextMoveScenes = _name;//ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½
+                other.transform.parent.GetComponent<Outline>().enabled = true;//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Æ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­
+                EventManager.Invoke("ActiveFInfo", "ï¿½Ì´Ï°ï¿½ï¿½ï¿½ : " + _name);//ï¿½ï¿½ï¿½ï¿½Ç¥ï¿½ï¿½
                 
                 if (titleText != null)
                 {
@@ -112,13 +175,13 @@ public class Player : MonoBehaviour
                 }
                 minigameImageUI.PopUpImage(other.transform.parent.transform,_name);
                 break;
-                //ÆË¾÷
+            //ï¿½Ë¾ï¿½
             case "Ranking":
             case "Friends":
             case "Gacha":
             case "Achivement":
-            case "GSS_Desktop":       
-                curEventTypr = 2;//¸ð¼Ç¾øÀÌ µðÆúÆ®·Î 2 ÀÌÈÄ ´Ù¸¥ ¸ð¼Ç »ý±â¸é º¯°æ ¿¹Á¤
+            case "GSS_Desktop":
+                curEventTypr = 2;//ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ 2 ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 openUIName = _name;
                 other.transform.parent.GetComponent<Outline>().enabled = true;
                 EventManager.Invoke("ActiveFInfo", _name);
@@ -130,7 +193,7 @@ public class Player : MonoBehaviour
                 
 
                 break;
-            //À§ ÀÌ¸§ÀÌ ¾Æ´Ñ ´Ù¸¥¿ÀºêÁ§Æ®¸é ¹«½Ã
+            //ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             default:
                 curEventTypr = 0;
                 nextMoveScenes = "";
@@ -140,7 +203,7 @@ public class Player : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        //ÇÃ·¹ÀÌ¾î°¡ ºüÁ®³ª¿Â ¿ÀºêÁ§Æ®ÀÇ ÀÌ¸§À¸·Î Á¤º¸ ÃÊ±âÈ­
+        //ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         string _name = other.gameObject.name;
 
         switch (_name)
