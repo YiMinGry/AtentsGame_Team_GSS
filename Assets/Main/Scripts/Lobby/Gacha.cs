@@ -19,8 +19,8 @@ public class Gacha : MonoBehaviour
     Text nameText, gradeText, normalCoinText, rareCoinText;
 
     private GameObject addedPet;
-    public GameObject[] preSpawn, spawn, additional, postSpawn, deSpawn; // ÀÌÆåÆ® ÀúÀå
-    private GameObject preSpawnEffect, spawnEffect, additionalEffect, postSpawnEffect, deSpawnEffect; // ÀÌÆåÆ® »ý¼º À§ÇØ ÇÒ´ç
+    public GameObject[] preSpawn, spawn, additional, postSpawn, deSpawn; // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+    private GameObject preSpawnEffect, spawnEffect, additionalEffect, postSpawnEffect, deSpawnEffect; // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½
     public GameObject canvas = null;
     public GameObject gachaCamera = null;
 
@@ -28,9 +28,9 @@ public class Gacha : MonoBehaviour
 
     private int grade = 0, petNum = 0, petNumMax = 17, effectType = 0;
 
-    bool isGachaActive = false; // °¡Ã­ ½ÇÇà Áß¿¡ ¶Ç´Ù¸¥ °¡Ã­ ½ÇÇà ¹æÁö
-    bool isSpawnEnd = false;    // ½ºÆù ³¡³ª±â Àü¿¡ µð½ºÆù ¹æÁö
-    bool isDespawned = false;   // µð½ºÆù ÈÄ¿¡ ´Ù½Ã µð½ºÆù ¹æÁö
+    bool isGachaActive = false; // ï¿½ï¿½Ã­ ï¿½ï¿½ï¿½ï¿½ ï¿½ß¿ï¿½ ï¿½Ç´Ù¸ï¿½ ï¿½ï¿½Ã­ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    bool isSpawnEnd = false;    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    bool isDespawned = false;   // ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¿ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     Coroutine NoCoinCoroutine;
     float noCoinCount = 0.0f;
@@ -91,11 +91,11 @@ public class Gacha : MonoBehaviour
         if (!isGachaActive)
         {
             petNum = SetPetNumber();
-            if (petNum > -1)    // petNum¿¡ -1ÀÌ ¸®ÅÏµÇ¸é »Ì±â ºÒ°¡´É
+            if (petNum > -1)    // petNumï¿½ï¿½ -1ï¿½ï¿½ ï¿½ï¿½ï¿½ÏµÇ¸ï¿½ ï¿½Ì±ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½
             {
                 petRender.SetActive(true);
                 isGachaActive = true;
-                effectType = Random.Range(0, 3); // ÀÌÆåÆ® Å¸ÀÔ ÇöÀç 3°³
+                effectType = Random.Range(0, 3); // ï¿½ï¿½ï¿½ï¿½Æ® Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½
                 //petNum = Random.Range(0, petNumMax);
                 gachaCamera.SetActive(true);
                 StartCoroutine(PetSpawn());
@@ -105,8 +105,8 @@ public class Gacha : MonoBehaviour
 
     private int SetPetNumber()
     {
-        int[] unHavePets = new int[petNumMax];  // ¾È °¡Áø Æê ÀÎµ¦½º¸¸ ³ÖÀ» ¹è¿­
-        int count = 0;  // ¾È °¡Áø Æê °³¼ö
+        int[] unHavePets = new int[petNumMax];  // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
+        int count = 0;  // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         for (int i = 0; i < petNumMax; i++)
         {
@@ -122,8 +122,8 @@ public class Gacha : MonoBehaviour
         }
         else
         {
-            Debug.Log("ÀÌ¹Ì ¸ðµç Ä£±¸¸¦ °¡Áö°í ÀÖ½À´Ï´Ù.");
-            return -1;  // »Ì±â°¡ ºÒ°¡´ÉÇÏ¸é -1 ¸®ÅÏ
+            Debug.Log("ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ Ä£ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.");
+            return -1;  // ï¿½Ì±â°¡ ï¿½Ò°ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ -1 ï¿½ï¿½ï¿½ï¿½
         }
     }
 
@@ -150,7 +150,7 @@ public class Gacha : MonoBehaviour
             normalCoinText.fontSize = startCoinFontSize;
             noCoinCount = 0.0f;
             NoCoinCoroutine = StartCoroutine(NoCoin(normalCoinText));
-            Debug.Log("ÄÚÀÎÀÌ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
         }
     }
 
@@ -171,7 +171,7 @@ public class Gacha : MonoBehaviour
             normalCoinText.fontSize = startCoinFontSize;
             noCoinCount = 0.0f;
             NoCoinCoroutine = StartCoroutine(NoCoin(rareCoinText));
-            Debug.Log("ÄÚÀÎÀÌ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
         }
     }    
 
@@ -179,19 +179,19 @@ public class Gacha : MonoBehaviour
     {
         while (true)
         {            
-            // ±ÛÀÚ »ö±ò Èò»ö <-> »¡°£»ö ¹Ýº¹
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ <-> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ýºï¿½
             text.color = new Color(1, Mathf.Abs(Mathf.Cos(noCoinCount)), Mathf.Abs(Mathf.Cos(noCoinCount)));
-            // ±ÛÀÚ »çÀÌÁî 35 ~ 45 ¹Ýº¹
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 35 ~ 45 ï¿½Ýºï¿½
             text.fontSize = Mathf.FloorToInt(startCoinFontSize + 15.0f * Mathf.Abs(Mathf.Sin(noCoinCount)));
             noCoinCount += Time.deltaTime * 10.0f;
-            // noCoinCount°¡ ÆÄÀÌÀÇ 2¹è°¡ µÇ¸é(2¹ø ¹Ýº¹ÇÏ¸é) ÄÚ·çÆ¾ Á¾·á
+            // noCoinCountï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 2ï¿½è°¡ ï¿½Ç¸ï¿½(2ï¿½ï¿½ ï¿½Ýºï¿½ï¿½Ï¸ï¿½) ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½
             if (noCoinCount > Mathf.PI * 2)
             {
                 break;
             }
             yield return null;
         }
-        // ÄÚ·çÆ¾ Á¾·á ½Ã ±ÛÀÚ »ö, Å©±â ÃÊ±âÈ­
+        // ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, Å©ï¿½ï¿½ ï¿½Ê±ï¿½È­
         text.color = Color.white;
         text.fontSize = startCoinFontSize;
         yield return null;
@@ -206,7 +206,7 @@ public class Gacha : MonoBehaviour
         }
     }
 
-    IEnumerator PetSpawn() // Æê »Ì±â±â°è¿¡¼­ ¼ÒÈ¯
+    IEnumerator PetSpawn() // ï¿½ï¿½ ï¿½Ì±ï¿½ï¿½è¿¡ï¿½ï¿½ ï¿½ï¿½È¯
     {
         //nameText.text = Pets[petNum].friendName;
         nameText.text = MFDataManager.instance.mfarr[petNum].friendName;
@@ -233,10 +233,10 @@ public class Gacha : MonoBehaviour
         yield return Utill.WaitForSeconds(2f);
 
         DeleteObject(preSpawnEffect);
-        //addedPet = MakeObject(Pets[petNum].prefab, petSpawner); // Æê »ý¼º ¹× petPositionÀÇ ÀÚ½ÄÀ¸·Î ¼³Á¤
-        addedPet = MakeObject(MFDataManager.instance.mfarr[petNum].prefab, petSpawner); // Æê »ý¼º ¹× petPositionÀÇ ÀÚ½ÄÀ¸·Î ¼³Á¤
+        //addedPet = MakeObject(Pets[petNum].prefab, petSpawner); // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ petPositionï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        addedPet = MakeObject(MFDataManager.instance.mfarr[petNum].prefab, petSpawner); // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ petPositionï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         anim = addedPet.GetComponentInChildren<Animator>();
-        anim.SetBool("Spawn", true); // 9¹ø jump ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+        anim.SetBool("Spawn", true); // 9ï¿½ï¿½ jump ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
         spawnEffect = MakeObject(spawn[3 * effectType + grade], effectSpawner);
 
         yield return Utill.WaitForSeconds(1f);
@@ -247,7 +247,7 @@ public class Gacha : MonoBehaviour
         isSpawnEnd = true;
     }
 
-    IEnumerator PetDespawn() // Æê »Ì±â±â°è¿¡¼­ ¼ÒÈ¯
+    IEnumerator PetDespawn() // ï¿½ï¿½ ï¿½Ì±ï¿½ï¿½è¿¡ï¿½ï¿½ ï¿½ï¿½È¯
     {
         isDespawned = true;
         anim.SetBool("Despawn", true);
@@ -270,14 +270,14 @@ public class Gacha : MonoBehaviour
         EventManager.Invoke("CloseUI", "Gacha");
     }
 
-    private GameObject MakeObject(GameObject effect, Transform Spawner) // ¿ÀºêÁ§Æ® »ý¼º ÇÔ¼ö
+    private GameObject MakeObject(GameObject effect, Transform Spawner) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     {
         GameObject _effect = Instantiate(effect, Spawner);
         _effect.SetActive(true);
         return _effect;
     }
 
-    private void DeleteObject(GameObject effect) // ÀÌÆåÆ® »èÁ¦ ÇÔ¼ö
+    private void DeleteObject(GameObject effect) // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     {
         effect?.SetActive(false);
         Destroy(effect);
