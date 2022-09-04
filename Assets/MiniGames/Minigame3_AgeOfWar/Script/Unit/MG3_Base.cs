@@ -32,9 +32,20 @@ public class MG3_Base : MG3_Unit
 
         }
     }
+    public int HpMax 
+    { 
+        get => hpMax;
+        set 
+        { 
+
+            hp += value-hpMax;
+            hpMax = value;
+            hpBarImage.fillAmount = (float)hp / (float)hpMax;
+        } 
+    }
     override protected void Awake()
     {
-        hpMax = 100;
+        hpMax = 150;
         UnitNum= 10000;
         hp = hpMax;
         SetHpBar();

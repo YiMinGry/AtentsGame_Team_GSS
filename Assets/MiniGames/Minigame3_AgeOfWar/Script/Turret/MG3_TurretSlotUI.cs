@@ -37,7 +37,7 @@ public class MG3_TurretSlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnt
                 gold >= MG3_GameManager.Inst.TurretDataMgr[revolNum].cost)
             {
 
-                turretSlot.SetTurret(MG3_GameManager.Inst.Revolution);
+                turretSlot.SetTurret(MG3_GameManager.Inst.Revolution,true);
                 MG3_GameManager.Inst.Menu.OnClickTurretCancel?.Invoke();//temp를 hide하고 Cancel창 지움
                 slotImg.color = Color.clear;
                 //gameObject.SetActive(false);

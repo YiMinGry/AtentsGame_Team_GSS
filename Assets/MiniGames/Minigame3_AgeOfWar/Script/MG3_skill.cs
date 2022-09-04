@@ -9,7 +9,9 @@ public class MG3_skill : MonoBehaviour
 
     float rand;
     float sidedistance = 13.0f;
-    public int numProjectile = 15;
+    public int basenumProjectile = 5;
+    public int numProjectile;
+
     Button skillButton;
     Image skillImage;
     Vector3 skillPosition;
@@ -30,6 +32,7 @@ public class MG3_skill : MonoBehaviour
     {
         if(skillImage.fillAmount <0.01f)
         {
+            numProjectile = basenumProjectile * (MG3_GameManager.Inst.Revolution + 3);
             StartCoroutine(MeteorCo());
             skillImage.fillAmount = 1;
         }
@@ -43,7 +46,7 @@ public class MG3_skill : MonoBehaviour
 
             rand = Random.Range(0.0f, 1.0f);
             GameObject obj=Instantiate(projectilePrefab,skillPosition,skillRotation);
-            obj.transform.position += Vector3.right * (36 * rand - 18);
+            obj.transform.position += Vector3.right * (sidedistance*2*rand - sidedistance);
             yield return new WaitForSeconds(0.1f);
         }
     }
