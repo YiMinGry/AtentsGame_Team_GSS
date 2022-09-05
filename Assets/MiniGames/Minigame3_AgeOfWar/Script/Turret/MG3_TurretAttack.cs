@@ -5,106 +5,135 @@ using UnityEngine;
 
 public class MG3_TurretAttack : MG3_UnitRange
 {
-    float attackInterval = 5.0f;
+    float attackInterval = 3.0f;
+    float attackCool;
     public float lookSpeed = 1.0f;
     public GameObject projectile;
     Rigidbody rigid;
-    public float shootingPower = 10.0f;
+    public float shootingPower = 50.0f;
     Transform projectileTr;
-    public float attackDelay = 0.3f;
-    public float attackDelayTimer = 0.3f;
+    Transform targetTr;
+    Transform turretTr;
+    float offset;
+    [SerializeField] LayerMask UnitLayerMask;
     
     public AudioClip turretClip;
     GameObject projectileDomy;
 
     private void Awake()
     {
+        attackCool = attackInterval;
         projectileDomy = transform.GetChild(0).GetChild(2).gameObject;
+        turretTr = transform.parent;
+        int turretSlotNum =int.Parse( turretTr.parent.name[turretTr.parent.name.Length - 1].ToString());
+        offset = (0.8f + turretSlotNum * 1.2f);
+
     }
     protected override void Start()
     {
-        targetNum = WRONGTARGETNUM;
+        //targetNum = WRONGTARGETNUM;
         anim = GetComponent<Animator>();
-        
-        
+
+
         projectileTr = transform.GetChild(0).Find("ProjectileTr");
-        attackDelayTimer = attackDelay;
-       
+        SetTarget();
     }
-    protected override void OnTriggerStay(Collider other)
+    //protected override void OnTriggerStay(Collider other)
+    //{
+    //    MG3_Unit unitOther = other.GetComponent<MG3_Unit>();
+
+    //    if ((other.CompareTag("Unit") || other.CompareTag("Enemy")) && (!transform.parent.parent.CompareTag(other.tag))) //적이면
+    //    {
+    //        //적이 사정거리내로 왔다
+    //        if (targetNum >= unitOther.UnitNum) //targetNum은 초기:10000 or 선봉의 unitNum 고로 후방은 저 조건에 만족 못 함(움직일 때 리셋하면 안되네)
+    //        {   //첫번째놈이다
+    //            targetTr=unitOther.transform;
+
+    //            if (targetNum == WRONGTARGETNUM)        //타겟이 초기화 됐다면
+    //            {
+    //                targetNum = unitOther.UnitNum;
+    //                attackCool = attackInterval;
+    //            }
+
+    //            attackCool -= Time.fixedDeltaTime;
+
+    //            if (attackCool < 0)
+    //            {
+
+    //                attackCool = attackInterval;
+    //                anim.SetTrigger("Shoot");
+    //            }
+
+    //            LookAtSlow(targetTr);
+
+    //        }
+    //    }
+
+    //}
+
+    protected override void FixedUpdate()
     {
-        MG3_Unit unitOther = other.GetComponent<MG3_Unit>();
-        
-        if ((other.CompareTag("Unit") || other.CompareTag("Enemy")) && (!transform.parent.parent.CompareTag(other.tag))) //적이면
+        if(targetTr!=null)
         {
-            //적이 사정거리내로 왔다
-            if (targetNum >= unitOther.UnitNum) //targetNum은 초기:10000 or 선봉의 unitNum 고로 후방은 저 조건에 만족 못 함(움직일 때 리셋하면 안되네)
-            {   //첫번째놈이다
-                Transform target=unitOther.transform;
-                
-                if (targetNum == WRONGTARGETNUM)        //타겟이 초기화 됐다면
-                {
-                    targetNum = unitOther.UnitNum;
-                    attackDelayTimer = attackDelay;
-                    attackStart = false;
-                    //InitializeAttack();
-                }
-
-                attackCool -= Time.fixedDeltaTime;
-
-                if (attackCool < 0)
-                {
-                    //공격 애니메이션 실행
-                    //Debug.Log("폭탄받아라!!!!!!!!!!!");
-                    MG3_SoundManager.instance.SFXPlay("turret", turretClip);
-
-                    attackCool = attackInterval;
-                    anim.SetTrigger("Shoot");
-                    attackStart = true;
-                    projectileDomy.SetActive(false);
-                }
-                if(attackCool<1.0f)
-                {
-                    projectileDomy.SetActive(true);
-                }
-                if(attackStart)
-                {
-                    attackDelayTimer -= Time.fixedDeltaTime;
-                    
-                }
-                if(attackDelayTimer < 0)
-                {
-                    
-                    attackDelayTimer = attackDelay;
-                    TurretShot(target);
-                    //Debug.Log("빵!!!!!!");
-                    attackStart=false;
-                }
-                LookAtSlow(target);
-               
+            attackCool -= Time.fixedDeltaTime;
+            //LookAtSlow(targetTr);
+            if(attackCool < 0)
+            {
+                anim.SetTrigger("Shoot");
+                attackCool = attackInterval;
             }
         }
-        
+
+
     }
     protected override void OnTriggerEnter(Collider other)
     {
-        
+        if ((other.CompareTag("Unit") || other.CompareTag("Enemy")) && (!transform.parent.CompareTag(other.tag)))
+        {
+            if (targetTr == null)
+            {
+                attackCool = attackInterval;
+                SetTarget();
+            }
+        }
     }
     protected override void OnTriggerExit(Collider other)
     {
         if ((other.CompareTag("Unit") || other.CompareTag("Enemy")) && (!transform.parent.CompareTag(other.tag)))
         {
-
-            attackStart = false;
-            attackDelayTimer = attackDelay;
+            targetTr = null;
+            if (targetTr == null)
+            {
+                SetTarget();
+            }
         }
 
-            base.OnTriggerExit(other);
-        
-        //anim.SetTrigger("ShootStop");
-        //InitializeAttack();
     }
+    public void SetTarget()
+    {
+        if (Physics.Raycast(turretTr.position - turretTr.up * offset - turretTr.forward, transform.forward, out RaycastHit hitInfo, 12f, UnitLayerMask))
+        {
+            targetTr = hitInfo.transform;
+        }
+    }
+    public void DomySetActive()// addEvent 함
+    {
 
+        projectileDomy.SetActive(true);
+    }
+    public void ShotEvent()//addEvent 함
+    {
+
+        projectileDomy.SetActive(false);
+        MG3_SoundManager.instance.SFXPlay("turret", turretClip);
+        
+        if(targetTr != null)
+        {
+
+            TurretShot(targetTr);
+        }
+        
+    }
     void LookAtSlow(Transform targetTr)
     {
         Vector3 dir = targetTr.position - transform.position;
@@ -114,17 +143,13 @@ public class MG3_TurretAttack : MG3_UnitRange
     {
         GameObject obj = Instantiate(projectile, projectileTr);
         rigid = obj.GetComponent<Rigidbody>();
-        Vector3 dir = target.position - transform.position;
+        Vector3 dir = (target.position - transform.position).normalized;
+        dir.z = 0;
         rigid.gameObject.transform.parent = null;
         rigid.isKinematic = false;
         
         rigid.AddForce(dir * shootingPower, ForceMode.Impulse);
     }
 
-    void InitializeAttack()
-    {
-        attackStart = true;
-        attackDelayTimer = attackDelay;
-        attackCool = attackInterval;
-    }
+    
 }

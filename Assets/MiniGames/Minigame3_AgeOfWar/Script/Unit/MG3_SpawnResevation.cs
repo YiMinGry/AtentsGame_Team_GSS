@@ -22,11 +22,16 @@ public class MG3_SpawnResevation : MonoBehaviour
 
     void ReserveSpawn(int _unitType)
     {
-        unitQueue.Enqueue(_unitType);
+        if(MG3_GameManager.Inst.Gold>= MG3_GameManager.Inst.UnitDataMgr[_unitType].cost&&unitQueue.Count<4)
+        {
+            MG3_GameManager.Inst.Gold -= MG3_GameManager.Inst.UnitDataMgr[_unitType].cost;
+            unitQueue.Enqueue(_unitType);
+
+            buildTimeQueue.Enqueue(MG3_GameManager.Inst.UnitDataMgr[_unitType].buildTime);
+            resevImage.fillAmount = unitQueue.Count * 0.25f;
+            isSpawning = true;
+        }
         
-        buildTimeQueue.Enqueue(MG3_GameManager.Inst.UnitDataMgr[_unitType].buildTime);
-        resevImage.fillAmount = unitQueue.Count * 0.25f;
-        isSpawning = true;
     }
 
     public void SpawnMeleeUnit()

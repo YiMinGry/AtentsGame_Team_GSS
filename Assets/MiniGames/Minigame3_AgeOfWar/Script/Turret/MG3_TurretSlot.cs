@@ -7,12 +7,15 @@ public class MG3_TurretSlot : MonoBehaviour
     MG3_TurretData turretData;
     GameObject turretObj;
     public MG3_TurretData TurretData => turretData;
-    public void SetTurret(int _id)
+    public void SetTurret(int _id,bool isMine)
     {
         
         turretData = MG3_GameManager.Inst.TurretDataMgr[_id];
-        MG3_GameManager.Inst.Gold -= turretData.cost;
-        turretObj =Instantiate(turretData.turretPrefab,transform).gameObject;
+        if (isMine)
+        {
+            MG3_GameManager.Inst.Gold -= turretData.cost;
+        }
+        turretObj = Instantiate(turretData.turretPrefab, transform).gameObject;
     }
     public void SellTurret()
     {

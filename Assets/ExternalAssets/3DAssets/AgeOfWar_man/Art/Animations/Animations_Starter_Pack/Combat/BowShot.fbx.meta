@@ -9,6 +9,12 @@ ModelImporter:
   - first:
       74: -1169289577551834828
     second: BowShot
+  - first:
+      74: -1169289577551834828
+    second: human_male_bowshot_01
+  - first:
+      74: -6230127162173890992
+    second: BowShot
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -62,11 +68,19 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.49193546
+        functionName: Swing
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: f05b7253010c391468c1ad767cb2a712,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 2
     - serializedVersion: 16
       name: BowShot
       takeName: human_male_bowshot_01

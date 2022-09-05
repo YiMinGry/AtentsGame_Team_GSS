@@ -33,22 +33,22 @@ public class MG3_UnitSpawner : MonoBehaviour
         //unit.SetUnitStat(GameManager.Inst.UnitDataMgr[unitType+revolNum*3]);
         //unit.SetUnitStat(unitData);
 
-
-        if (MG3_GameManager.Inst.Gold >= unitData.cost)
+        GameObject unitObject = Instantiate(unitData.UnitPrefab, transform);
+        MG3_Unit unit = unitObject.GetComponent<MG3_Unit>();
+        unit.SetUnitStat(unitData);
+        unit.UnitNum = unitCount;
+        if (isEnemy)
         {
-            GameObject unitObject = Instantiate(unitData.UnitPrefab, transform);
-            MG3_Unit unit = unitObject.GetComponent<MG3_Unit>();
-            unit.SetUnitStat(unitData);
-            unit.UnitNum = unitCount;
-            if (isEnemy)
-            {
-                unitObject.tag = "Enemy";
-            }
-            else
-            {
-                MG3_GameManager.Inst.Gold -= unit.Cost;
-            }
-            unitCount++;
+            unitObject.tag = "Enemy";
         }
+        //else
+        //{
+        //    MG3_GameManager.Inst.Gold -= unit.Cost;
+        //}
+        unitCount++;
+        //if (MG3_GameManager.Inst.Gold >= unitData.cost)
+        //{
+           
+        //}
     }
 }

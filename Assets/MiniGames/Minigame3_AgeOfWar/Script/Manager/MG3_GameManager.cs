@@ -10,7 +10,7 @@ public class MG3_GameManager : MonoBehaviour
 {
     MG3_UnitDataManager unitDataMgr;
     MG3_TurretDataManager turretDataMgr;
-    private int gold = 200;
+    [SerializeField] private int gold = 0;
     [SerializeField] private int exp = 0;
     private int revolution = 0;
     private int numTurretSlot = 0;
@@ -19,6 +19,9 @@ public class MG3_GameManager : MonoBehaviour
     private GameObject[] bases = new GameObject[3];
     public GameObject[] enemyBases;
     public GameObject[] enemyTurretSlot;
+    private MG3_Base myBase;
+    private MG3_Base enemyBase;
+
     MG3_Menu menu;
     private int enemyRevol = 0;
     public int score = 0;
@@ -48,7 +51,8 @@ public class MG3_GameManager : MonoBehaviour
                 enemyRevol++;
                 enemyBases[enemyRevol].SetActive(true);
                 MG3_TurretSlot slot = enemyTurretSlot[enemyRevol].GetComponent<MG3_TurretSlot>();
-                slot.SetTurret(enemyRevol);
+                slot.SetTurret(enemyRevol,false);
+                enemyBase.HpMax = enemyBase.HpMax * 2;
             }
         } 
     }
@@ -97,6 +101,7 @@ public class MG3_GameManager : MonoBehaviour
         {
             if(baseparents[i].CompareTag("Unit"))
             {
+                myBase=baseparents[i];
                 baseparent = baseparents[i].transform.Find("Base").gameObject;
                 for(int j=0;j<bases.Length;j++)
                 {
@@ -107,9 +112,13 @@ public class MG3_GameManager : MonoBehaviour
                     }
                 }
             }
+            else
+            {
+                enemyBase=baseparents[i];
+            }
         }
         MG3_TurretSlot slot = enemyTurretSlot[0].GetComponent<MG3_TurretSlot>();
-        slot.SetTurret(0);
+        slot.SetTurret(0,false);
     }
     public void Revol()
     {
@@ -120,6 +129,7 @@ public class MG3_GameManager : MonoBehaviour
                 bases[revolution].SetActive(false);
                 revolution++;
                 bases[revolution].SetActive(true);
+                myBase.HpMax = myBase.HpMax * 2;
             }
         }
         
