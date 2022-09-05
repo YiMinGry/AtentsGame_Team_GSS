@@ -6,6 +6,6 @@ public class MG3_StarTest : MonoBehaviour
 {
     private void Start()
     {
-        MG3_GameManager.Inst.Gold += 300;
+        MG3_GameManager.Inst.Gold += 500;
     }
 }

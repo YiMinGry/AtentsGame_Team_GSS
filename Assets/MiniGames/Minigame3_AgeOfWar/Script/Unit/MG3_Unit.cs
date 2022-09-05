@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class MG3_Unit : MonoBehaviour
 {
-    
+    [SerializeField] private LayerMask unitLayerMask;
     [SerializeField] protected float moveSpeed = 1.0f;
     [SerializeField] protected int unitNum = 0;
     [SerializeField] protected int hp;
@@ -20,9 +20,8 @@ public class MG3_Unit : MonoBehaviour
     public AudioClip gunClip;
     private Vector3 rayOffest;
     private int revol;
+    private bool atOtherBase = false;
 
-    protected int targetNum;
-    protected const int WRONGTARGETNUM = 20000;
     //유닛별 차등----------------------------------------------------------
     [SerializeField] protected int attack = 5;
     [SerializeField] protected int hpMax = 20;
@@ -125,12 +124,21 @@ public class MG3_Unit : MonoBehaviour
         {
             Destroy(this.gameObject); 
         }
-        
+        if (isMelee)
+        {
+            attackCool -= Time.fixedDeltaTime;
+            if (attackCool < 0)
+            {
+                anim.SetTrigger("Attack");
+                attackCool = meleeTime;
+            }
+        }
 
     }
 
     virtual protected void OnTriggerEnter(Collider other)
     {
+        
         MG3_Unit unitOther = other.GetComponent<MG3_Unit>();
         if (other.CompareTag(this.gameObject.tag))//같은 태그면
         {
@@ -147,57 +155,69 @@ public class MG3_Unit : MonoBehaviour
         }
         else if (other.CompareTag("Enemy") || other.CompareTag("Unit")) //적이 enter
         {
+            MG3_Base BaseOther = other.GetComponent<MG3_Base>();
+            if (BaseOther != null)
+            {
+                atOtherBase = true;
+            }
             nowMoveSpeed = 0;
             anim.SetInteger("State", (int)MG3_UnitState.melee);
             isMelee = true;
+            isRange = false;
+            attackCool = Random.Range(0.1f, 0.3f);
+
         }
     }
     virtual protected void OnTriggerExit(Collider other)
     {
-        MG3_Unit unitOther = other.GetComponent<MG3_Unit>();
-        if ((other.CompareTag(this.gameObject.tag))&& (unitNum > unitOther.UnitNum))//같은 태그이고 나보다 선봉이 exit하면
+        if(!atOtherBase)
         {
-            if(waitingNum<=1)
+            MG3_Unit unitOther = other.GetComponent<MG3_Unit>();
+            if ((other.CompareTag(this.gameObject.tag)) && (unitNum > unitOther.UnitNum))//같은 태그이고 나보다 선봉이 exit하면
+            {
+                if (waitingNum <= 1)
+                {
+                    nowMoveSpeed = moveSpeed;
+                    anim.SetInteger("State", (int)MG3_UnitState.walk);
+
+                    //anim.SetBool("isWaiting", false);
+                    waitingNum--;
+                }
+                else
+                {
+                    waitingNum--;
+                }
+            }
+            else if ((other.CompareTag("Enemy") || other.CompareTag("Unit")) && waitingNum <= 1) //적이 exit 하면(죽으면)
             {
                 nowMoveSpeed = moveSpeed;
                 anim.SetInteger("State", (int)MG3_UnitState.walk);
-                
-                //anim.SetBool("isWaiting", false);
-                waitingNum--;
-            }
-            else
-            {
-                waitingNum--;
+                isMelee = false;
             }
         }
-        else if ((other.CompareTag("Enemy") || other.CompareTag("Unit"))&& waitingNum <= 1) //적이 exit 하면(죽으면)
-        {
-            nowMoveSpeed = moveSpeed;
-            anim.SetInteger("State", (int)MG3_UnitState.walk);
-            isMelee = false;
-        }
+        
     }
 
-    virtual protected void OnTriggerStay(Collider other)
-    {
-        MG3_Unit unitOther = other.GetComponent<MG3_Unit>();
-        if (!(CompareTag(other.tag)) && (other.CompareTag("Unit") || other.CompareTag("Enemy")))    //적이면
-        {
-            if (unitOther != targetUnit)                                   //원래 패던놈이 아니면
-            {
-                targetUnit = unitOther;
-                attackCool = Random.Range(-0.1f,0.1f); //상대와 완벽히 똑같은 공격 타이밍 방지
-            }
-            attackCool -= Time.fixedDeltaTime;
-            if (attackCool < 0)
-            {
-                anim.SetTrigger("Attack");
-                attackCool = meleeTime;
-            }
+    //virtual protected void OnTriggerStay(Collider other)
+    //{
+    //    MG3_Unit unitOther = other.GetComponent<MG3_Unit>();
+    //    if (!(CompareTag(other.tag)) && (other.CompareTag("Unit") || other.CompareTag("Enemy")))    //적이면
+    //    {
+    //        if (unitOther != targetUnit)                                   //원래 패던놈이 아니면
+    //        {
+    //            targetUnit = unitOther;
+    //            attackCool = Random.Range(-0.1f,0.1f); //상대와 완벽히 똑같은 공격 타이밍 방지
+    //        }
+    //        attackCool -= Time.fixedDeltaTime;
+    //        if (attackCool < 0)
+    //        {
+    //            anim.SetTrigger("Attack");
+    //            attackCool = meleeTime;
+    //        }
             
 
-        }
-    }
+    //    }
+    //}
     // 함수부------------------------------------------------------------------
 
     public void SetUnitStat(MG3_UnitData unitData)
@@ -261,7 +281,18 @@ public class MG3_Unit : MonoBehaviour
        
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(this.transform.position + rayOffest, this.transform.forward, out hitInfo, reach))
+        if (Physics.Raycast(this.transform.position + rayOffest, this.transform.forward, out hitInfo, reach,unitLayerMask))
+        {
+            MG3_Unit unit = hitInfo.transform.GetComponent<MG3_Unit>();
+
+            Debug.Log($"{this.tag} 공격 {hitInfo.transform.tag}");
+            if (unit != null)
+            {
+                unit.TakeDamage(Attack);
+
+            }
+        }
+        else if(Physics.Raycast(this.transform.position + rayOffest, this.transform.forward, out hitInfo, reach))
         {
             MG3_Unit unit = hitInfo.transform.GetComponent<MG3_Unit>();
 

@@ -66,8 +66,8 @@ public class MG3_Base : MG3_Unit
     {
      
     }
-    protected override void OnTriggerStay(Collider other)
-    {
+    //protected override void OnTriggerStay(Collider other)
+    //{
         
-    }
+    //}
 }

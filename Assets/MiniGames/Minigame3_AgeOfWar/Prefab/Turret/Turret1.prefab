@@ -127,15 +127,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bddcbbd6cdb945c4f9fb2617e7d49a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetNum: 0
-  arrowClip: {fileID: 0}
-  gunClip: {fileID: 0}
+  attackCool: 0
   lookSpeed: 1
   projectile: {fileID: 6722001751910105418, guid: 13830299553580e4195868711d2c5188,
     type: 3}
-  shootingPower: 2
-  attackDelay: 0.4
-  attackDelayTimer: 0.4
+  shootingPower: 15
+  UnitLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   turretClip: {fileID: 8300000, guid: a979be80f06ddf04492330d0d62c7f8b, type: 3}
 --- !u!95 &3954923008539757419
 Animator:
