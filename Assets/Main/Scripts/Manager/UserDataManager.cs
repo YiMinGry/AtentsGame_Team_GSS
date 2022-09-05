@@ -38,7 +38,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         ID = _jdata["ID"].ToString();
         nickName = _jdata["nickName"].ToString();
         coin1 = long.Parse(_jdata["coin1"].ToString());
-        coin2 = long.Parse(_jdata["coin1"].ToString());
+        coin2 = long.Parse(_jdata["coin2"].ToString());
         mfList = _jdata["MFList"].ToString();
 
         JObject _list = new JObject();
@@ -113,6 +113,6 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     public void S2CL_UserCoinUpdate(JObject _jdata)
     {
         coin1 = long.Parse(_jdata["coin1"].ToString());
-        coin2 = long.Parse(_jdata["coin1"].ToString());
+        coin2 = long.Parse(_jdata["coin2"].ToString());
     }
 }
