@@ -137,12 +137,12 @@ public class Gacha : MonoBehaviour
     {
         if (UserDataManager.instance.CL2S_UserCoinUpdate(0, -50))
         {
-            //UserDataManager.instance.coin1 -= 50;
             SetNormalGrade();
             PetSpawnButton();
         }
         else
         {
+            AudioManager.Inst.PlaySFX("ErrorSound_01");
             if (NoCoinCoroutine != null)
             {
                 StopCoroutine(NoCoinCoroutine);
@@ -158,12 +158,12 @@ public class Gacha : MonoBehaviour
     {
         if (UserDataManager.instance.CL2S_UserCoinUpdate(1, -50))
         {
-            //UserDataManager.instance.coin2 -= 50;
             SetRareGrade();
             PetSpawnButton();
         }
         else
         {
+            AudioManager.Inst.PlaySFX("Gacha_ErrorSound_01");
             if (NoCoinCoroutine != null)
             {
                 StopCoroutine(NoCoinCoroutine);
@@ -179,19 +179,19 @@ public class Gacha : MonoBehaviour
     {
         while (true)
         {            
-            // ���� ���� ��� <-> ������ �ݺ�
+            // 글자 색깔 흰색 <-> 붉은색 반복
             text.color = new Color(1, Mathf.Abs(Mathf.Cos(noCoinCount)), Mathf.Abs(Mathf.Cos(noCoinCount)));
-            // ���� ������ 35 ~ 45 �ݺ�
+            // 글자 크기 35 ~ 45 반복
             text.fontSize = Mathf.FloorToInt(startCoinFontSize + 15.0f * Mathf.Abs(Mathf.Sin(noCoinCount)));
             noCoinCount += Time.deltaTime * 10.0f;
-            // noCoinCount�� ������ 2�谡 �Ǹ�(2�� �ݺ��ϸ�) �ڷ�ƾ ����
+            // noCoinCount가 파이의 2배 보다 커지면(2번 반복하면)종료
             if (noCoinCount > Mathf.PI * 2)
             {
                 break;
             }
             yield return null;
         }
-        // �ڷ�ƾ ���� �� ���� ��, ũ�� �ʱ�ȭ
+        // 글자 색깔, 크기 초기화
         text.color = Color.white;
         text.fontSize = startCoinFontSize;
         yield return null;
@@ -208,7 +208,7 @@ public class Gacha : MonoBehaviour
 
     IEnumerator PetSpawn() // 펫 뽑기기계에서 소환
     {
-        //nameText.text = Pets[petNum].friendName;
+        AudioManager.Inst.PlaySFX("Gacha_CoinSound_01");
         nameText.text = MFDataManager.instance.mfarr[petNum].friendName;
         MFDataManager.instance.mfarr[petNum].isHave = true;
 

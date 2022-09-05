@@ -139,7 +139,7 @@ public class MG2_GameManager : MonoBehaviour
         AudioManager.Inst.IsMusicOn = true;
         AudioManager.Inst.IsSoundOn = true;
         onGameStart = StartCoroutine(OnGameStart());
-        AudioManager.Inst.PlayBGM("FishBGM");
+        AudioManager.Inst.PlayBGM("Fish_BGM");
     }
 
     private void OnEnable()
