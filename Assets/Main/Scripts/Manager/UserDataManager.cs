@@ -27,6 +27,9 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         NetEventManager.Regist("LoginOK", S2CL_LoginOK);
         NetEventManager.Regist("SetUserNickName", S2CL_SetUserNickName);
         NetEventManager.Regist("UserCoinUpdate", S2CL_UserCoinUpdate);
+
+        NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);
+
         ID = SystemInfo.deviceUniqueIdentifier;
     }
 
@@ -114,5 +117,24 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     {
         coin1 = long.Parse(_jdata["coin1"].ToString());
         coin2 = long.Parse(_jdata["coin2"].ToString());
+    }
+
+    public void CL2S_ReadMyAllRanking()
+    {
+        JObject _userData = new JObject();
+        _userData.Add("cmd", "ReadMyAllRanking");
+        _userData.Add("ID", UserDataManager.instance.ID);
+
+        NetManager.instance.CL2S_SEND(_userData);
+    }
+
+    public void S2CL_ReadMyAllRanking(JObject _jdata)
+    {
+        Debug.Log(_jdata.ToString());
+
+        JArray _data = JArray.Parse(_jdata["MG_1"].ToString());
+        string _str = _data[0].ToString();
+
+        Debug.Log(_str);
     }
 }
