@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 512444018205743290}
   - component: {fileID: 8383650583789938679}
-  m_Layer: 0
+  - component: {fileID: -5369234791368188175}
+  m_Layer: 7
   m_Name: CopperCoin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,6 +48,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateSpeed: 360
   moveRange: 0.3
+  isRotate: 1
+--- !u!135 &-5369234791368188175
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507399224546833684}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.15
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &508702386175268318
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +73,7 @@ GameObject:
   - component: {fileID: 505004115780703366}
   - component: {fileID: 537177740544916988}
   - component: {fileID: 529403974926460976}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CopperCoin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

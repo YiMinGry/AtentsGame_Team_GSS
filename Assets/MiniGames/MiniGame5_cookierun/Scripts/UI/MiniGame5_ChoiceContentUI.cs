@@ -73,6 +73,7 @@ public class MiniGame5_ChoiceContentUI : MonoBehaviour
         Checked = Have.Find("Checked");
 
         chooseBtn = NotChecked.GetComponent<Button>();
+        chooseBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
     }
 
     public void Init()

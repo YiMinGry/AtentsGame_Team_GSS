@@ -23,5 +23,15 @@ public enum ChoiceState
 {
     RunFriend = 0,
     NextRunFriend,
-    BuffFriend,
+    BuffFriend
+}
+
+public enum ItemState
+{
+    ScoreItem = 0,
+    HealItem,
+    CoinItem,
+    BonusItem,
+    MagnetItem,
+    BigItem
 }

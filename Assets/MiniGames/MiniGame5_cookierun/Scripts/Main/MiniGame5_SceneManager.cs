@@ -13,6 +13,8 @@ public class MiniGame5_SceneManager : MonoBehaviour
     MiniGame5_Scene[] sceneList;
     public MiniGame5_Scene[] SceneList { get; }
 
+    Coroutine coScene;
+
     static MiniGame5_SceneManager instance;
     public static MiniGame5_SceneManager Inst { get => instance; }
 
@@ -32,7 +34,7 @@ public class MiniGame5_SceneManager : MonoBehaviour
         }
     }
 
-    public void Inintialize()
+    public void Initialize()
     {
         // GetComponent, FindTypeOf<> : 비활성화 된 컴포넌트는 찾을 수 없음
         // GetComponentsInChildren : 모든 자식을 찾아옴 (비적합)
@@ -84,13 +86,14 @@ public class MiniGame5_SceneManager : MonoBehaviour
     {
         uiList[(int)UIState.StartUI].OpenScene();
         uiList[(int)UIState.OpeningUI].CloseScene();
+        MiniGame5_SoundManager.Inst.StartBGM();
     }
 
     public void OnPlay(bool isPractice = false)
     {
         uiList[(int)UIState.MainPlayingUI].gameObject.GetComponent<MiniGame5_MainPlayingUI>().isPractice = isPractice;
 
-        StartCoroutine(CoBeforePlayAnim());
+        coScene = StartCoroutine(CoBeforePlayAnim());
     }
 
     IEnumerator CoBeforePlayAnim()
@@ -113,16 +116,39 @@ public class MiniGame5_SceneManager : MonoBehaviour
     {
         uiList[(int)UIState.MainPlayingUI].StartScene();
         sceneList[(int)SceneState.MainScene].StartScene();
+        MiniGame5_SoundManager.Inst.MainBGM();
+    }
+
+    public void OnBonusTimeEnd()
+    {
+        sceneList[(int)SceneState.MainScene].StartScene();
     }
 
     public void OnGameEnd()
     {
-        StartCoroutine(CoGameEnd());
+        MiniGame5_GameManager.Inst.IsGameGoing = false;
+        sceneList[(int)SceneState.MainScene].EndScene();
+
+        if (!MiniGame5_GameManager.Inst.IsFirstRunner)
+        {
+            coScene = StartCoroutine(CoGameEnd());
+        }
+        else
+        {
+            MiniGame5_GameManager.Inst.IsFirstRunner = false;
+            coScene = StartCoroutine(OnChangeNextRunnerOnPlay());
+        }
+    }
+
+    IEnumerator OnChangeNextRunnerOnPlay()
+    {
+        yield return new WaitForSeconds(1f);
+        MiniGame5_GameManager.Inst.Life = 0.5f;
+        sceneList[(int)SceneState.MainScene].ChangeCharator(ChoiceState.NextRunFriend);
     }
 
     IEnumerator CoGameEnd()
     {
-        sceneList[(int)SceneState.MainScene].EndScene();
         yield return new WaitForSeconds(sceneList[(int)SceneState.MainScene].WaitSeconds);
 
         uiList[(int)UIState.GameEndUI].StartScene();
@@ -132,7 +158,8 @@ public class MiniGame5_SceneManager : MonoBehaviour
 
     public void OnRanking()
     {
-        StopAllCoroutines();
+        MiniGame5_SoundManager.Inst.ClearBGM();
+        StopCoroutine(coScene);
         sceneList[(int)SceneState.MainScene].CloseScene();
         sceneList[(int)SceneState.StartScene].OpenScene();
 
@@ -143,18 +170,20 @@ public class MiniGame5_SceneManager : MonoBehaviour
 
     public void OnReset()
     {
-        MiniGame5_GameManager.Inst.GameSet();
-        MiniGame5_GameManager.Inst.Player.Init();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-        foreach (var ui in uiList)
-        {
-            ui.ReSet();
-        }
+        //MiniGame5_GameManager.Inst.GameSet();
+        //MiniGame5_GameManager.Inst.Player.Init();
 
-        foreach (var scene in sceneList)
-        {
-            scene.ReSet();
-        }
+        //foreach (var ui in uiList)
+        //{
+        //    ui.ReSet();
+        //}
+
+        //foreach (var scene in sceneList)
+        //{
+        //    scene.ReSet();
+        //}
     }
 
     public void OnGoMainRoom()
@@ -175,6 +204,7 @@ public class MiniGame5_SceneManager : MonoBehaviour
         uiList[(int)UIState.StartChoiceUI].Refresh(ChoiceState.NextRunFriend);
         uiList[(int)UIState.StartUI].Refresh(ChoiceState.NextRunFriend);
     }
+
     public void ChangePet()
     {
         sceneList[(int)SceneState.StartScene].ChangeCharator(ChoiceState.BuffFriend);

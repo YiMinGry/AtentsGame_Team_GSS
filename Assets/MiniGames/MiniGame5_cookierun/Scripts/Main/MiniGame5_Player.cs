@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.InputSystem;
 using DG.Tweening;
 
@@ -12,49 +12,134 @@ public class MiniGame5_Player : MonoBehaviour
     Rigidbody rigid;
     CapsuleCollider coli;
 
+    bool isFirst = true;
+    bool isDie = false;
     bool isReady = false;
     public bool IsReady { 
         get => isReady; 
         private set
         {
             isReady = value;
-            Debug.Log("Player Ready");
-            MiniGame5_SceneManager.Inst.OnPlayStart();
+
+            if (isFirst)
+            {
+                MiniGame5_SceneManager.Inst.OnPlayStart();
+                isFirst = false;
+            }
+            else
+            {
+                MiniGame5_SceneManager.Inst.OnBonusTimeEnd();
+            }
         }
     }
     public System.Action OnPlayerReady;
 
-    public float startPosY = 10.0f;
+    float startPosY = 10.0f;
 
-    public float jumpPower = 10.0f;
     public bool isJumping = false;
+
+    float jumpPower = 12f;
+    int originMag = 20;
+    public float magnitude = 20f;
+    
     int jumpCount = 0;
 
-    Vector3 origin_coliPos = new Vector3(0.0f, 0.27f, 0.0f);
-    float origin_coliHeight = 0.54f;
-    Vector3 onSlide_coliPos = new Vector3(0.0f, 0.22f, -0.15f);
-    float onSlide_coliHeight = 0.46f;
+    bool isSuperMode = false;
+    public bool IsSuperMode => isSuperMode;
 
-    public bool isSuperBig = false;
+    bool isSuperBig = false;
+    public bool IsSuperBig
+    {
+        get => isSuperBig;
+        private set
+        {
+            isSuperBig = value;
+            isSuperMode = value;
+            if (!isSuperBig)
+                StopCoroutine(coBig);
+        }
+    }
+    bool isSuperBoost = false;
+    public bool IsSuperBoost
+    {
+        get => isSuperBoost;
+        private set
+        {
+            isSuperBoost = value;
+            isSuperMode = value;
+        }
+    }
+
+    bool isMagnetOn = false;
+    public bool IsMagnetOn
+    {
+        get => isMagnetOn;
+        private set
+        {
+            isMagnetOn = value;
+            if (!isMagnetOn)
+                StopCoroutine(coMag);
+        }
+    }
+
+    bool isBonusTime = false;
+    public bool IsBonusTime
+    {
+        get => isBonusTime;
+        private set
+        {
+            isBonusTime = value;
+            if (!isBonusTime)
+                StopCoroutine(coBonus);
+        }
+    }
+
+    float magnetRange = 5f;
+
+    Coroutine coMag;
+    Coroutine coBig;
+    Coroutine coBonus;
 
     private void Awake()
     {
         anim = GetComponentInChildren<Animator>();
-        rigid = GetComponent<Rigidbody>();
+
+        gameObject.AddComponent<CapsuleCollider>();
+        gameObject.AddComponent<Rigidbody>();
+
         coli = GetComponent<CapsuleCollider>();
+        rigid = GetComponent<Rigidbody>();
 
         actions = new MiniGame5_Player_Action();
-    }
 
-    private void Start()
-    {
         Init();
     }
 
     public void Init()
     {
-        // 애니메이션 컨트롤러 지정
+        magnitude = (float)originMag;
 
+        //coli.material = MiniGame5_GameManager.Inst.MiniFriendData.coliMat;
+        coli.center = new Vector3(0f, 0.27f, 0f);
+        coli.radius = 0.1f;
+        coli.height = 0.54f;
+
+        rigid.constraints =
+            RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        
+        if (!this.gameObject.CompareTag("Player"))
+        {
+            this.gameObject.tag = "Player";
+        }
+
+        Utill.ChangeLayersRecursively(this.transform, 6);
+
+        Setting();
+    }
+
+    public void Setting()
+    {
+        isFirst = true;
         isReady = false;
         isJumping = false;
         anim.SetBool("isLanding", false);
@@ -85,12 +170,15 @@ public class MiniGame5_Player : MonoBehaviour
 
     private void onJump(InputAction.CallbackContext obj)
     {
+        coli.height = 0.45f;
         Jump();
+        MiniGame5_SoundManager.Inst.PlayJumpCilp();
     }
 
     private void onSlide(InputAction.CallbackContext obj)
     {
         Slide(obj);
+        MiniGame5_SoundManager.Inst.PlaySlideClip();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -100,6 +188,7 @@ public class MiniGame5_Player : MonoBehaviour
             if (isReady == false)
             {
                 anim.SetBool("isLanding", true);
+                magnitude = (float)originMag;
                 IsReady = true;
             }
 
@@ -107,6 +196,7 @@ public class MiniGame5_Player : MonoBehaviour
             {
                 anim.SetBool("isJumping", false);
                 isJumping = false;
+                coli.height = 0.54f;
             }
             jumpCount = 0;
         }
@@ -114,32 +204,42 @@ public class MiniGame5_Player : MonoBehaviour
 
     private void Update()
     {
-        //if (isJumping == true)
-        //{
-            rigid.AddForce(-transform.up * jumpPower * 0.7f);
-        //}
+        if (!isDie)
+        {
+            if (jumpCount > 0) rigid.AddForce(magnitude * jumpCount * -transform.up);
+            else rigid.AddForce(magnitude * -transform.up);
 
-        //SuperTime_Big();
+            MagNet();
+        }
     }
 
     void Jump()
     {
-        if (jumpCount == 0 && isJumping == false)
+        if (!isBonusTime)
         {
-            anim.SetBool("isJumping", true);
-            rigid.velocity = Vector3.zero;
-            rigid.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+            if (jumpCount == 0 && isJumping == false)
+            {
+                anim.SetBool("isJumping", true);
+                rigid.velocity = Vector3.zero;
+                rigid.AddForce(transform.up * jumpPower * 1.1f, ForceMode.Impulse);
 
-            isJumping = true;
-            jumpCount = 1;
-        } 
-        else if (jumpCount == 1)
+                isJumping = true;
+                jumpCount = 1;
+            }
+            else if (jumpCount == 1)
+            {
+                anim.SetBool("Roll", true);
+                rigid.velocity = Vector3.zero;
+                rigid.AddForce(transform.up * jumpPower * 1.75f, ForceMode.Impulse);
+
+                jumpCount = 2;
+            }
+        }
+        else
         {
-            anim.SetBool("Roll", true);
             rigid.velocity = Vector3.zero;
-            rigid.AddForce(transform.up * jumpPower * 1.2f, ForceMode.Impulse);
-
-            jumpCount = 2;
+            rigid.AddForce(transform.up * 5, ForceMode.Impulse);
+            Debug.Log("player bonus jump");
         }
     }
 
@@ -148,33 +248,130 @@ public class MiniGame5_Player : MonoBehaviour
         if (context.started)
         {
             anim.SetBool("isSlide", true);
-            coli.center = onSlide_coliPos;
-            coli.height = onSlide_coliHeight;
+            coli.center = new Vector3(0f, 0.2f, -0.17f);
+            coli.radius = 0.2f;
+            coli.height = 0.4f;
         }
         else if (context.canceled)
         {
             anim.SetBool("isSlide", false);
-            coli.center = origin_coliPos;
-            coli.height = origin_coliHeight;
+            coli.center = new Vector3(0f, 0.27f, 0f);
+            coli.radius = 0.1f;
+            coli.height = 0.54f;
         }
     }
 
-    void SuperTime_Fast()
+    public void Damaged()
     {
-        //이팩트 추가
-    }
-
-    void SuperTime_Big()
-    {
-        if (isSuperBig)
-            transform.DOScale(9.0f, 0.5f);
-        else
-            transform.DOScale(4.0f, 0.5f);
+        MiniGame5_SoundManager.Inst.PlayDamageClip();
+        anim.SetTrigger("Damage");
     }
 
     public void Die()
     {
         anim.SetBool("isDie", true);
+        isDie = true;
+        MiniGame5_SoundManager.Inst.PlayDieClip();
         Debug.Log("Player Die");
+
+        Destroy(rigid, 10f);
+        Destroy(coli, 10f);
+        Destroy(gameObject, 10f);
+    }
+
+    void MagNet()
+    {
+        if (isMagnetOn)
+        {
+            Collider[] cols = Physics.OverlapSphere((0.7f * Vector3.up) + transform.position, magnetRange, LayerMask.GetMask("Item"));
+            for (int i = 0; i < cols.Length; i++)
+            {
+                cols[i].GetComponent<MiniGame5_Item>().OnMagnet((0.7f * Vector3.up) + transform.position);
+            }
+        }
+    }
+
+    public void MagnetModeOn()
+    {
+        coMag = StartCoroutine(CoTurnOnMagnet());
+    }
+
+    IEnumerator CoTurnOnMagnet()
+    {
+        isMagnetOn = true;
+
+        yield return new WaitForSeconds(5f);
+
+        IsMagnetOn = false;
+    }
+
+    public void BigModeOn()
+    {
+        coBig = StartCoroutine(CoTurnOnBig());
+    }
+
+    IEnumerator CoTurnOnBig()
+    {
+        isSuperBig = true;
+        transform.DOScale(10f, 1f).SetEase(Ease.InOutBounce);
+        anim.speed = 0.5F;
+
+        yield return new WaitForSeconds(5f);
+
+        transform.DOScale(4f, 1f).SetEase(Ease.InOutBounce);
+        yield return new WaitForSeconds(1f);
+        anim.speed = 1F;
+        IsSuperBig = false;
+    }
+
+
+    void Boost()
+    {
+
+    }
+
+    public void StartBonusTime()
+    {
+        coBonus = StartCoroutine(CoStartBonusTime());
+    }
+
+    IEnumerator CoStartBonusTime()
+    {
+        anim.SetBool("isMoveToBonusTime", true);
+
+        yield return new WaitForSeconds(0.5f);
+        transform.localPosition = new(transform.localPosition.x, 38.7f, transform.localPosition.z);
+
+        anim.SetBool("isBonusTime", true);
+        anim.SetBool("isMoveToBonusTime", false);
+        isBonusTime = true;
+
+        magnitude = 5;
+    }
+
+    public void EndBonusTime()
+    {
+        coBonus = StartCoroutine(CoEndBonusTime());
+    }
+
+    IEnumerator CoEndBonusTime()
+    {
+        isBonusTime = false;
+        anim.SetBool("isBonusTime", false);
+
+        //transform.localPosition = new(transform.localPosition.x, 10f, transform.localPosition.z);
+        yield return new WaitForSeconds(0.1f);
+
+        isReady = false;
+        IsBonusTime = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (isMagnetOn)
+        {
+            Handles.color = Color.cyan;
+            Handles.DrawWireDisc((0.7f * Vector3.up) + transform.position, transform.right, magnetRange);
+        }
     }
 }

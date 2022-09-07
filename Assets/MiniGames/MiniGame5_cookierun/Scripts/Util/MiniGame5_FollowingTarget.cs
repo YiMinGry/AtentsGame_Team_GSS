@@ -4,20 +4,35 @@ using UnityEngine;
 
 public class MiniGame5_FollowingTarget : MonoBehaviour
 {
+
     public Transform target;
+    public bool setTargetParent = false;
     public Vector3 dis = Vector3.zero;
-    //public Vector3 dir = Vector3.zero;
-    public float size = 1;
 
     private void Start()
     {
+        Init();
+    }
+
+    public void Init(Transform newTarget = null)
+    {
+        target = newTarget;
         if (target == null)
         {
             target = MiniGame5_GameManager.Inst.Player.transform;
         }
-        transform.parent = target;
-        transform.localPosition = dis;
-        //transform.localRotation = Quaternion.Euler(dir);
-        transform.localScale = size * Vector3.one;
+
+        if (setTargetParent) transform.parent = target;
+    }
+
+    private void Update()
+    {
+        if (!setTargetParent)
+        {
+            Vector3 fixedPos = new Vector3(target.position.x + dis.x,
+                                           target.position.y + dis.y,
+                                           target.position.z + dis.z);
+            transform.position = fixedPos;
+        }
     }
 }

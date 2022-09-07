@@ -13,6 +13,8 @@ public class MiniGame5_MainPlayingUI : MiniGame5_UI
     Animator lifeBarHandleAnim;
     Transform[] bonusTime;
 
+    Coroutine coBonusTime;
+
     public override void Init()
     {
         //Debug.Log($"MainPlayingUI state = {(UIState)Id}");
@@ -31,13 +33,15 @@ public class MiniGame5_MainPlayingUI : MiniGame5_UI
         MiniGame5_GameManager.Inst.OnScoreChange += RefreshScoreUI;
         MiniGame5_GameManager.Inst.OnLifeChange += RefreshLifeBarUI;
         MiniGame5_GameManager.Inst.OnBonusTimeChange += RefreshBonusTime;
+        MiniGame5_GameManager.Inst.StartBonusTime += CountBonusTime;
+        MiniGame5_GameManager.Inst.EndBonusTime += () => StopCoroutine(coBonusTime);
 
         ReSet();
     }
 
     public override void StartScene()
     {
-        MiniGame5_GameManager.Inst.IsGameStart = true;
+        MiniGame5_GameManager.Inst.IsGameGoing = true;
         lifeBarHandleAnim.StopPlayback();
     }
 
@@ -77,6 +81,21 @@ public class MiniGame5_MainPlayingUI : MiniGame5_UI
         for (int i = 0; i < bonusTime.Length; i++)
         {
             bonusTime[i].gameObject.SetActive(MiniGame5_GameManager.Inst.BonusTime[i]);
+        }
+    }
+
+    void CountBonusTime()
+    {
+        coBonusTime = StartCoroutine(CoCountBonusTime());
+    }
+
+    IEnumerator CoCountBonusTime()
+    {
+        for (int i = MiniGame5_GameManager.Inst.BonusTime.Length - 1; i >= 0 ; i--)
+        {
+            yield return new WaitForSeconds(1f);
+            bonusTime[i].gameObject.SetActive(false);
+            if (i == 0) MiniGame5_GameManager.Inst.IsBonusTime = false;
         }
     }
 }

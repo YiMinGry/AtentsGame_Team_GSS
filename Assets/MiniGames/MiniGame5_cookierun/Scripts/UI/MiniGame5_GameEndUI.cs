@@ -20,6 +20,7 @@ public class MiniGame5_GameEndUI : MiniGame5_UI
         okBtn = transform.Find("OKBtn").GetComponent<Button>();
 
         okBtn.onClick.AddListener(MiniGame5_SceneManager.Inst.OnRanking);
+        okBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
     }
 
     public override void StartScene()

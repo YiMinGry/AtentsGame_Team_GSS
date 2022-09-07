@@ -7,14 +7,14 @@ using UnityEngine.UI;
 public class MiniGame5_GameManager : MonoBehaviour
 {
     MiniGame5_SceneManager sceneManager;
+    MiniGame5_SoundManager soundManager;
 
     MiniGame5_Player player;
     public MiniGame5_Player Player
     {
         get => player;
-        set { player = value; }
+        set => player = value; 
     }
-
 
     //==============================================================
     //==============================================================
@@ -72,16 +72,16 @@ public class MiniGame5_GameManager : MonoBehaviour
     //==============================================================
     //==============================================================
 
-    bool isGameStart;
-    public bool IsGameStart
+    bool isGameGoing;
+    public bool IsGameGoing
     {
-        get => isGameStart;
+        get => isGameGoing;
         set
         {
-            if (isGameStart != value)
+            if (isGameGoing != value)
             {
-                isGameStart = value;
-                if (isGameStart)
+                isGameGoing = value;
+                if (isGameGoing)
                 {
                     OnGameStart += LifeTimer;
                     OnGameStart += ScoreTimer;
@@ -93,6 +93,9 @@ public class MiniGame5_GameManager : MonoBehaviour
             }
         }
     }
+
+    bool isFirstRunner = true;
+    public bool IsFirstRunner { get => isFirstRunner; set => isFirstRunner = value; }
 
     public System.Action OnGameStart;
 
@@ -138,13 +141,10 @@ public class MiniGame5_GameManager : MonoBehaviour
         get => life;
         set
         {
-            if (value > 0)
-            {
-                life = value;
-                Mathf.Clamp(life, 0f, 1f);
-                OnLifeChange?.Invoke();
-            }
-            else
+            life = value;
+            Mathf.Clamp(life, 0f, 1f);
+            OnLifeChange?.Invoke();
+            if (value <= 0)
             {
                 sceneManager.OnGameEnd();
             }
@@ -157,17 +157,54 @@ public class MiniGame5_GameManager : MonoBehaviour
     public System.Action OnLifeChange;
 
     bool[] bonusTime = new bool[9];
-    public bool[] BonusTime
+    public bool[] BonusTime => bonusTime;
+    public int BonusTimeIndex
     {
-        get => bonusTime;
         set
         {
-            bonusTime = value;
+            bonusTime[value] = true;
             OnBonusTimeChange?.Invoke();
+            //Debug.Log($"bonusTime length {bonusTime.Length}");
+
+            bool isAllCollected = true;
+            for (int i = 0; i < bonusTime.Length; i++)
+            {
+                //Debug.Log($"bonusTime {i} = {bonusTime[i]}");
+                if (bonusTime[i] == false)
+                {
+                    isAllCollected = false;
+                    break;
+                }
+            }
+
+            if (isAllCollected == true)
+            {
+                IsBonusTime = true;
+            }
+        }
+    }
+
+    bool isBonusTime = false;
+    public bool IsBonusTime
+    {
+        get => isBonusTime;
+        set
+        {
+            isBonusTime = value;
+            if (isBonusTime)
+            {
+                StartBonusTime?.Invoke();
+            }
+            else
+            {
+                EndBonusTime?.Invoke();
+            }
         }
     }
 
     public System.Action OnBonusTimeChange;
+    public System.Action StartBonusTime;
+    public System.Action EndBonusTime;
 
     //==============================================================
     //==============================================================
@@ -208,9 +245,16 @@ public class MiniGame5_GameManager : MonoBehaviour
         miniFriendData = GetComponent<MiniGame5_DataManager>();
 
         sceneManager = FindObjectOfType<MiniGame5_SceneManager>();
+        soundManager = FindObjectOfType<MiniGame5_SoundManager>();
         player = GameObject.Find("LoadScene").transform.Find("Main").Find("PlayerPos").Find("Player").GetComponent<MiniGame5_Player>();
 
-        sceneManager.Inintialize();
+        for (int i = 0; i < bonusTime.Length; i++)
+        {
+            bonusTime[i] = false;
+        }
+
+        //soundManager.Initialize();
+        sceneManager.Initialize();
     }
     
     //==============================================================
@@ -218,7 +262,7 @@ public class MiniGame5_GameManager : MonoBehaviour
 
     public void GameSet()
     {
-        IsGameStart = false;
+        IsGameGoing = false;
         stageLevel = 1;
         score = 0;
         life = 1f;
@@ -256,7 +300,7 @@ public class MiniGame5_GameManager : MonoBehaviour
 
     void LifeTimer()
     {
-        Life -= Time.deltaTime * 0.05f * (float)stageLevel;
+        Life -= Time.deltaTime * 0.02f * (float)stageLevel;
     }
 
     void ScoreTimer()

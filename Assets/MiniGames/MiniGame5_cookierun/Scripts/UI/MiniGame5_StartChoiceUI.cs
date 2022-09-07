@@ -37,6 +37,10 @@ public class MiniGame5_StartChoiceUI : MiniGame5_UI
             choiceCutList[i] = transform.Find("ActiveTabs").GetChild(i).GetComponent<Transform>();
         }
 
+        choiceTabBtn[0].onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+        choiceTabBtn[1].onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+        choiceTabBtn[2].onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+
         choiceTabBtn[0].onClick.AddListener(() => OpenScene(ChoiceState.RunFriend));
         choiceTabBtn[1].onClick.AddListener(() => OpenScene(ChoiceState.NextRunFriend));
         choiceTabBtn[2].onClick.AddListener(() => OpenScene(ChoiceState.BuffFriend));

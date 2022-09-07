@@ -17,8 +17,11 @@ public class MiniGame5_RankingUI : MiniGame5_UI
         scores = transform.Find("Score").GetComponentsInChildren<Text>();
         okBtn = transform.Find("OkBtn").GetComponent<Button>();
 
+        okBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+
         okBtn.onClick.AddListener(MiniGame5_SceneManager.Inst.OnReset);
         okBtn.onClick.AddListener(MiniGame5_SceneManager.Inst.OnOpening);
+
     }
 
     public override void StartScene()
