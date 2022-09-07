@@ -91,12 +91,11 @@ public class Gacha : MonoBehaviour
         if (!isGachaActive)
         {
             petNum = SetPetNumber();
-            if (petNum > -1)    // petNum�� -1�� ���ϵǸ� �̱� �Ұ���
+            if (petNum > -1)    // petNum이 -1이면 뽑기 불가능
             {
                 petRender.SetActive(true);
                 isGachaActive = true;
-                effectType = Random.Range(0, 3); // ����Ʈ Ÿ�� ���� 3��
-                //petNum = Random.Range(0, petNumMax);
+                effectType = Random.Range(0, 3);
                 gachaCamera.SetActive(true);
                 StartCoroutine(PetSpawn());
             }
@@ -122,8 +121,8 @@ public class Gacha : MonoBehaviour
         }
         else
         {
-            Debug.Log("�̹� ��� ģ���� ������ �ֽ��ϴ�.");
-            return -1;  // �̱Ⱑ �Ұ����ϸ� -1 ����
+            Debug.Log("이미 모든 친구를 보유중입니다.");
+            return -1;  // 뽑기 불가능할 때 -1 리턴
         }
     }
 
@@ -210,7 +209,7 @@ public class Gacha : MonoBehaviour
     {
         AudioManager.Inst.PlaySFX("Gacha_CoinSound_01");
         nameText.text = MFDataManager.instance.mfarr[petNum].friendName;
-        MFDataManager.instance.mfarr[petNum].isHave = true;
+        MFDataManager.instance.Send_HaveMF(petNum);
 
         switch (grade)
         {
