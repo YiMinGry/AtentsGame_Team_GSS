@@ -27,8 +27,9 @@ public class MG2_GameManager : MonoBehaviour
     int score = 0;          // 현재 점수
     int stage = 1;          // 현재 스테이지
     int count = 30;         // continue 할 때 카운트
+    int chance = 2;         // continue 할 수 있는 제한 횟수
     int healthPoint = 4;    // 현재 hp
-    int[] stageScoreSet = new int[] { 1000, 2000, 3000, 4000 }; // 다음 스테이지로 넘어가는 점수
+    int[] stageScoreSet = new int[] { 2000, 4000, 8000, 16000 }; // 다음 스테이지로 넘어가는 점수
 
     bool isYes = true; // GameOver 화면에서 Continue 할 건지 묻는 변수
 
@@ -55,7 +56,7 @@ public class MG2_GameManager : MonoBehaviour
         get => coin;
         set
         {
-            coin = Mathf.Clamp(value, 0, 99);
+            coin = Mathf.Clamp(value, 0, 9999);
             mg2_UIManager.CoinUpdate(coin);
         }
     }
@@ -66,6 +67,10 @@ public class MG2_GameManager : MonoBehaviour
         get => stage;
         set
         {
+            if(stage < value) // 레벨업 했을 때만
+            {
+                mg2_UIManager.SetLevelUpUI(true);
+            }
             stage = value;
             stage = Mathf.Clamp(stage, 1, 6);   // 스테이지 1~5까지인데 6으로 해놓음
             playerLevelChange.Invoke();         // 스테이지 변할 때 마다(레벨업 or 다시하기) 플레이어 프리팹 변경
@@ -114,7 +119,6 @@ public class MG2_GameManager : MonoBehaviour
     {
         mg2_UIManager.mg2_GameManager = this;
         mg2_EffectManager.mg2_GameManager = this;
-        NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);
 
         if (instance == null)
         {
@@ -131,10 +135,18 @@ public class MG2_GameManager : MonoBehaviour
 
     private void Start()
     {
-        Coin = 2;
+        Coin = (int)UserDataManager.instance.coin1;
+        AudioManager.Inst.IsMusicOn = true;
+        AudioManager.Inst.IsSoundOn = true;
         onGameStart = StartCoroutine(OnGameStart());
-        AudioManager.Inst.PlayBGM("FishBGM");
-    }       
+        AudioManager.Inst.PlayBGM("Fish_BGM");
+    }
+
+    private void OnEnable()
+    {
+        NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);
+        //NetEventManager.Regist("ReadRanking", S2CL_ReadRanking);
+    }
 
     void NextStage(int score)
     {
@@ -151,6 +163,7 @@ public class MG2_GameManager : MonoBehaviour
         Stage = 1;
         HealthPoint = 4;
         count = 30;
+        chance = 2;
     }    
 
     private void StartGame() // 처음 시작할 때, Continue 할 때 실행
@@ -238,8 +251,8 @@ public class MG2_GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        StartGame();
         Initialize();
+        StartGame();
     }
     public void SoundOnOff()
     {
@@ -282,13 +295,13 @@ public class MG2_GameManager : MonoBehaviour
 
     IEnumerator GameOverCount()
     {
-        yield return new WaitForSeconds(1.0f);
-        mg2_UIManager.SetContinuePanel(true);
         mg2_UIManager.CoinUpdate(Coin);
+        mg2_UIManager.SetContinuePanel(true);
+        yield return new WaitForSeconds(2.0f);
         while (true)
         {
-            yield return new WaitForSeconds(1.0f);
             mg2_UIManager.SetCountText(count--);
+            yield return new WaitForSeconds(1.0f);
         }
     }    
 
@@ -296,13 +309,23 @@ public class MG2_GameManager : MonoBehaviour
     {
         while (true)
         {
+            if (count < 0 || chance < 1)
+            {
+                CL2S_UpdateRanking(Score);
+                mg2_UIManager.SetRankingPanel(true);
+                mg2_UIManager.SetResultPanel(true);
+                StartCoroutine(AfterGameOver());
+                break;
+            }
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
                 if (isYes) // Continue에서 Yes 선택
                 {
                     if (Coin > 0)   // 코인이 있으면 코인 1개 감소 후 게임 시작
                     {
+                        chance--;
                         Coin--;
+                        UserDataManager.instance.CL2S_UserCoinUpdate(0, -1);
                         StartGame();
                     }
                     else            // 코인이 없으면
@@ -314,9 +337,11 @@ public class MG2_GameManager : MonoBehaviour
                 {
                     CL2S_UpdateRanking(Score);
                     mg2_UIManager.SetRankingPanel(true);
+                    mg2_UIManager.SetResultPanel(true);
                     StartCoroutine(AfterGameOver());
+                    break;
                 }
-            }
+            }            
             if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
             {
                 isYes = true;
@@ -329,6 +354,7 @@ public class MG2_GameManager : MonoBehaviour
             }
             yield return null;
         }
+        yield return null;
     }
 
     IEnumerator AfterGameOver()
@@ -338,6 +364,7 @@ public class MG2_GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 GoToLobby();
+                //RestartGame(); 디버그용
                 break;
             }
             yield return null;
@@ -360,11 +387,23 @@ public class MG2_GameManager : MonoBehaviour
     }
 
     public void S2CL_UpdateRanking(JObject _jdata)
-    {
+    {        
         JArray _arr = JArray.Parse(_jdata["allRankArr"].ToString());
 
         mg2_UIManager.SetTop10Rank(_arr);
-    }    
+
+        JObject _data = JObject.Parse(_jdata["myRkData"].ToString());
+        //Debug.Log($"Update Ranking jdata : {_data}");
+        mg2_UIManager.ResultUpdate(Score, Coin, _data);
+    }
+
+    //public void S2CL_ReadRanking(JObject _jdata)
+    //{
+    //    Debug.Log($"Read Ranking jdata : {_jdata}");
+    //    JArray _arr = JArray.Parse(_jdata["Top10"].ToString());
+
+    //    mg2_UIManager.SetTop10Rank(_arr);
+    //}
 
     public void GoToLobby()
     {
@@ -372,10 +411,12 @@ public class MG2_GameManager : MonoBehaviour
         AudioManager.Inst.IsSoundOn = false;
         TimeStop(false);
         StopAllCoroutines();
-        bl_SceneLoaderManager.LoadScene("Main_Lobby");
+        //bl_SceneLoaderManager.LoadScene("Main_Lobby");    // 메인로비
+        bl_SceneLoaderManager.LoadScene("Dev_Lobby");       // 디버그용 로비
     }
     private void OnDisable()
     {
+        //NetEventManager.UnRegist("ReadRanking", S2CL_ReadRanking);
         NetEventManager.UnRegist("UpdateRanking", S2CL_UpdateRanking);
     }
 }

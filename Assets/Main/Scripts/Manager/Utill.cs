@@ -223,4 +223,23 @@ public static class Utill
         }
         return wfs;
     }
+
+    // 자식오브젝트 레이어까지 지정하기
+    public static void ChangeLayersRecursively(this Transform trans, string name)
+    {
+        trans.gameObject.layer = LayerMask.NameToLayer(name);
+        foreach (Transform child in trans)
+        {
+            ChangeLayersRecursively(child, name);
+        }
+    }
+
+    public static void ChangeLayersRecursively(this Transform trans, int index)
+    {
+        trans.gameObject.layer = index;
+        foreach (Transform child in trans)
+        {
+            ChangeLayersRecursively(child, index);
+        }
+    }
 }

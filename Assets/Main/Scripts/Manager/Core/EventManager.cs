@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void Callback(string _str);
+public delegate void Callback(string _str = "");
 
 public static class EventManager
 {

@@ -40,6 +40,13 @@ public class MiniGame5_StartUI : MiniGame5_UI
 
         // Settings =========================================================================
 
+        runFriendBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+        nextRunFriendBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+        buffFriendBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+
+        practiceBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+        playBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+
         runFriendBtn.onClick.AddListener(() => choiceUI.OpenScene(ChoiceState.RunFriend));
         nextRunFriendBtn.onClick.AddListener(() => choiceUI.OpenScene(ChoiceState.NextRunFriend));
         buffFriendBtn.onClick.AddListener(() => choiceUI.OpenScene(ChoiceState.BuffFriend));
