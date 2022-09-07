@@ -77,6 +77,7 @@ public static class NetEventManager
                 {
                     UnityMainThreadDispatcher.Instance().Enqueue(() =>
                     {
+                        Debug.Log("S2CL => " + _jdata);
                         func.Invoke(_jdata);
                     });
                 });

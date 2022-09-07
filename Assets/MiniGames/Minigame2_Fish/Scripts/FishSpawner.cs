@@ -44,8 +44,8 @@ public class FishSpawner : MonoBehaviour
         float rand = Random.Range(0.0f, 1.0f);
         switch (stage)
         {
-            case 1:                     // 스테이지 1 : 70%, 30%
-                if(rand < 0.7f)
+            case 1:                     // 스테이지 1 : 40%, 60%
+                if(rand < 0.4f)
                 {
                     return enemyFish[0];
                 }
@@ -117,11 +117,11 @@ public class FishSpawner : MonoBehaviour
                 {
                     return enemyFish[2];
                 }
-                else if (rand < 0.5f)
+                else if (rand < 0.3f)
                 {
                     return enemyFish[3];
                 }
-                else if (rand < 0.8f)
+                else if (rand < 0.4f)
                 {
                     return enemyFish[4];
                 }

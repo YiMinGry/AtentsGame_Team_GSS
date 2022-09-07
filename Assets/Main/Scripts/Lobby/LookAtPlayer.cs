@@ -150,8 +150,9 @@ public class LookAtPlayer : MonoBehaviour
     public IEnumerator doMove_PhoneModeOff()
     {
         transform.DOMove(originPosition, animDuration).SetEase(animEase);
-        transform.DORotate(originRotation.eulerAngles, animDuration).SetEase(animEase);
-        yield return new WaitForSeconds(animDuration);
-        isFollowingPlayerMode = true;
+        transform.DORotate(originRotation.eulerAngles, animDuration).SetEase(animEase).OnComplete(() => { isFollowingPlayerMode = true; });
+        yield return null;
+        //yield return new WaitForSeconds(animDuration);
+        //isFollowingPlayerMode = true;
     }
 }
