@@ -17,6 +17,7 @@ public class MiniGame5_SettingUI : MiniGame5_UI
         detailBtn = GetComponent<Button>();
 
         detailBtn.onClick.AddListener(ToggleBtn);
+        detailBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
     }
 
     void ToggleBtn()

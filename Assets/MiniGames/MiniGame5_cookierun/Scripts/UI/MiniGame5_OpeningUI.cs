@@ -12,6 +12,7 @@ public class MiniGame5_OpeningUI : MiniGame5_UI
         //Debug.Log($"OpeningUI state = {(UIState)Id}");
 
         startBtn = transform.Find("StartBtn").GetComponent<Button>();
+        startBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayStartButtonClip);
         startBtn.onClick.AddListener(MiniGame5_SceneManager.Inst.OnStart);
     }
 }
