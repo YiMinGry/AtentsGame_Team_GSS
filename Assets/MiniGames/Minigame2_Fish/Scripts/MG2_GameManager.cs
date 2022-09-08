@@ -411,8 +411,8 @@ public class MG2_GameManager : MonoBehaviour
         AudioManager.Inst.IsSoundOn = false;
         TimeStop(false);
         StopAllCoroutines();
-        //bl_SceneLoaderManager.LoadScene("Main_Lobby");    // 메인로비
-        bl_SceneLoaderManager.LoadScene("Dev_Lobby");       // 디버그용 로비
+        bl_SceneLoaderManager.LoadScene("Main_Lobby");    // 메인로비
+        //bl_SceneLoaderManager.LoadScene("Dev_Lobby");       // 디버그용 로비
     }
     private void OnDisable()
     {

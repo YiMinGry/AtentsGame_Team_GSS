@@ -17,9 +17,9 @@ public class UIMoveCon : MonoBehaviour
     [SerializeField]
     string dir = "up";
 
-    //public void UIMove(string dir)
     private void OnEnable()
     {
+        AudioManager.Inst.PlaySFX("EffectSound_Pop2");
         EndPos = transform.position;
         switch (dir)
         {
