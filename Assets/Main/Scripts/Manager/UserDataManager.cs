@@ -5,18 +5,34 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+public struct MGPlayData//ï¿½Ì´Ï°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¼Å©ï¿½ï¿½
+{
+    public bool _is1st;//1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½
+    public int _maxScore;//ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public int _playCount;//ï¿½Ã·ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½Æ®
+
+}
+
 public class UserDataManager : MonoSingleton<UserDataManager>
 {
     [SerializeField]
     private KoreaInput koreaInput;
 
-    public int idx;//È¸¿ø¹øÈ£
-    public string ssID;//¼¼¼Ç¾ÆÀÌµð
-    public string ID;//µð¹ÙÀÌ½º ¾ÆÀÌµð
-    public string nickName;//´Ð³×ÀÓ
-    public long coin1;//ÀÏ¹ÝÀçÈ­
-    public long coin2;//Æ¯¼öÀçÈ­
+    public int idx;//È¸ï¿½ï¿½ï¿½ï¿½È£
+    public string ssID;//ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½Ìµï¿½
+    public string ID;//ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
+    public string nickName;//ï¿½Ð³ï¿½ï¿½ï¿½
+    public long coin1;//ï¿½Ï¹ï¿½ï¿½ï¿½È­
+    public long coin2;//Æ¯ï¿½ï¿½ï¿½ï¿½È­
     public string mfList;
+    public string archiveList;//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+
+    //ï¿½Ì´Ï°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¿ï¿½
+    public MGPlayData MG1PlayData;
+    public MGPlayData MG2PlayData;
+    public MGPlayData MG3PlayData;
+    public MGPlayData MG4PlayData;
+    public MGPlayData MG5PlayData;
 
 
     // Start is called before the first frame update
@@ -27,7 +43,20 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         NetEventManager.Regist("LoginOK", S2CL_LoginOK);
         NetEventManager.Regist("SetUserNickName", S2CL_SetUserNickName);
         NetEventManager.Regist("UserCoinUpdate", S2CL_UserCoinUpdate);
+
+        NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);
+        NetEventManager.Regist("ArchiveUpdate", S2CL_ArchiveUpdate);
+
         ID = SystemInfo.deviceUniqueIdentifier;
+    }
+
+    public void RefreshUserInfo()
+    {
+        JObject _userData = new JObject();
+        _userData.Add("cmd", "RefreshUserInfo");
+        _userData.Add("ID", UserDataManager.instance.ID);
+
+        NetManager.instance.CL2S_SEND(_userData);
     }
 
     public void S2CL_LoginOK(JObject _jdata)
@@ -40,20 +69,49 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         coin1 = long.Parse(_jdata["coin1"].ToString());
         coin2 = long.Parse(_jdata["coin2"].ToString());
         mfList = _jdata["MFList"].ToString();
-
+        archiveList = _jdata["ArchiveList"].ToString();
         JObject _list = new JObject();
         _list = JObject.Parse(mfList);
 
         MFDataManager.instance.SetAllMF(_list);
 
-        //NetManager.instance.AddRollingMSG($"È¯¿µÇÕ´Ï´Ù, {nickName}´Ô.");
 
-        //¸ÞÀÎ
-        bl_SceneLoaderManager.LoadScene("Main_Lobby");
+        JArray _mgarr = JArray.Parse(_jdata["MGData"].ToString());
 
-        //Å×½ºÆ®¿ë Dev_Lobby ÁøÀÔÀÌ ÇÊ¿äÇÏ¸é À§ ¸ÞÀÎ·Îºñ ºÎºÐ ÁÖ¼®ÇÏ°í ¾Æ·¡ µ¥ºê·Îºñ ÁÖ¼® Ç®±â
 
-        //bl_SceneLoaderManager.LoadScene("Dev_Lobby");
+        MG1PlayData._is1st = _mgarr[0]["_is1st"].ToString().Equals("true");
+        MG1PlayData._playCount = int.Parse(_mgarr[0]["_playCount"].ToString());
+        MG1PlayData._maxScore = int.Parse(_mgarr[0]["_maxScore"].ToString());
+
+
+        MG2PlayData._is1st = _mgarr[1]["_is1st"].ToString().Equals("true");
+        MG2PlayData._playCount = int.Parse(_mgarr[1]["_playCount"].ToString());
+        MG2PlayData._maxScore = int.Parse(_mgarr[1]["_maxScore"].ToString());
+
+        MG3PlayData._is1st = _mgarr[2]["_is1st"].ToString().Equals("true");
+        MG3PlayData._playCount = int.Parse(_mgarr[2]["_playCount"].ToString());
+        MG3PlayData._maxScore = int.Parse(_mgarr[2]["_maxScore"].ToString());
+
+        MG4PlayData._is1st = _mgarr[3]["_is1st"].ToString().Equals("true");
+        MG4PlayData._playCount = int.Parse(_mgarr[3]["_playCount"].ToString());
+        MG4PlayData._maxScore = int.Parse(_mgarr[3]["_maxScore"].ToString());
+
+        MG5PlayData._is1st = _mgarr[4]["_is1st"].ToString().Equals("true");
+        MG5PlayData._playCount = int.Parse(_mgarr[4]["_playCount"].ToString());
+        MG5PlayData._maxScore = int.Parse(_mgarr[4]["_maxScore"].ToString());
+
+
+        if (!_jdata["retMsg"].ToString().Equals("Refresh"))
+        {
+            //NetManager.instance.AddRollingMSG($"È¯ï¿½ï¿½ï¿½Õ´Ï´ï¿½, {nickName}ï¿½ï¿½.");
+
+            //ï¿½ï¿½ï¿½ï¿½
+            bl_SceneLoaderManager.LoadScene("Main_Lobby");
+
+            //ï¿½×½ï¿½Æ®ï¿½ï¿½ Dev_Lobby ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î·Îºï¿½ ï¿½Îºï¿½ ï¿½Ö¼ï¿½ï¿½Ï°ï¿½ ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½Îºï¿½ ï¿½Ö¼ï¿½ Ç®ï¿½ï¿½
+
+            //bl_SceneLoaderManager.LoadScene("Dev_Lobby");
+        }
     }
 
     public void S2CL_SetUserNickName(JObject _jdata)
@@ -85,7 +143,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         NickNamePopClose();
     }
 
-    public bool CL2S_UserCoinUpdate(int _coinType, int _addAmount)//0ÀÏ¹ÝÀçÈ­ 1Æ¯¼öÀçÈ­ / ´õÇØÁÙ°ª Áõ°¡´Â ¾ç¼ö °¨¼Ò´Â À½¼ö
+    public bool CL2S_UserCoinUpdate(int _coinType, int _addAmount)//0ï¿½Ï¹ï¿½ï¿½ï¿½È­ 1Æ¯ï¿½ï¿½ï¿½ï¿½È­ / ï¿½ï¿½ï¿½ï¿½ï¿½Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò´ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
 
         long _money = _coinType == 0 ? coin1 : coin2;
@@ -93,7 +151,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         if (_money + _addAmount < 0)
         {
 
-            //¼ÒÁö±Ý ºÎÁ·
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             return false;
         }
         else
@@ -114,5 +172,44 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     {
         coin1 = long.Parse(_jdata["coin1"].ToString());
         coin2 = long.Parse(_jdata["coin2"].ToString());
+    }
+
+    public void CL2S_ReadMyAllRanking()
+    {
+        JObject _userData = new JObject();
+        _userData.Add("cmd", "ReadMyAllRanking");
+        _userData.Add("ID", UserDataManager.instance.ID);
+
+        NetManager.instance.CL2S_SEND(_userData);
+    }
+
+    public void S2CL_ReadMyAllRanking(JObject _jdata)
+    {
+        Debug.Log(_jdata.ToString());
+
+        JArray _data = JArray.Parse(_jdata["MG_1"].ToString());
+        string _str = _data[0].ToString();
+
+        Debug.Log(_str);
+    }
+
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ß´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½ _archiveNameï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½Ì¸ï¿½ ï¿½Ö¾î¼­ ï¿½Ô¼ï¿½ È£ï¿½ï¿½
+    public void CL2S_ArchiveUpdate(string _archiveName)
+    {
+        JObject _userData = new JObject();
+        _userData.Add("cmd", "ArchiveUpdate");
+        _userData.Add("ID", UserDataManager.instance.ID);
+        _userData.Add("ArchiveName", _archiveName);
+
+
+        NetManager.instance.CL2S_SEND(_userData);
+    }
+
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public void S2CL_ArchiveUpdate(JObject _jdata)
+    {
+        Debug.Log(_jdata.ToString());
+
+        archiveList = _jdata["ArchiveList"].ToString();
     }
 }

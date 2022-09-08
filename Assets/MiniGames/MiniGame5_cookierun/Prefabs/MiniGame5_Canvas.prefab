@@ -728,7 +728,7 @@ GameObject:
   - component: {fileID: 1188709126340930825}
   - component: {fileID: 1188709126340930826}
   m_Layer: 5
-  m_Name: Scroll_BuffMini
+  m_Name: Scroll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2731,6 +2731,7 @@ GameObject:
   - component: {fileID: 1188709126856054787}
   - component: {fileID: 1188709126856056828}
   - component: {fileID: 1188709126856056829}
+  - component: {fileID: 1904099231}
   m_Layer: 5
   m_Name: PlayBtn
   m_TagString: Untagged
@@ -2818,7 +2819,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 3
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -2843,6 +2844,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!95 &1904099231
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188709126856056831}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1766e40140096c746be8fedef7b61be5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1188709126883417249
 GameObject:
   m_ObjectHideFlags: 0
@@ -4292,7 +4313,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1188709127192596158
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5095,7 +5116,7 @@ GameObject:
   - component: {fileID: 1188709127377387632}
   - component: {fileID: 1188709127377387633}
   m_Layer: 5
-  m_Name: Scroll_NextRunMini
+  m_Name: Scroll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5430,7 +5451,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1188709127416735841
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7649,7 +7670,7 @@ GameObject:
   - component: {fileID: 1188709127969816591}
   - component: {fileID: 1188709127969816584}
   m_Layer: 5
-  m_Name: Scroll_RunMini
+  m_Name: Scroll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8443,7 +8464,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1188709128079932088
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9622,7 +9643,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1188709128396148117
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17793,7 +17814,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &388624127830806584
 RectTransform:
   m_ObjectHideFlags: 0
