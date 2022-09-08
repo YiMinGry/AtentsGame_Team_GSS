@@ -204,6 +204,9 @@ public class UserDataManager : MonoSingleton<UserDataManager>
 
 
         NetManager.instance.CL2S_SEND(_userData);
+
+        NetManager.instance.AddRollingMSG("업적", $"{_archiveName}업적을 달성했습니다.");
+
     }
 
     //���� �޼��ϰ� �������� �����ִ� ���� ���� ����Ʈ ������

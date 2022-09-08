@@ -243,6 +243,8 @@ public class Gacha : MonoBehaviour
         additionalEffect = MakeObject(additional[3 * effectType + grade], effectSpawner);
         canvas.SetActive(true);
         isSpawnEnd = true;
+
+        NetManager.instance.AddRollingMSG("미니친구", $"미니친구 {MFDataManager.instance.mfarr[petNum].friendName}를 뽑았습니다.");
     }
 
     IEnumerator PetDespawn()
