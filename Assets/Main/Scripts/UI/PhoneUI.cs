@@ -163,6 +163,7 @@ public class PhoneUI : MonoBehaviour
 
     void OpenPage(int index)
     {
+        AudioManager.Inst.PlaySFX("EffectSound_Pop2");
         foreach (var page in pages)
         {
             page.gameObject.SetActive(false);
