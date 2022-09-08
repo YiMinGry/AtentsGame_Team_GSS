@@ -5,11 +5,11 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public struct MGPlayData//¹Ì´Ï°ÔÀÓ ¾÷Àû Ã¼Å©¿ë
+public struct MGPlayData//ï¿½Ì´Ï°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¼Å©ï¿½ï¿½
 {
-    public bool _is1st;//1µîÇÑ ±â·ÏÀÌ ÀÖ´ÂÁö
-    public int _maxScore;//ÃÖ´ë Á¡¼ö
-    public int _playCount;//ÇÃ·¹ÀÌ Ä«¿îÆ®
+    public bool _is1st;//1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½
+    public int _maxScore;//ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public int _playCount;//ï¿½Ã·ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½Æ®
 
 }
 
@@ -18,16 +18,16 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     [SerializeField]
     private KoreaInput koreaInput;
 
-    public int idx;//È¸¿ø¹øÈ£
-    public string ssID;//¼¼¼Ç¾ÆÀÌµğ
-    public string ID;//µğ¹ÙÀÌ½º ¾ÆÀÌµğ
-    public string nickName;//´Ğ³×ÀÓ
-    public long coin1;//ÀÏ¹İÀçÈ­
-    public long coin2;//Æ¯¼öÀçÈ­
+    public int idx;//È¸ï¿½ï¿½ï¿½ï¿½È£
+    public string ssID;//ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½Ìµï¿½
+    public string ID;//ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
+    public string nickName;//ï¿½Ğ³ï¿½ï¿½ï¿½
+    public long coin1;//ï¿½Ï¹ï¿½ï¿½ï¿½È­
+    public long coin2;//Æ¯ï¿½ï¿½ï¿½ï¿½È­
     public string mfList;
-    public string archiveList;//¾÷Àû ¸®½ºÆ®
+    public string archiveList;//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
 
-    //¹Ì´Ï°ÔÀÓ ¾÷Àû¿ë µ¥ÀÌÅÍ Á¢±Ù¿ë
+    //ï¿½Ì´Ï°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¿ï¿½
     public MGPlayData MG1PlayData;
     public MGPlayData MG2PlayData;
     public MGPlayData MG3PlayData;
@@ -103,12 +103,13 @@ public class UserDataManager : MonoSingleton<UserDataManager>
 
         if (!_jdata["retMsg"].ToString().Equals("Refresh"))
         {
-            //NetManager.instance.AddRollingMSG($"È¯¿µÇÕ´Ï´Ù, {nickName}´Ô.");
+            NetManager.instance.AddRollingMSG("ë¡œê·¸ì¸", $"{nickName}ë‹˜ í™˜ì˜í•©ë‹ˆë‹¤.");
+            NetManager.instance.AddRollingMSG("ë ˆíŠ¸ë¡œ í”„ë Œì¦ˆ", $"{nickName}ë‹˜ ì¦ê±°ìš´ ì‹œê°„ ë˜ì‹­ì‹œì˜¤.");
 
-            //¸ŞÀÎ
+            //ï¿½ï¿½ï¿½ï¿½
             bl_SceneLoaderManager.LoadScene("Main_Lobby");
 
-            //Å×½ºÆ®¿ë Dev_Lobby ÁøÀÔÀÌ ÇÊ¿äÇÏ¸é À§ ¸ŞÀÎ·Îºñ ºÎºĞ ÁÖ¼®ÇÏ°í ¾Æ·¡ µ¥ºê·Îºñ ÁÖ¼® Ç®±â
+            //ï¿½×½ï¿½Æ®ï¿½ï¿½ Dev_Lobby ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î·Îºï¿½ ï¿½Îºï¿½ ï¿½Ö¼ï¿½ï¿½Ï°ï¿½ ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½Îºï¿½ ï¿½Ö¼ï¿½ Ç®ï¿½ï¿½
 
             //bl_SceneLoaderManager.LoadScene("Dev_Lobby");
         }
@@ -143,7 +144,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         NickNamePopClose();
     }
 
-    public bool CL2S_UserCoinUpdate(int _coinType, int _addAmount)//0ÀÏ¹İÀçÈ­ 1Æ¯¼öÀçÈ­ / ´õÇØÁÙ°ª Áõ°¡´Â ¾ç¼ö °¨¼Ò´Â À½¼ö
+    public bool CL2S_UserCoinUpdate(int _coinType, int _addAmount)//0ï¿½Ï¹ï¿½ï¿½ï¿½È­ 1Æ¯ï¿½ï¿½ï¿½ï¿½È­ / ï¿½ï¿½ï¿½ï¿½ï¿½Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò´ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
 
         long _money = _coinType == 0 ? coin1 : coin2;
@@ -151,7 +152,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         if (_money + _addAmount < 0)
         {
 
-            //¼ÒÁö±İ ºÎÁ·
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             return false;
         }
         else
@@ -193,7 +194,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         Debug.Log(_str);
     }
 
-    //¾÷Àû ´Ş¼ºÇß´Ù°í ¼­¹ö·Î Àü¼ÛÇÏ´Â ÇÔ¼ö _archiveName¿¡ ¿øÇÏ´Â ¾÷Àû Å×ÀÌºí ÀÌ¸§ ³Ö¾î¼­ ÇÔ¼ö È£Ãâ
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¼ï¿½ï¿½ß´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½ _archiveNameï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½Ì¸ï¿½ ï¿½Ö¾î¼­ ï¿½Ô¼ï¿½ È£ï¿½ï¿½
     public void CL2S_ArchiveUpdate(string _archiveName)
     {
         JObject _userData = new JObject();
@@ -203,9 +204,12 @@ public class UserDataManager : MonoSingleton<UserDataManager>
 
 
         NetManager.instance.CL2S_SEND(_userData);
+
+        NetManager.instance.AddRollingMSG("ì—…ì ", $"{_archiveName}ì—…ì ì„ ë‹¬ì„±í–ˆìŠµë‹ˆë‹¤.");
+
     }
 
-    //¾÷Àû ´Ş¼ºÇÏ°í ¼­¹ö¿¡¼­ º¸³»ÁÖ´Â ´äÀå ¾÷Àû ¸®½ºÆ® º¸¿©ÁÜ
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¼ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public void S2CL_ArchiveUpdate(JObject _jdata)
     {
         Debug.Log(_jdata.ToString());
