@@ -216,6 +216,7 @@ public class AnimConChanger : MonoBehaviour
         // 폰 닫혀있으면 열고
         if (animator.GetBool("isPhoneOpen") == false)
         {
+            AudioManager.Inst.PlaySFX("EffectSound_Pop");
             if (isHandCamMode)
             {
                 
@@ -233,7 +234,7 @@ public class AnimConChanger : MonoBehaviour
         }
         else //열려있으면 닫음
         {
-
+            AudioManager.Inst.PlaySFX("EffectSound_Pop2");
             if (isHandCamMode)
             {
                 isHandCam = false;
