@@ -10,8 +10,10 @@ public class Player : MonoBehaviour
     int curEventTypr = 0;//�÷��̾ ��ȣ�ۿ��Ҷ� � �ִϸ��̼��� �����ؾ����� ����
     string nextMoveScenes = "";//���̵��Ҷ� �������� �������� �̸�����
     string openUIName = "";//��ȣ�ۿ����� ui�� ���� �ݱ� ���� �̸� ����
+    public bool isOpenUI = false;
+
     MinigameImageUI minigameImageUI;
-    
+
 
     [SerializeField]
     private Transform[] mfPos;
@@ -70,15 +72,23 @@ public class Player : MonoBehaviour
                 mfs[_idx] = _mf;
 
             }
-                _idx++;
+            _idx++;
         }
     }
 
 
     public void Update()
     {
-        //�����̱� ���� �Լ�
-        animConChanger.Walk(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        if (isOpenUI)
+        {
+            animConChanger.Walk(0, 0);
+        }
+        else
+        {
+            //�����̱� ���� �Լ�
+            animConChanger.Walk(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        }
 
 
         //animConChanger�� ���¿� ���� ���������� �����ϱ� ���� ����ġ��
@@ -110,6 +120,7 @@ public class Player : MonoBehaviour
                     {
                         //�˾��� ���������� �ݱ�
                         EventManager.Invoke("CloseUI", openUIName);
+                        isOpenUI = false;
                     }
                 }
 
@@ -134,6 +145,8 @@ public class Player : MonoBehaviour
                                 {
                                     //ui�˾� Ȱ��ȭ
                                     EventManager.Invoke("OpenUI", openUIName);
+                                    isOpenUI = true;
+
                                 });
                                 break;
                         }
@@ -142,6 +155,8 @@ public class Player : MonoBehaviour
 
                 break;
         }
+
+
     }
 
 
@@ -161,18 +176,18 @@ public class Player : MonoBehaviour
                 curEventTypr = 1;//�ɱ�
                 nextMoveScenes = _name;//�̵��� ���̸�
                 other.transform.parent.GetComponent<Outline>().enabled = true;//���� ������Ʈ�� �ƿ������� Ȱ��ȭ
-                //EventManager.Invoke("ActiveFInfo", "�̴ϰ��� : " + _name);//����ǥ��
-                
+                                                                              //EventManager.Invoke("ActiveFInfo", "�̴ϰ��� : " + _name);//����ǥ��
+
                 //if (titleText != null)
                 //{
                 //    titleText.enabled = true;
                 //    titleText.text = other.transform.GetChild(0).gameObject.name;
                 //}
-                if(minigameImageUI==null)
+                if (minigameImageUI == null)
                 {
-                    minigameImageUI=FindObjectOfType<MinigameImageUI>();
+                    minigameImageUI = FindObjectOfType<MinigameImageUI>();
                 }
-                minigameImageUI.PopUpImage(other.transform.parent.transform,_name);
+                minigameImageUI.PopUpImage(other.transform.parent.transform, _name);
                 break;
             //�˾�
             case "Ranking":
@@ -189,8 +204,6 @@ public class Player : MonoBehaviour
                 //    titleText.enabled = true;
                 //    titleText.text = other.transform.GetChild(0).gameObject.name;
                 //}
-                
-
                 break;
             //�� �̸��� �ƴ� �ٸ�������Ʈ�� ����
             default:
@@ -218,7 +231,7 @@ public class Player : MonoBehaviour
                 other.transform.parent.GetComponent<Outline>().enabled = false;
                 //if(titleText!=null)
                 //    titleText.enabled = false;
-                if(minigameImageUI!=null)
+                if (minigameImageUI != null)
                 {
                     minigameImageUI.HideImage();
                 }
