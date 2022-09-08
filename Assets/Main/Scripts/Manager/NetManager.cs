@@ -174,7 +174,7 @@ public class NetManager : MonoSingleton<NetManager>
                 string[] _alertMsg = rollingTextQue.Dequeue();
 
                 //텍스트에 큐에 담겨있는 첫번째 메세지를 입력
-                RollingText.text = _alertMsg[0];
+                titleText.text = _alertMsg[0];
                 RollingText.text = _alertMsg[1];
 
                 ////문자의 길이가 10보다 크면
