@@ -161,13 +161,13 @@ public class Player : MonoBehaviour
                 curEventTypr = 1;//�ɱ�
                 nextMoveScenes = _name;//�̵��� ���̸�
                 other.transform.parent.GetComponent<Outline>().enabled = true;//���� ������Ʈ�� �ƿ������� Ȱ��ȭ
-                EventManager.Invoke("ActiveFInfo", "�̴ϰ��� : " + _name);//����ǥ��
+                //EventManager.Invoke("ActiveFInfo", "�̴ϰ��� : " + _name);//����ǥ��
                 
-                if (titleText != null)
-                {
-                    titleText.enabled = true;
-                    titleText.text = other.transform.GetChild(0).gameObject.name;
-                }
+                //if (titleText != null)
+                //{
+                //    titleText.enabled = true;
+                //    titleText.text = other.transform.GetChild(0).gameObject.name;
+                //}
                 if(minigameImageUI==null)
                 {
                     minigameImageUI=FindObjectOfType<MinigameImageUI>();
@@ -183,12 +183,12 @@ public class Player : MonoBehaviour
                 curEventTypr = 2;//��Ǿ��� ����Ʈ�� 2 ���� �ٸ� ��� ����� ���� ����
                 openUIName = _name;
                 other.transform.parent.GetComponent<Outline>().enabled = true;
-                EventManager.Invoke("ActiveFInfo", _name);
-                if(titleText!=null)
-                {
-                    titleText.enabled = true;
-                    titleText.text = other.transform.GetChild(0).gameObject.name;
-                }
+                //EventManager.Invoke("ActiveFInfo", _name);
+                //if(titleText!=null)
+                //{
+                //    titleText.enabled = true;
+                //    titleText.text = other.transform.GetChild(0).gameObject.name;
+                //}
                 
 
                 break;
@@ -214,10 +214,10 @@ public class Player : MonoBehaviour
             case "MG_S_05":
                 curEventTypr = 0;
                 nextMoveScenes = "";
-                EventManager.Invoke("DeActiveFInfo", _name);
+                //EventManager.Invoke("DeActiveFInfo", _name);
                 other.transform.parent.GetComponent<Outline>().enabled = false;
-                if(titleText!=null)
-                    titleText.enabled = false;
+                //if(titleText!=null)
+                //    titleText.enabled = false;
                 if(minigameImageUI!=null)
                 {
                     minigameImageUI.HideImage();
@@ -232,10 +232,10 @@ public class Player : MonoBehaviour
                 curEventTypr = 0;
                 openUIName = "";
                 other.transform.parent.GetComponent<Outline>().enabled = false;
-                EventManager.Invoke("DeActiveFInfo", _name);
+                //EventManager.Invoke("DeActiveFInfo", _name);
                 other.transform.parent.GetComponent<Outline>().enabled = false;
-                if(titleText != null)
-                    titleText.enabled = false;
+                //if(titleText != null)
+                //    titleText.enabled = false;
                 break;
             default:
 

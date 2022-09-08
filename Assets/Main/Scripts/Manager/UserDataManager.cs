@@ -103,7 +103,8 @@ public class UserDataManager : MonoSingleton<UserDataManager>
 
         if (!_jdata["retMsg"].ToString().Equals("Refresh"))
         {
-            //NetManager.instance.AddRollingMSG($"ȯ���մϴ�, {nickName}��.");
+            NetManager.instance.AddRollingMSG("로그인", $"{nickName}님 환영합니다.");
+            NetManager.instance.AddRollingMSG("레트로 프렌즈", $"{nickName}님 즐거운 시간 되십시오.");
 
             //����
             bl_SceneLoaderManager.LoadScene("Main_Lobby");
@@ -203,6 +204,9 @@ public class UserDataManager : MonoSingleton<UserDataManager>
 
 
         NetManager.instance.CL2S_SEND(_userData);
+
+        NetManager.instance.AddRollingMSG("업적", $"{_archiveName}업적을 달성했습니다.");
+
     }
 
     //���� �޼��ϰ� �������� �����ִ� ���� ���� ����Ʈ ������
