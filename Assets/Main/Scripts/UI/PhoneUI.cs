@@ -43,7 +43,7 @@ public class PhoneUI : MonoBehaviour
     //Transform page3_AchiveList;
     Transform page3_RankList;
     Text[] page3_RankText;
-    int minigameNum = 2;
+    
 
     private void Awake()
     {
@@ -145,7 +145,7 @@ public class PhoneUI : MonoBehaviour
     }
     private void OnEnable()
     {
-        NetEventManager.Regist("ReadRanking", S2CL_ReadRanking);//서버에서 ReadRanking 커멘드로 패킷이 올경우 실행
+        NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);//서버에서 ReadRanking 커멘드로 패킷이 올경우 실행
         NetEventManager.Regist("TotalRanking", S2CL_TotalRanking);
     }
 
@@ -218,65 +218,61 @@ public class PhoneUI : MonoBehaviour
     public void SetPage3()
     {
         CL2S_TotalRanking();
-        StartCoroutine(UpdateRank());
+        UpdateRank();
+
+        UserDataManager.instance.RefreshUserInfo();
         // 미니게임들 완성되고 넣어야할듯한...
 
         //page3_AchieveCount = 
-        //page3_TotalScore =
         //page3_TotalRank = 
 
+        //page3_TotalScore =
         //그 외 디테일 볼 수 있게 하단 버튼에 연결
     }
     //page3함수========================================================================
-    IEnumerator UpdateRank()
+    void UpdateRank()
     {
-        minigameNum = 2;
-        string BaseSceneName = "MG_";
-        string SceneName;
-        for (int i = 2; i < page3_RankText.Length; i++)
-        {
-            int num;
-            num = (i + 2) / 2;
-
-            SceneName = $"{BaseSceneName}{num}";
-            CL2S_ReadRanking(SceneName);
-            i++;
-            yield return new WaitForSeconds(0.15f);
-        }
-    }
-    
-    public void S2CL_ReadRanking(JObject _jdata)
-    {
-       
-        Debug.Log(_jdata);
-        JObject _data = JObject.Parse(_jdata["myRkData"].ToString());
-        string rank = $"{_data["ranking"]}";
-        if(rank=="-1")
-        {
-            page3_RankText[minigameNum].text = "기록없음";
-            minigameNum++;
-            page3_RankText[minigameNum].text = $"--";
-            minigameNum++;
-        }
-        else
-        {
-            page3_RankText[minigameNum].text = $"{_data["ranking"]}위";
-            minigameNum++;
-            page3_RankText[minigameNum].text = $"{_data["Score"]}점";
-            minigameNum++;
-        }
+        CL2S_ReadMyAllRanking();
         
     }
-    void CL2S_ReadRanking(string _name)
+    
+    
+    public void CL2S_ReadMyAllRanking()
     {
         JObject _userData = new JObject();
-        _userData.Add("cmd", "ReadRanking");
+        _userData.Add("cmd", "ReadMyAllRanking");
         _userData.Add("ID", UserDataManager.instance.ID);
-        _userData.Add("MG_NAME", _name);
 
         NetManager.instance.CL2S_SEND(_userData);
     }
 
+    public void S2CL_ReadMyAllRanking(JObject _jdata)
+    {
+        Debug.Log(_jdata.ToString());
+        
+        string BaseSceneName = "MG_";
+        string SceneName;
+        for (int i = 2; i < 6; i++)
+        {
+            SceneName = $"{BaseSceneName}{i}";
+            JArray _data = JArray.Parse(_jdata[SceneName].ToString());
+
+            Debug.Log(_data);
+            JObject data = JObject.Parse(_data[10].ToString());
+
+            string rank = $"{data["ranking"]}";
+            if (rank == "-1")
+            {
+                page3_RankText[i * 2 - 2].text = "기록없음";
+                page3_RankText[i * 2-1].text = $"--";
+            }
+            else
+            {
+                page3_RankText[i * 2 - 2].text = $"{data["ranking"]}위";
+                page3_RankText[i * 2-1].text = $"{data["Score"]}점";
+            }
+        }
+    }
     public void S2CL_TotalRanking(JObject _jdata)
     {
         Debug.Log(_jdata);
