@@ -16,7 +16,11 @@ public class MiniGame5_ChoiceContentUI : MonoBehaviour
     }
 
     ChoiceState state;
-    public ChoiceState State { get; set; }
+    public ChoiceState State
+    {
+        get => state;
+        set { state = value; }
+    }
     Text friendName;
     Image sprite;
     Transform NotHave;
@@ -37,6 +41,7 @@ public class MiniGame5_ChoiceContentUI : MonoBehaviour
 
                 if (isChecked)
                 {
+                    
                     switch (state)
                     {
                         case ChoiceState.RunFriend:
@@ -51,8 +56,8 @@ public class MiniGame5_ChoiceContentUI : MonoBehaviour
                     }
                 }
                 
-                NotChecked.gameObject.SetActive(!isChecked);
-                Checked.gameObject.SetActive(isChecked);
+                //NotChecked.gameObject.SetActive(!isChecked);
+                //Checked.gameObject.SetActive(isChecked);
                 //transform.SetAsFirstSibling();
             }
         }
@@ -60,7 +65,6 @@ public class MiniGame5_ChoiceContentUI : MonoBehaviour
 
     private void Awake()
     {
-        state = ChoiceState.RunFriend;
         friendName = transform.Find("Name").GetComponent<Text>();
         sprite = transform.Find("Sprite").GetComponent<Image>();
         NotHave = transform.Find("NotHave");
@@ -69,6 +73,7 @@ public class MiniGame5_ChoiceContentUI : MonoBehaviour
         Checked = Have.Find("Checked");
 
         chooseBtn = NotChecked.GetComponent<Button>();
+        chooseBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
     }
 
     public void Init()
@@ -92,9 +97,9 @@ public class MiniGame5_ChoiceContentUI : MonoBehaviour
         chooseBtn.onClick.AddListener(() => IsChecked = true);
     }
 
-    public void OnCheck()
+    public void OnCheck(bool value)
     {
-        isChecked = true;
+        isChecked = value;
         NotChecked.gameObject.SetActive(!isChecked);
         Checked.gameObject.SetActive(isChecked);
     }

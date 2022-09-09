@@ -41,6 +41,7 @@ public class LobbyUI : MonoBehaviour
 
     public void OpenUI(string _str)
     {
+        AudioManager.Inst.PlaySFX("EffectSound_Pop");
         dim.SetActive(true);
         lobbyUis[_str].SetActive(true);
 
@@ -48,6 +49,7 @@ public class LobbyUI : MonoBehaviour
 
     public void CloseUI(string _str)
     {
+        AudioManager.Inst.PlaySFX("EffectSound_Pop2");
         dim.SetActive(false);
         lobbyUis[_str].SetActive(false);
     }

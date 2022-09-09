@@ -63,5 +63,20 @@ namespace float_oat.Desktop90
         {
             Canvas.enabled = false;
         }
+        public void DoubleClickSound()
+        {
+            AudioManager.Inst.PlaySFX("DoubleClick");
+        }
+
+        public void ClickSound()
+        {
+            AudioManager.Inst.PlaySFX("Click");
+        }
+
+        public void EnterSound()
+        {
+            if (Random.Range(0.0f, 1.0f) < 0.5f) AudioManager.Inst.PlaySFX("Enter");
+            else AudioManager.Inst.PlaySFX("Enter2");
+        }
     }
 }

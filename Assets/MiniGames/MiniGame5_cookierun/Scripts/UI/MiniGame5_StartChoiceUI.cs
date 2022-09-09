@@ -37,17 +37,23 @@ public class MiniGame5_StartChoiceUI : MiniGame5_UI
             choiceCutList[i] = transform.Find("ActiveTabs").GetChild(i).GetComponent<Transform>();
         }
 
+        choiceTabBtn[0].onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+        choiceTabBtn[1].onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+        choiceTabBtn[2].onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
+
         choiceTabBtn[0].onClick.AddListener(() => OpenScene(ChoiceState.RunFriend));
         choiceTabBtn[1].onClick.AddListener(() => OpenScene(ChoiceState.NextRunFriend));
         choiceTabBtn[2].onClick.AddListener(() => OpenScene(ChoiceState.BuffFriend));
 
         CreateMiniFriendList();
-        ShowHaveFriend();
+        ChangeHaveFrieHierarchy();
     }
 
     private void Start()
     {
-        ShowChenkedFriend();
+        Refresh(ChoiceState.RunFriend);
+        Refresh(ChoiceState.NextRunFriend);
+        Refresh(ChoiceState.BuffFriend);
     }
 
     public void OpenScene(ChoiceState state)
@@ -66,32 +72,54 @@ public class MiniGame5_StartChoiceUI : MiniGame5_UI
 
     public override void Refresh(ChoiceState state)
     {
+        
         switch (state)
         {
             case ChoiceState.RunFriend:
-                for (int i = runnerList.Length - 1; i >= 0; i--)
+                for (int i = 0; i < runnerList.Length; i++)
                 {
-                    if (runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked == true)
+                    if (runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data.isHave == true)
                     {
-                        runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked = false;
+                        if (runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data == MiniGame5_GameManager.Inst.RunnerData)
+                        {
+                            runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck(true);
+                        }
+                        else
+                        {
+                            runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck(false);
+                        }
                     }
                 }
                 break;
             case ChoiceState.NextRunFriend:
-                for (int i = nextRunnerList.Length - 1; i >= 0; i--)
+                for (int i = 0; i < nextRunnerList.Length; i++)
                 {
-                    if (nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked == true)
+                    if (nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data.isHave == true)
                     {
-                        nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked = false;
+                        if (nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data == MiniGame5_GameManager.Inst.NextRunnerData)
+                        {
+                            nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck(true);
+                        }
+                        else
+                        {
+                            nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck(false);
+                        }
                     }
                 }
                 break;
             case ChoiceState.BuffFriend:
-                for (int i = petList.Length - 1; i >= 0; i--)
+                for (int i = 0; i < petList.Length; i++)
                 {
-                    if (petList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked == true)
+                    if (petList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data.isHave == true)
                     {
-                        petList[i].GetComponent<MiniGame5_ChoiceContentUI>().IsChecked = false;
+                        if (petList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data == MiniGame5_GameManager.Inst.PetData)
+                        {
+                            petList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck(true);
+                        }
+                        else
+                        {
+                            petList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck(false);
+                        }
                     }
                 }
                 break;
@@ -136,7 +164,7 @@ public class MiniGame5_StartChoiceUI : MiniGame5_UI
         }
     }
 
-    void ShowHaveFriend()
+    void ChangeHaveFrieHierarchy()
     {
         for (int i = runnerList.Length-1; i >= 0; i--)
         {
@@ -159,36 +187,6 @@ public class MiniGame5_StartChoiceUI : MiniGame5_UI
             if (petList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data.isHave == true)
             {
                 petList[i].transform.SetAsFirstSibling();
-            }
-        }
-    }
-
-    void ShowChenkedFriend()
-    {
-        for (int i = 0; i < runnerList.Length; i++)
-        {
-            if (runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data == MiniGame5_GameManager.Inst.RunnerData)
-            {
-                runnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck();
-                break;
-            }
-        }
-
-        for (int i = 0; i < nextRunnerList.Length; i++)
-        {
-            if (nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data == MiniGame5_GameManager.Inst.NextRunnerData)
-            {
-                nextRunnerList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck();
-                break;
-            }
-        }
-
-        for (int i = 0; i < petList.Length; i++)
-        {
-            if (petList[i].GetComponent<MiniGame5_ChoiceContentUI>().Data == MiniGame5_GameManager.Inst.PetData)
-            {
-                petList[i].GetComponent<MiniGame5_ChoiceContentUI>().OnCheck();
-                break;
             }
         }
     }
