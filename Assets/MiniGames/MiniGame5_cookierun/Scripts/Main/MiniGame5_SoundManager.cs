@@ -24,6 +24,26 @@ public class MiniGame5_SoundManager : MonoBehaviour
     static MiniGame5_SoundManager instance;
     public static MiniGame5_SoundManager Inst { get => instance; }
 
+    float bgmVolume = 0.2f;
+    public float BgmVolume
+    {
+        get => bgmVolume;
+        set
+        {
+            bgmAudio.volume = Mathf.Clamp(value, 0f, 0.2f);
+        }
+    }
+
+    float effectVolume = 1f;
+    public float EffectVolume
+    {
+        get => effectVolume;
+        set
+        {
+            effectAudio.volume = Mathf.Clamp(value, 0f, 1f);
+        }
+    }
+
     private void Awake()
     {
         if (instance == null)

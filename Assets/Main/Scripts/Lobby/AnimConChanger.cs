@@ -42,6 +42,8 @@ public class AnimConChanger : MonoBehaviour
 
     public bool isMoveingHold = false;//캐릭터가 움직이지 못하게 하기 위한 변수
 
+    Coroutine coPhoneUI;
+
     //마우스의 위치를 추적하여 방향으로 변환하여 리턴하는 함수
     Vector3 GetMouseScreenToWorldPoint()
     {
@@ -217,17 +219,17 @@ public class AnimConChanger : MonoBehaviour
         if (animator.GetBool("isPhoneOpen") == false)
         {
             AudioManager.Inst.PlaySFX("EffectSound_Pop");
-            if (isHandCamMode)
+            if (isHandCamMode) // 1인칭
             {
                 
                 isHandCam = true;
                 PhoneMode_PhoneFocus.gameObject.SetActive(true);
             }
-            else
+            else // 3인칭
             {
                 PhoneAnim?.Invoke(true);
                 //PlayerFocusCam.gameObject.SetActive(true);
-                StartCoroutine(lookAtPlayer.doMove_PhoneModeOn(this.transform, PhoneMode_PlayerFocus));
+                coPhoneUI = StartCoroutine(lookAtPlayer.DoMove_PhoneModeOn(this.transform, PhoneMode_PlayerFocus));
             }
             isMoveingHold = true;
             animator.SetBool("isPhoneOpen", true);
@@ -244,12 +246,12 @@ public class AnimConChanger : MonoBehaviour
             {
                 PhoneAnim?.Invoke(false);
                 //PlayerFocusCam.gameObject.SetActive(false);
-                StartCoroutine(lookAtPlayer.doMove_PhoneModeOff());
+                coPhoneUI = StartCoroutine(lookAtPlayer.DoMove_PhoneModeOff());
             }
             isMoveingHold = false;
             animator.SetBool("isPhoneOpen", false);
         }
-        StopAllCoroutines();
+        StopCoroutine(coPhoneUI);
     }
 
     

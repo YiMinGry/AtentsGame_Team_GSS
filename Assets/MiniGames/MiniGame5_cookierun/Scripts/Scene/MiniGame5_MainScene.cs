@@ -50,7 +50,7 @@ public class MiniGame5_MainScene : MiniGame5_Scene
         mainMapScroll.isStop = false;
 
         petPos.localPosition = new(0f, 0f, -0.4f);
-        petPos.GetComponentInChildren<CapsuleCollider>().enabled = true;
+        //petPos.GetComponentInChildren<CapsuleCollider>().enabled = true;
     }
 
     public override void EndScene()

@@ -106,6 +106,7 @@ public class MiniGame5_SceneManager : MonoBehaviour
         uiList[(int)UIState.StartChoiceUI].CloseScene();
         sceneList[(int)SceneState.StartScene].CloseScene();
 
+        MiniGame5_SoundManager.Inst.MainBGM();
         uiList[(int)UIState.MainPlayingUI].OpenScene();
         sceneList[(int)SceneState.MainScene].OpenScene();
 
@@ -116,7 +117,6 @@ public class MiniGame5_SceneManager : MonoBehaviour
     {
         uiList[(int)UIState.MainPlayingUI].StartScene();
         sceneList[(int)SceneState.MainScene].StartScene();
-        MiniGame5_SoundManager.Inst.MainBGM();
     }
 
     public void OnBonusTimeEnd()

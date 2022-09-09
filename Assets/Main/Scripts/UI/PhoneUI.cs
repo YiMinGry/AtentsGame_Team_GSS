@@ -140,8 +140,7 @@ public class PhoneUI : MonoBehaviour
         {
             page3_RankText[i] = page3_RankList.GetChild(i).GetComponent<Text>();
         }
-
-
+        page3_sidePage.Find("OutBtn").GetComponent<Button>().onClick.AddListener(() => page3_sidePage.gameObject.SetActive(false));
     }
     private void OnEnable()
     {
@@ -152,6 +151,7 @@ public class PhoneUI : MonoBehaviour
     private void Start()
     {
         Init();
+        OpenPage(0);
     }
 
     void Init()
@@ -224,8 +224,6 @@ public class PhoneUI : MonoBehaviour
         //page3_AchieveCount = 
         //page3_TotalScore =
         //page3_TotalRank = 
-
-        //그 외 디테일 볼 수 있게 하단 버튼에 연결
     }
     //page3함수========================================================================
     IEnumerator UpdateRank()
