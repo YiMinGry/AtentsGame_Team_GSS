@@ -155,6 +155,7 @@ public class TapperGameManager : MonoBehaviour
     {
 
         CL2S_UpdateRanking(score);
+        StartCoroutine(UserDataManager.instance.AchivementCheck(4));
 
         isGameOver = true;
 

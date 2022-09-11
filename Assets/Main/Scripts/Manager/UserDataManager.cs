@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 public struct MGPlayData//미니게임 업적 체크용
 {
@@ -33,14 +34,15 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     public MGPlayData MG3PlayData;
     public MGPlayData MG4PlayData;
     public MGPlayData MG5PlayData;
+    public List<MGPlayData> MGPlayDataList;
 
     //업적용 조건
     
-    private int[,] conditionScore= { { 1, 5, 10, 25, 50 }, { 500,1500,3000,4500,6000 }, { 1, 5, 10, 25, 50 }, { 1, 5, 10, 25, 50 } };
-    private int[,] conditionPlayCount= { { 1, 5, 10, 25, 50 }, { 1, 5, 10, 25, 50 }, { 1, 5, 10, 25, 50 }, { 1, 5, 10, 25, 50 } };
-    private int[] conditionMfCount = {1,10,20,30};
-    private int[] coin1Condition = {100,500,2000,5000,10000};
-    private int[] coin2Condition = { 50, 200, 500, 1000,3000 };
+    public int[,] conditionScore= { {0,0,0,0,0 },{ 1, 5, 10, 25, 50 }, { 50,1500,3000,4500,6000 }, { 1, 5, 10, 25, 50 }, { 1, 5, 10, 25, 50 } };
+    public int[] conditionPlayCount= {1, 3, 7, 10, 13 };
+    public int[] conditionMfCount = {1,5,15,25,34};
+    public int[] coin1Condition = {10,30,50,100,500};
+    public int[] coin2Condition = { 1, 10, 25, 60,100 };
 
 
 
@@ -61,6 +63,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         NetEventManager.Regist("ArchiveUpdate", S2CL_ArchiveUpdate);
 
         ID = SystemInfo.deviceUniqueIdentifier;
+        
     }
 
     public void RefreshUserInfo()
@@ -125,6 +128,19 @@ public class UserDataManager : MonoSingleton<UserDataManager>
             //�׽�Ʈ�� Dev_Lobby ������ �ʿ��ϸ� �� ���ηκ� �κ� �ּ��ϰ� �Ʒ� ����κ� �ּ� Ǯ��
 
             //bl_SceneLoaderManager.LoadScene("Dev_Lobby");
+
+
+           
+        }
+
+        if (MGPlayDataList==null)
+        {
+            MGPlayDataList = new List<MGPlayData>();
+            MGPlayDataList.Add(MG1PlayData);
+            MGPlayDataList.Add(MG2PlayData);
+            MGPlayDataList.Add(MG3PlayData);
+            MGPlayDataList.Add(MG4PlayData);
+            MGPlayDataList.Add(MG5PlayData);
         }
     }
 
@@ -227,6 +243,72 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     {
         Debug.Log(_jdata.ToString());
 
-        archiveList = _jdata["ArchiveList"].ToString();
+        archiveList = _jdata["List"].ToString();
+    }
+    public IEnumerator AchivementCheck(int MG_num=0)
+    {
+        RefreshUserInfo();
+        yield return new WaitForSeconds(1.0f);
+        string achivementName;
+        JObject _data = JObject.Parse(archiveList);
+        if (MG_num == 0)
+        {
+            MatchCollection matches = Regex.Matches(mfList, "\"1");
+            int cnt = matches.Count;
+            for (int i=0; i<5;i++)
+            {
+                //if (conditionMfCount[i]<=mf)
+                
+                if (conditionMfCount[i] <=cnt)
+                {
+                    achivementName = $"MF_Count_{i + 1}";
+                    CallAchievement(_data, achivementName);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                if (conditionScore[MG_num - 1, i] <= MGPlayDataList[MG_num - 1]._maxScore)
+                {
+                    achivementName = $"MG_{MG_num}_Score_{i + 1}";
+                    CallAchievement(_data, achivementName);
+                }
+                if (conditionPlayCount[i] <= MGPlayDataList[MG_num - 1]._playCount)
+                {
+                    achivementName = $"MG_{MG_num}_Count_{i + 1}";
+                    CallAchievement(_data, achivementName);
+                }
+                if (MGPlayDataList[i]._is1st)
+                {
+                    achivementName = $"MG_{MG_num}_1st";
+                    CallAchievement(_data, achivementName);
+                }
+            }
+            //전체 랭크 1등
+        }
+        for(int i=0;i<5;i++)
+        {
+            if (coin1Condition[i] <=coin1)
+            {
+                achivementName = $"Coin1_{i + 1}";
+                CallAchievement(_data, achivementName);
+            }
+            if (coin2Condition[i] <= coin2)
+            {
+                achivementName = $"Coin2_{i + 1}";
+                CallAchievement(_data, achivementName);
+            }
+        }
+        
+    }
+    private void CallAchievement(JObject _data,string _achievementName)
+    {
+        int check = int.Parse(_data[_achievementName].ToString());
+        if (check == 0)
+        {
+            CL2S_ArchiveUpdate(_achievementName);
+        }
     }
 }

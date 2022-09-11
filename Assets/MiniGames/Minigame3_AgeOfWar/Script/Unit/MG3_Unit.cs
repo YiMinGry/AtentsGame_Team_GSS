@@ -260,49 +260,54 @@ public class MG3_Unit : MonoBehaviour
 
     public void Swing()
     {
-        float reach;
-        if(isMelee)
+        if (!MG3_GameManager.Inst.IsGameover)
         {
-            MG3_SoundManager.instance.SFXPlay("swing", swingClip);
-            reach = 1.5f;
-        }
-        else
-        {
-            if (revol > 1)
+            float reach;
+            if (isMelee)
             {
-                MG3_SoundManager.instance.SFXPlay("gun", gunClip);
+                MG3_SoundManager.instance.SFXPlay("swing", swingClip);
+                reach = 1.5f;
             }
             else
             {
-                MG3_SoundManager.instance.SFXPlay("arrow", arrowClip);
+                if (revol > 1)
+                {
+                    MG3_SoundManager.instance.SFXPlay("gun", gunClip);
+                }
+                else
+                {
+                    MG3_SoundManager.instance.SFXPlay("arrow", arrowClip);
+                }
+                reach = 4.0f;
             }
-            reach = 4.0f;
-        }
-       
-        RaycastHit hitInfo;
 
-        if (Physics.Raycast(this.transform.position + rayOffest, this.transform.forward, out hitInfo, reach,unitLayerMask))
-        {
-            MG3_Unit unit = hitInfo.transform.GetComponent<MG3_Unit>();
+            RaycastHit hitInfo;
 
-            Debug.Log($"{this.tag} 공격 {hitInfo.transform.tag}");
-            if (unit != null)
+            if (Physics.Raycast(this.transform.position + rayOffest, this.transform.forward, out hitInfo, reach, unitLayerMask))
             {
-                unit.TakeDamage(Attack);
+                MG3_Unit unit = hitInfo.transform.GetComponent<MG3_Unit>();
 
+                Debug.Log($"{this.tag} 공격 {hitInfo.transform.tag}");
+                if (unit != null)
+                {
+                    unit.TakeDamage(Attack);
+
+                }
             }
-        }
-        else if(Physics.Raycast(this.transform.position + rayOffest, this.transform.forward, out hitInfo, reach))
-        {
-            MG3_Unit unit = hitInfo.transform.GetComponent<MG3_Unit>();
-
-            Debug.Log($"{this.tag} 공격 {hitInfo.transform.tag}");
-            if (unit != null)
+            else if (Physics.Raycast(this.transform.position + rayOffest, this.transform.forward, out hitInfo, reach))
             {
-                unit.TakeDamage(Attack);
+                MG3_Unit unit = hitInfo.transform.GetComponent<MG3_Unit>();
 
+                Debug.Log($"{this.tag} 공격 {hitInfo.transform.tag}");
+                if (unit != null)
+                {
+                    unit.TakeDamage(Attack);
+
+                }
             }
+
         }
+        
        
 
     }
