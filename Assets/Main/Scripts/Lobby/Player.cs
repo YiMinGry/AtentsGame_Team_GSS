@@ -44,7 +44,11 @@ public class Player : MonoBehaviour
                 _mf.name = _data.id.ToString();
                 mfPosCheck[_idx] = true;
                 mfs[_idx] = _mf;
-
+                Collider mfCollider = _mf.GetComponent<Collider>(); // Player가 미니친구 콜라이더에 밀리는 문제 방지
+                if (mfCollider != null)
+                {
+                    mfCollider.enabled = false;
+                }
                 _idx++;
             }
         }
@@ -71,6 +75,11 @@ public class Player : MonoBehaviour
                 _mf.name = _data.id.ToString();
                 mfPosCheck[_idx] = true;
                 mfs[_idx] = _mf;
+                Collider mfCollider = _mf.GetComponent<Collider>();
+                if(mfCollider != null)
+                {
+                    mfCollider.enabled = false;
+                }
 
             }
             _idx++;
