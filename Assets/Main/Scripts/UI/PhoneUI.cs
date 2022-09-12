@@ -45,6 +45,7 @@ public class PhoneUI : MonoBehaviour
     Text[] page3_RankText;
     public GameObject achieveTextObj;
     public Transform contentsTr;
+    private Text playerTitle;
     
 
     private void Awake()
@@ -142,7 +143,7 @@ public class PhoneUI : MonoBehaviour
         {
             page3_RankText[i] = page3_RankList.GetChild(i).GetComponent<Text>();
         }
-
+        
 
     }
     private void OnEnable()
@@ -154,7 +155,6 @@ public class PhoneUI : MonoBehaviour
     private void Start()
     {
         Init();
-        UserDataManager.instance.CL2S_ArchiveUpdate("MG_2_Score_1");
     }
 
     void Init()
@@ -220,9 +220,6 @@ public class PhoneUI : MonoBehaviour
 
     public void SetPage3()
     {
-        CL2S_TotalRanking();
-        UpdateRank();
-        StartCoroutine(UserDataManager.instance.AchivementCheck());
         // 미니게임들 완성되고 넣어야할듯한...
 
         //page3_AchieveCount = 
@@ -232,7 +229,7 @@ public class PhoneUI : MonoBehaviour
         //그 외 디테일 볼 수 있게 하단 버튼에 연결
     }
     //page3함수========================================================================
-    void UpdateRank()
+    public void UpdateRank()
     {
         CL2S_ReadMyAllRanking();
         
@@ -295,8 +292,6 @@ public class PhoneUI : MonoBehaviour
         string achivementName;
         JObject data = JObject.Parse(UserDataManager.instance.archiveList);
 
-        //string a = _data[(MG_num - 1) * 5 + 2].ToString();
-        //string b = _data[25+(MG_num - 1) * 5 + 2].ToString();
         int check;
         for (int i = 0; i < 5; i++)
         {
@@ -318,10 +313,8 @@ public class PhoneUI : MonoBehaviour
             CheckAchieveMent(data, achivementName);
         }
         achivementName = $"Total_1st";
-        check = int.Parse(data[achivementName].ToString());
-        if (check == 1)
-        {
-        }
+        CheckAchieveMent(data, achivementName);
+
     }
     void CheckAchieveMent(JObject _data,string _achieveName)
     {
@@ -408,7 +401,7 @@ public class PhoneUI : MonoBehaviour
             {
                 if(_achieveName.Contains("MF"))
                 {
-                    a = "미니친구 ";
+                    a = "";
                     switch (achieveTier)
                     {
                         case 1:
@@ -448,13 +441,34 @@ public class PhoneUI : MonoBehaviour
 
                 
             GameObject obj = Instantiate(achieveTextObj, contentsTr);
+            obj.GetComponent<Toggle>().group = obj.transform.parent.GetComponent<ToggleGroup>();
             Text achiveText = obj.GetComponent<Text>();
             achiveText.text = a + b;
             achiveText.transform.GetChild(1).GetComponent<Text>().text = a + condition;
-           
-            
-            
-
         }
     }
+    public void SetTitle(GameObject _thisObj)
+    {
+        
+        playerTitle = FindObjectOfType<Player>().GetComponentInChildren<Text>();
+        Text title = _thisObj.GetComponent<Text>();
+        Transform parentTr = _thisObj.transform.parent;
+
+        playerTitle.text = $"<{title.text}>";
+        for(int i = 0; i<parentTr.childCount;i++)
+        {
+            Toggle a=parentTr.GetChild(i).GetComponent<Toggle>();
+            if(a.isOn)
+            {
+                break;
+            }
+            if(i==parentTr.childCount-1)
+            {
+                playerTitle.text = "";
+            }
+        }
+
+        
+    }
+    
 }
