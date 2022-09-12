@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     int curEventTypr = 0;//�÷��̾ ��ȣ�ۿ��Ҷ� � �ִϸ��̼��� �����ؾ����� ����
     string nextMoveScenes = "";//���̵��Ҷ� �������� �������� �̸�����
     string openUIName = "";//��ȣ�ۿ����� ui�� ���� �ݱ� ���� �̸� ����
+    Transform sitPos;
     public bool isOpenUI = false;
 
     MinigameImageUI minigameImageUI;
@@ -137,6 +138,7 @@ public class Player : MonoBehaviour
                                     //�̴ϰ��� �����̵� �ӽſ� ������츦 �����Ͽ�
                                     //�ش� ������ �̵��ϰ�
                                     StartCoroutine(GotoNextScene(nextMoveScenes));
+                                    StartCoroutine(SitDown(sitPos));
                                 });
 
                                 break;
@@ -164,6 +166,7 @@ public class Player : MonoBehaviour
     {
         //�÷��̾ ���� �ݶ��̾��� ������Ʈ �̸��� �޾ƿͼ� �̸��� �´� �̺�Ʈ ����
         string _name = other.gameObject.name;
+        Transform _transform = other.gameObject.transform;
 
         switch (_name)
         {
@@ -175,6 +178,7 @@ public class Player : MonoBehaviour
             case "MG_S_05":
                 curEventTypr = 1;//�ɱ�
                 nextMoveScenes = _name;//�̵��� ���̸�
+                sitPos = _transform;
                 other.transform.parent.GetComponent<Outline>().enabled = true;//���� ������Ʈ�� �ƿ������� Ȱ��ȭ
                                                                               //EventManager.Invoke("ActiveFInfo", "�̴ϰ��� : " + _name);//����ǥ��
 
@@ -257,7 +261,15 @@ public class Player : MonoBehaviour
 
     }
 
-
+    IEnumerator SitDown(Transform _transform)
+    {
+        while(true)
+        {
+            transform.position = Vector3.Lerp(transform.position, _transform.position, Time.deltaTime * 2.0f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_transform.rotation.eulerAngles*(-1.0f)), Time.deltaTime * 2.0f);
+            yield return null;
+        }
+    }
 
     IEnumerator GotoNextScene(string _name)
     {
