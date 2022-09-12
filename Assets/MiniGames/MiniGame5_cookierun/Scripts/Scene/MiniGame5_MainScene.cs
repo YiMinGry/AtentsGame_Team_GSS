@@ -66,10 +66,10 @@ public class MiniGame5_MainScene : MiniGame5_Scene
 
     public override void ReSet()
     {
-        MiniGame5_GameManager.Inst.Player.Init();
+        //MiniGame5_GameManager.Inst.Player.Init();
 
-        mainMapScroll.ResetMap();
-        bonusMapScroll.ResetMap();
+        //mainMapScroll.ResetMap();
+        //bonusMapScroll.ResetMap();
     }
 
     public override void ChangeCharator(ChoiceState state)
@@ -107,7 +107,7 @@ public class MiniGame5_MainScene : MiniGame5_Scene
 
     void ChangeNextRunner()
     {
-        playerPos.GetChild(0).parent = transform.Find("Map").Find("Main");
+        if (playerPos.childCount > 0) playerPos.GetChild(0).parent = transform.Find("Map").Find("Main");
 
         GameObject obj = Instantiate(MiniGame5_GameManager.Inst.NextRunnerData.prefab, playerPos);
         obj.AddComponent<MiniGame5_Player>();
@@ -145,7 +145,6 @@ public class MiniGame5_MainScene : MiniGame5_Scene
     IEnumerator CoStartBonusTime()
     {
         mainMapScroll.isStop = true;
-        petPos.GetComponentInChildren<CapsuleCollider>().enabled = false;
         petPos.localPosition = new(0f, 0.5f, 0f);
         bonusBound.SetActive(true);
         
@@ -158,6 +157,7 @@ public class MiniGame5_MainScene : MiniGame5_Scene
 
     public void EndBonusTime()
     {
+        MiniGame5_SoundManager.Inst.MainBGM();
         coBonus = StartCoroutine(CoEndBonusTime());
         MiniGame5_GameManager.Inst.Player.EndBonusTime();
     }

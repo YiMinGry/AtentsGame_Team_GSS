@@ -7,6 +7,7 @@ public class MiniGame5_SoundManager : MonoBehaviour
     AudioSource bgmAudio;
     AudioSource effectAudio;
 
+    public AudioClip loadingSceneBGM;
     public AudioClip startSceneBGM;
     public AudioClip mainSceneBGM;
     public AudioClip bonusTimeBGM;
@@ -34,13 +35,13 @@ public class MiniGame5_SoundManager : MonoBehaviour
         }
     }
 
-    float effectVolume = 1f;
+    float effectVolume = 0.3f;
     public float EffectVolume
     {
         get => effectVolume;
         set
         {
-            effectAudio.volume = Mathf.Clamp(value, 0f, 1f);
+            effectAudio.volume = Mathf.Clamp(value, 0f, 0.8f);
         }
     }
 
@@ -68,12 +69,21 @@ public class MiniGame5_SoundManager : MonoBehaviour
 
         bgmAudio.loop = true;
         effectAudio.loop = false;
+
+        bgmAudio.volume = bgmVolume;
+        effectAudio.volume = effectVolume;
     }
 
     public void ClearBGM()
     {
         bgmAudio.clip = null;
         bgmAudio.Stop();
+    }
+
+    public void loadingBGM()
+    {
+        bgmAudio.clip = loadingSceneBGM;
+        bgmAudio.Play();
     }
 
     public void StartBGM()
@@ -90,8 +100,8 @@ public class MiniGame5_SoundManager : MonoBehaviour
 
     public void BonusTimeBGM()
     {
-        if (!bgmAudio.isPlaying) bgmAudio.Play();
         bgmAudio.clip = bonusTimeBGM;
+        bgmAudio.Play();
     }
 
     public void PlayJumpCilp()

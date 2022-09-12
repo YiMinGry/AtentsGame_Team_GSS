@@ -33,5 +33,6 @@ public enum ItemState
     CoinItem,
     BonusItem,
     MagnetItem,
-    BigItem
+    BigItem,
+    StageUpItem,
 }

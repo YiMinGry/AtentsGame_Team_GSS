@@ -40,6 +40,8 @@ public class MiniGame5_StartUI : MiniGame5_UI
 
         // Settings =========================================================================
 
+        bestScore.text = UserDataManager.instance.MG5PlayData._maxScore.ToString();
+
         runFriendBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
         nextRunFriendBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
         buffFriendBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);

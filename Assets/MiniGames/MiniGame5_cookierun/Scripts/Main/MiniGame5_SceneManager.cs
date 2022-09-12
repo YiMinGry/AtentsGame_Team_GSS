@@ -80,6 +80,8 @@ public class MiniGame5_SceneManager : MonoBehaviour
 
         sceneList[(int)SceneState.StartScene].OpenScene();
         sceneList[(int)SceneState.MainScene].CloseScene();
+
+        uiList[(int)UIState.OpeningUI].StartScene();
     }
 
     public void OnStart()
@@ -142,8 +144,8 @@ public class MiniGame5_SceneManager : MonoBehaviour
 
     IEnumerator OnChangeNextRunnerOnPlay()
     {
-        yield return new WaitForSeconds(1f);
-        MiniGame5_GameManager.Inst.Life = 0.5f;
+        yield return new WaitForSeconds(3f);
+        MiniGame5_GameManager.Inst.Life = 0.75f;
         sceneList[(int)SceneState.MainScene].ChangeCharator(ChoiceState.NextRunFriend);
     }
 

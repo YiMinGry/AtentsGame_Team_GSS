@@ -27,8 +27,8 @@ public class MiniGame5_SettingUI : MiniGame5_UI
         bgmSlider = detail.transform.Find("BGSound").GetComponent<Slider>();
         effectSlider = detail.transform.Find("EffectSound").GetComponent<Slider>();
 
-        MiniGame5_SoundManager.Inst.BgmVolume = bgmSlider.value;
-        MiniGame5_SoundManager.Inst.EffectVolume = effectSlider.value;
+        bgmSlider.value = MiniGame5_SoundManager.Inst.BgmVolume;
+        effectSlider.value = MiniGame5_SoundManager.Inst.EffectVolume;
         bgmSlider.onValueChanged.AddListener((value) => MiniGame5_SoundManager.Inst.BgmVolume = value);
         effectSlider.onValueChanged.AddListener((value) => MiniGame5_SoundManager.Inst.EffectVolume = value);
 
