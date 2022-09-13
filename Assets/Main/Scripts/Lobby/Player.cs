@@ -10,10 +10,11 @@ public class Player : MonoBehaviour
     int curEventTypr = 0;//�÷��̾ ��ȣ�ۿ��Ҷ� � �ִϸ��̼��� �����ؾ����� ����
     string nextMoveScenes = "";//���̵��Ҷ� �������� �������� �̸�����
     string openUIName = "";//��ȣ�ۿ����� ui�� ���� �ݱ� ���� �̸� ����
+    
     public bool isOpenUI = false;
+    public bool isArcadeUIOn = false;
 
     MinigameImageUI minigameImageUI;
-
 
     [SerializeField]
     private Transform[] mfPos;
@@ -23,7 +24,6 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         EventManager.Regist("MF_Refresh", MF_Refresh);
-
 
         MFInit();
     }
@@ -115,6 +115,9 @@ public class Player : MonoBehaviour
                     {
                         //�ڵ��� on off
                         animConChanger.TogglePhone();
+
+                        // 폰UI 켜질때 arcade UI는 꺼지도록
+                        if (isArcadeUIOn) minigameImageUI.ToggleUI();
                     }
                     else
                     {
@@ -187,7 +190,9 @@ public class Player : MonoBehaviour
                 {
                     minigameImageUI = FindObjectOfType<MinigameImageUI>();
                 }
-                minigameImageUI.PopUpImage(other.transform.parent.transform, _name);
+                //minigameImageUI.PopUpImage(other.transform.parent.transform, _name);
+                minigameImageUI.PopUpImage(other.gameObject.transform, _name);
+                isArcadeUIOn = true;
                 break;
             //�˾�
             case "Ranking":
@@ -233,7 +238,8 @@ public class Player : MonoBehaviour
                 //    titleText.enabled = false;
                 if (minigameImageUI != null)
                 {
-                    minigameImageUI.HideImage();
+                    minigameImageUI.ToggleUI();
+                    isArcadeUIOn = false;
                 }
                 break;
 
@@ -257,7 +263,15 @@ public class Player : MonoBehaviour
 
     }
 
+    void OpenArcadeUI_withOutline()
+    {
 
+    }
+
+    void ArcadeUI_withOutline()
+    {
+
+    }
 
     IEnumerator GotoNextScene(string _name)
     {

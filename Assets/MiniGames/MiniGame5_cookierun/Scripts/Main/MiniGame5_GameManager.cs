@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class MiniGame5_GameManager : MonoBehaviour
 {
@@ -144,7 +146,7 @@ public class MiniGame5_GameManager : MonoBehaviour
             life = value;
             Mathf.Clamp(life, 0f, 1f);
             OnLifeChange?.Invoke();
-            if (value <= 0)
+            if (value <= 0 && !isBonusTime)
             {
                 sceneManager.OnGameEnd();
             }
@@ -255,6 +257,8 @@ public class MiniGame5_GameManager : MonoBehaviour
 
         //soundManager.Initialize();
         sceneManager.Initialize();
+
+        NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);
     }
     
     //==============================================================
@@ -306,5 +310,27 @@ public class MiniGame5_GameManager : MonoBehaviour
     void ScoreTimer()
     {
         Score += 1 * stageLevel;
+    }
+
+    public void SendUserData()
+    {
+        JObject _userData = new JObject();
+        _userData.Add("cmd", "UpdateRanking");
+        _userData.Add("ID", UserDataManager.instance.ID);
+        _userData.Add("nickName", UserDataManager.instance.nickName);
+        _userData.Add("MG_NAME", "MG_5");
+        _userData.Add("Score", Score);
+
+        NetManager.instance.CL2S_SEND(_userData);
+    }
+
+    public void S2CL_UpdateRanking(JObject _jdata)
+    {
+        JArray _arr = JArray.Parse(_jdata["allRankArr"].ToString());
+        MiniGame5_RankingUI rankingUI = GameObject.Find("Canvas").transform.Find("RankingUI").GetComponent<MiniGame5_RankingUI>();
+        for (int i = 0; i < 5; i++)
+        {
+            rankingUI.SetRank(i, $"{_arr[i]["nickName"]}", $"{_arr[i]["Score"]}");
+        }
     }
 }

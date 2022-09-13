@@ -14,23 +14,44 @@ public class MiniGame5_SetBonusTimeText : MonoBehaviour
         textMesh = GetComponentInChildren<TextMesh>();
         textMesh.text = bonusText;
 
-        if (bonusText == "B")
-            index = 0;
-        else if (bonusText == "O")
-            index = 1;
-        else if (bonusText == "N")
-            index = 2;
-        else if (bonusText == "U")
-            index = 3;
-        else if (bonusText == "S")
-            index = 4;
-        else if (bonusText == "T")
-            index = 5;
-        else if (bonusText == "I")
-            index = 6;
-        else if (bonusText == "M")
-            index = 7;
-        else if (bonusText == "E")
-            index = 8;
+        switch (bonusText)
+        {
+            case "B":
+                index = 0;
+                textMesh.color = new(1, 0, 1, 1);
+                break;
+            case "O":
+                index = 1;
+                textMesh.color = new(1, 0, 0, 1);
+                break;
+            case "N":
+                index = 2;
+                textMesh.color = new(1, 0.5f, 0, 1);
+                break;
+            case "U":
+                index = 3;
+                textMesh.color = new(1, 1, 0, 1);
+                break;
+            case "S":
+                index = 4;
+                textMesh.color = new(0, 1, 0, 1);
+                break;
+            case "T":
+                index = 5;
+                textMesh.color = new(0, 1, 1, 1);
+                break;
+            case "I":
+                index = 6;
+                textMesh.color = new(0, 0, 1, 1);
+                break;
+            case "M":
+                index = 7;
+                textMesh.color = new(0.5f, 0, 1, 1);
+                break;
+            case "E":
+                index = 8;
+                textMesh.color = new(1, 0, 1, 1);
+                break;
+        } 
     }
 }
