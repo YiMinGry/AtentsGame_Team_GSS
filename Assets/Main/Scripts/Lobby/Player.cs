@@ -279,7 +279,7 @@ public class Player : MonoBehaviour
     {
         while(true)
         {
-            transform.position = Vector3.Lerp(transform.position, _transform.position, Time.deltaTime * 2.0f);
+            transform.position = Vector3.Lerp(transform.position, _transform.position, Time.deltaTime * 1.0f);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_transform.rotation.eulerAngles*(-1.0f)), Time.deltaTime * 2.0f);
             yield return null;
         }
