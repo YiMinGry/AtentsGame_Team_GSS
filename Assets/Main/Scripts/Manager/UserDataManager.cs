@@ -133,15 +133,14 @@ public class UserDataManager : MonoSingleton<UserDataManager>
            
         }
 
-        if (MGPlayDataList==null)
-        {
-            MGPlayDataList = new List<MGPlayData>();
-            MGPlayDataList.Add(MG1PlayData);
-            MGPlayDataList.Add(MG2PlayData);
-            MGPlayDataList.Add(MG3PlayData);
-            MGPlayDataList.Add(MG4PlayData);
-            MGPlayDataList.Add(MG5PlayData);
-        }
+        
+        MGPlayDataList = null;
+        MGPlayDataList = new List<MGPlayData>();
+        MGPlayDataList.Add(MG1PlayData);
+        MGPlayDataList.Add(MG2PlayData);
+        MGPlayDataList.Add(MG3PlayData);
+        MGPlayDataList.Add(MG4PlayData);
+        MGPlayDataList.Add(MG5PlayData);
     }
 
     public void S2CL_SetUserNickName(JObject _jdata)
@@ -247,6 +246,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     }
     public IEnumerator AchivementCheck(int MG_num=0)
     {
+        yield return new WaitForSeconds(1.0f);
         RefreshUserInfo();
         yield return new WaitForSeconds(1.0f);
         string achivementName;
@@ -270,6 +270,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         {
             for (int i = 0; i < 5; i++)
             {
+                int z = conditionScore[MG_num - 1, i];
                 if (conditionScore[MG_num - 1, i] <= MGPlayDataList[MG_num - 1]._maxScore)
                 {
                     achivementName = $"MG_{MG_num}_Score_{i + 1}";
@@ -288,7 +289,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
             }
             //전체 랭크 1등
         }
-        for(int i=0;i<5;i++)
+        for(int i=0;i<5;i++)//코인체크
         {
             if (coin1Condition[i] <=coin1)
             {

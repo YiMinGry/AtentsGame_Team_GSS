@@ -19,6 +19,7 @@ public class MG3_SoundManager : MonoBehaviour
         AudioSource audiosource = obj.AddComponent<AudioSource>();
         audiosource.clip = clip;
         audiosource.Play();
+        audiosource.volume = 0.5f;
         Destroy(obj,clip.length);
     }
     public void BgmStop()

@@ -289,6 +289,13 @@ public class PhoneUI : MonoBehaviour
     }
     public void AchieveMentPopUp()
     {
+        if(contentsTr.childCount>0)
+        {
+            for(int a=0; a<contentsTr.childCount; a++)
+            {
+                Destroy(contentsTr.GetChild(a).gameObject);
+            }
+        }
         string achivementName;
         JObject data = JObject.Parse(UserDataManager.instance.archiveList);
 
@@ -297,18 +304,33 @@ public class PhoneUI : MonoBehaviour
         {
             for(int j=0; j<5; j++)
             {
-                achivementName = $"MG_{j+1}_Score_{i + 1}";
+                achivementName = $"MG_{i+1}_Score_{j + 1}";
                 CheckAchieveMent(data, achivementName);
-                achivementName = $"MG_{j + 1}_Count_{i + 1}";
-                CheckAchieveMent(data, achivementName);
-
+                
             }
+            for (int j = 0; j < 5; j++)
+            {
+                achivementName = $"MG_{i + 1}_Count_{j + 1}";
+                CheckAchieveMent(data, achivementName);
+            }
+        }
+        for(int i=0;i<5;i++)
+        {
             achivementName = $"MG_{i + 1}_1st";
             CheckAchieveMent(data, achivementName);
+        }
+        for (int i = 0; i < 5; i++)
+        {
             achivementName = $"MF_Count_{i + 1}";
             CheckAchieveMent(data, achivementName);
+        }
+        for (int i = 0; i < 5; i++)
+        {
             achivementName = $"Coin1_{i + 1}";
             CheckAchieveMent(data, achivementName);
+        }
+        for (int i = 0; i < 5; i++)
+        {
             achivementName = $"Coin2_{i + 1}";
             CheckAchieveMent(data, achivementName);
         }
