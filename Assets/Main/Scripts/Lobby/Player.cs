@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     int curEventTypr = 0;//�÷��̾ ��ȣ�ۿ��Ҷ� � �ִϸ��̼��� �����ؾ����� ����
     string nextMoveScenes = "";//���̵��Ҷ� �������� �������� �̸�����
     string openUIName = "";//��ȣ�ۿ����� ui�� ���� �ݱ� ���� �̸� ����
-    
+
     public bool isOpenUI = false;
     public bool isArcadeUIOn = false;
 
