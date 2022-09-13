@@ -195,6 +195,9 @@ public class Player : MonoBehaviour
                 isArcadeUIOn = true;
                 break;
             //�˾�
+            case "SitPos":
+                sitPos = _transform;
+                break;
             case "Ranking":
             case "Friends":
             case "Gacha":
@@ -242,7 +245,9 @@ public class Player : MonoBehaviour
                     isArcadeUIOn = false;
                 }
                 break;
-
+            case "SitPos":
+                sitPos = null;
+                break;
             case "Ranking":
             case "Friends":
             case "Gacha":
@@ -263,6 +268,19 @@ public class Player : MonoBehaviour
 
     }
 
+    IEnumerator SitDown(Transform _transform)
+    {
+        if(sitPos == null)
+        {
+            sitPos = transform;
+        }
+        while(true)
+        {
+            transform.position = Vector3.Lerp(transform.position, _transform.position, Time.deltaTime * 2.0f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_transform.rotation.eulerAngles*(-1.0f)), Time.deltaTime * 2.0f);
+            yield return null;
+        }
+    }
     void OpenArcadeUI_withOutline()
     {
 
@@ -276,7 +294,7 @@ public class Player : MonoBehaviour
     IEnumerator GotoNextScene(string _name)
     {
         yield return Utill.WaitForSeconds(1f);
-
+        AudioManager.Inst.StopBGM();
         bl_SceneLoaderManager.LoadScene(_name);
     }
 }
