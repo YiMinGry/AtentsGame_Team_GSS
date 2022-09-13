@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Gacha : MonoBehaviour
-{
+{  
     [SerializeField]
     private GameObject petRender;
     [SerializeField]
@@ -13,6 +13,8 @@ public class Gacha : MonoBehaviour
     private Transform effectSpawner = null;
 
     private Animator anim = null;
+
+    public RuntimeAnimatorController[] animCon;
 
     //public MiniFriendData[] Pets = null;
     [SerializeField]
@@ -39,7 +41,7 @@ public class Gacha : MonoBehaviour
     private void Start()
     {
         //petNumMax = Pets.Length;
-        petNumMax = MFDataManager.instance.mfarr.Length;        
+        petNumMax = MFDataManager.instance.mfarr.Length;  
     }
 
     private void OnEnable()
@@ -234,6 +236,16 @@ public class Gacha : MonoBehaviour
         DeleteObject(preSpawnEffect);
         addedPet = MakeObject(MFDataManager.instance.mfarr[petNum].prefab, petSpawner); // 펫 생성 및 petPosition의 자식으로 설정
         anim = addedPet.GetComponentInChildren<Animator>();
+        if(petNum < 17)
+        {
+            anim.runtimeAnimatorController = animCon[0];
+        }
+        else
+        {
+            anim.runtimeAnimatorController = animCon[petNum - 16];
+        }
+
+
         anim.SetBool("Spawn", true);
         spawnEffect = MakeObject(spawn[3 * effectType + grade], effectSpawner);
 

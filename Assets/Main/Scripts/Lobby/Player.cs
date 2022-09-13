@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
                 mfPosCheck[_idx] = true;
                 mfs[_idx] = _mf;
                 Collider mfCollider = _mf.GetComponent<Collider>();
-                if(mfCollider != null)
+                if (mfCollider != null)
                 {
                     mfCollider.enabled = false;
                 }
@@ -188,8 +188,7 @@ public class Player : MonoBehaviour
             case "MG_S_04":
             case "MG_S_05":
                 curEventTypr = 1;//�ɱ�
-                nextMoveScenes = _name;//�̵��� ���̸�
-                sitPos = _transform;
+                nextMoveScenes = _name;//�̵��� ���̸�                
                 other.transform.parent.GetComponent<Outline>().enabled = true;//���� ������Ʈ�� �ƿ������� Ȱ��ȭ
                 EventManager.Invoke("ActiveFInfo", "�̴ϰ��� : " + _name);//����ǥ��
                 if(minigameImageUI==null)
@@ -201,6 +200,9 @@ public class Player : MonoBehaviour
                 isArcadeUIOn = true;
                 break;
             //�˾�
+            case "SitPos":
+                sitPos = _transform;
+                break;
             case "Ranking":
             case "Friends":
             case "Gacha":
@@ -241,7 +243,9 @@ public class Player : MonoBehaviour
                     isArcadeUIOn = false;
                 }
                 break;
-
+            case "SitPos":
+                sitPos = null;
+                break;
             case "Ranking":
             case "Friends":
             case "Gacha":
@@ -264,10 +268,14 @@ public class Player : MonoBehaviour
 
     IEnumerator SitDown(Transform _transform)
     {
-        while(true)
+        if (sitPos == null)
         {
-            transform.position = Vector3.Lerp(transform.position, _transform.position, Time.deltaTime * 1.0f);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_transform.rotation.eulerAngles*(-1.0f)), Time.deltaTime * 2.0f);
+            sitPos = transform;
+        }
+        while (true)
+        {
+            transform.position = Vector3.Lerp(transform.position, _transform.position, Time.deltaTime * 2.0f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_transform.rotation.eulerAngles * (-1.0f)), Time.deltaTime * 2.0f);
             yield return null;
         }
     }
@@ -284,7 +292,7 @@ public class Player : MonoBehaviour
     IEnumerator GotoNextScene(string _name)
     {
         yield return Utill.WaitForSeconds(1f);
-
+        AudioManager.Inst.StopBGM();
         bl_SceneLoaderManager.LoadScene(_name);
     }
 }

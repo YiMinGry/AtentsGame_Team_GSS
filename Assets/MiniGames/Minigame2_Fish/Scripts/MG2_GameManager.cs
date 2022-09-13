@@ -281,10 +281,8 @@ public class MG2_GameManager : MonoBehaviour
                 GoToLobby();
                 break;
             }
-            if (Input.anyKeyDown && Coin > 0)   // 코인이 한 개 이상일때만 시작, 시작 후 코인 1개 감소
+            if (Input.anyKeyDown)
             {
-                Coin--;
-                UserDataManager.instance.CL2S_UserCoinUpdate(0, -1);
                 StartGame();
                 mg2_UIManager.SetDashPanel(true);
                 break;
@@ -297,8 +295,8 @@ public class MG2_GameManager : MonoBehaviour
 
     IEnumerator GameOverCount()
     {
-        mg2_UIManager.SetContinuePanel(true);
         mg2_UIManager.CoinUpdate(Coin);
+        mg2_UIManager.SetContinuePanel(true);
         yield return new WaitForSeconds(2.0f);
         while (true)
         {
@@ -342,7 +340,6 @@ public class MG2_GameManager : MonoBehaviour
                     StartCoroutine(UserDataManager.instance.AchivementCheck(2));
                     mg2_UIManager.SetRankingPanel(true);
                     mg2_UIManager.SetResultPanel(true);
-                    CL2S_UpdateRanking(Score);
                     StartCoroutine(AfterGameOver());
                     break;
                 }

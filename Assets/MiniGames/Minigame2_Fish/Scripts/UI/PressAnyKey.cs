@@ -11,6 +11,7 @@ public class PressAnyKey : MonoBehaviour
         text = GetComponent<Text>();
     }
 
+    // Start is called before the first frame update
     void OnEnable()
     {
         StartCoroutine(TextBlink());
@@ -21,10 +22,6 @@ public class PressAnyKey : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(0.5f);
-            if (MG2_GameManager.Inst.Coin < 1)
-            {
-                text.text = "No Coin";
-            }
             text.enabled = false;
             yield return new WaitForSeconds(0.5f);
             text.enabled = true;
