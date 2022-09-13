@@ -46,7 +46,7 @@ public class PhoneUI : MonoBehaviour
     public GameObject achieveTextObj;
     public Transform contentsTr;
     private Text playerTitle;
-    
+
 
     private void Awake()
     {
@@ -85,7 +85,7 @@ public class PhoneUI : MonoBehaviour
         page2_MiniDetail_Check = page2_MiniDetail_Data.Find("Check").gameObject;
         page2_MiniDetail_NotCheck = page2_MiniDetail_Data.Find("NotCheck").gameObject;
         page2_MiniList = pages[1].Find("MiniList");
-        
+
 
         _mfs = new List<MFItemInfo>();
 
@@ -139,7 +139,7 @@ public class PhoneUI : MonoBehaviour
         page3_sidePage = pages[2].Find("SideContents");
         page3_RankList = page3_sidePage.Find("RankingDetail").Find("ScrollView").Find("Viewport");
         page3_RankText = new Text[10];
-        for(int i=0; i<10; i++)
+        for (int i = 0; i < 10; i++)
         {
             page3_RankText[i] = page3_RankList.GetChild(i).GetComponent<Text>();
         }
@@ -220,19 +220,13 @@ public class PhoneUI : MonoBehaviour
 
     public void SetPage3()
     {
-        // �̴ϰ��ӵ� �ϼ��ǰ� �־���ҵ���...
-
-        //page3_AchieveCount = 
-        //page3_TotalRank = 
     }
     //page3�Լ�========================================================================
     public void UpdateRank()
     {
         CL2S_ReadMyAllRanking();
-        
+
     }
-    
-    
     public void CL2S_ReadMyAllRanking()
     {
         JObject _userData = new JObject();
@@ -244,7 +238,7 @@ public class PhoneUI : MonoBehaviour
 
     public void S2CL_ReadMyAllRanking(JObject _jdata)
     {
-        
+
         string BaseSceneName = "MG_";
         string SceneName;
         for (int i = 2; i < 6; i++)
@@ -257,13 +251,13 @@ public class PhoneUI : MonoBehaviour
             string rank = $"{data["ranking"]}";
             if (rank == "-1")
             {
-                page3_RankText[i * 2 - 2].text = "��Ͼ���";
-                page3_RankText[i * 2-1].text = $"--";
+                page3_RankText[i * 2 - 2].text = "기록없음";
+                page3_RankText[i * 2 - 1].text = $"--";
             }
             else
             {
-                page3_RankText[i * 2 - 2].text = $"{data["ranking"]}��";
-                page3_RankText[i * 2-1].text = $"{data["Score"]}��";
+                page3_RankText[i * 2 - 2].text = $"{data["ranking"]}등";
+                page3_RankText[i * 2 - 1].text = $"{data["Score"]}점";
             }
         }
     }
@@ -272,9 +266,9 @@ public class PhoneUI : MonoBehaviour
 
         JObject _data = JObject.Parse(_jdata["MyRank"].ToString());
         page3_TotalRank.text = $"{_data["MG_Total_Rank"]}";
-        page3_RankText[0].text = $"{_data["MG_Total_Rank"]}��";
+        page3_RankText[0].text = $"{_data["MG_Total_Rank"]}등";
         page3_TotalScore.text = $"{_data["MG_Total_Score"]}";
-        page3_RankText[1].text = $"{_data["MG_Total_Score"]}��";
+        page3_RankText[1].text = $"{_data["MG_Total_Score"]}점";
     }
     public void CL2S_TotalRanking()
     {
@@ -286,9 +280,9 @@ public class PhoneUI : MonoBehaviour
     }
     public void AchieveMentPopUp()
     {
-        if(contentsTr.childCount>0)
+        if (contentsTr.childCount > 0)
         {
-            for(int a=0; a<contentsTr.childCount; a++)
+            for (int a = 0; a < contentsTr.childCount; a++)
             {
                 Destroy(contentsTr.GetChild(a).gameObject);
             }
@@ -299,11 +293,11 @@ public class PhoneUI : MonoBehaviour
         int check;
         for (int i = 0; i < 5; i++)
         {
-            for(int j=0; j<5; j++)
+            for (int j = 0; j < 5; j++)
             {
-                achivementName = $"MG_{i+1}_Score_{j + 1}";
+                achivementName = $"MG_{i + 1}_Score_{j + 1}";
                 CheckAchieveMent(data, achivementName);
-                
+
             }
             for (int j = 0; j < 5; j++)
             {
@@ -311,7 +305,7 @@ public class PhoneUI : MonoBehaviour
                 CheckAchieveMent(data, achivementName);
             }
         }
-        for(int i=0;i<5;i++)
+        for (int i = 0; i < 5; i++)
         {
             achivementName = $"MG_{i + 1}_1st";
             CheckAchieveMent(data, achivementName);
@@ -335,13 +329,13 @@ public class PhoneUI : MonoBehaviour
         CheckAchieveMent(data, achivementName);
 
     }
-    void CheckAchieveMent(JObject _data,string _achieveName)
+    void CheckAchieveMent(JObject _data, string _achieveName)
     {
         int check = int.Parse(_data[_achieveName].ToString());
         if (check == 1)
         {
 
-            int achieveTier= int.Parse(_achieveName[_achieveName.Length - 1].ToString());
+            int achieveTier = int.Parse(_achieveName[_achieveName.Length - 1].ToString());
             string a = string.Empty;
             string b = string.Empty;
             string condition = string.Empty;
@@ -352,113 +346,111 @@ public class PhoneUI : MonoBehaviour
                 switch (mgNum)
                 {
                     case 2:
-                        a = "������Ű��� ";
+                        a = "물고기키우기 ";
                         break;
                     case 3:
-                        a = "����ô� ";
+                        a = "전쟁시대 ";
                         break;
                     case 4:
-                        a = "���� ";
+                        a = "태퍼 ";
                         break;
                     case 5:
-                        a = "�̴Ϸ� ";
+                        a = "미니런 ";
                         break;
                 }
                 if (_achieveName.Contains("_Score"))
                 {
                     int ScoreCon = UserDataManager.instance.conditionScore[mgNum - 1, achieveTier - 1];
-                    condition = $" ���� {ScoreCon}��";
+                    condition = $"점수 {ScoreCon}점 이상";
                     switch (achieveTier)
                     {
                         case 1:
-                            b = "���ʺ�";
+                            b = "왕초보";
                             break;
                         case 2:
-                            b = "�ʺ�";
+                            b = "초보";
                             break;
                         case 3:
-                            b = "�߼�";
+                            b = "중수";
                             break;
                         case 4:
-                            b = "����";
+                            b = "고수";
                             break;
                         case 5:
-                            b = "�ʰ���";
+                            b = "초고수";
                             break;
                     }
                 }
                 else if (_achieveName.Contains("_Count"))
                 {
                     int playCountCon = UserDataManager.instance.conditionPlayCount[achieveTier - 1];
-                    condition = $"�÷��� Ƚ�� {playCountCon}ȸ";
+                    condition = $"플레이횟수 {playCountCon}번 이상";
                     switch (achieveTier)
                     {
                         case 1:
-                            b = "����";
+                            b = "뉴비";
                             break;
                         case 2:
-                            b = "������";
+                            b = "숙련자";
                             break;
                         case 3:
-                            b = "���ι�";
+                            b = "고인물";
                             break;
                         case 4:
-                            b = "������";
+                            b = "썩은물";
                             break;
                         case 5:
-                            b = "����";
+                            b = "석유";
                             break;
                     }
                 }
                 else if (_achieveName.Contains("1st"))
                 {
-                    b = "������";
-                    condition = $"��ŷ 1�� �޼�";
+                    b = "마스터";
+                    condition = $"랭킹 1등 달성";
                 }
             }
             else
             {
-                if(_achieveName.Contains("MF"))
+                if (_achieveName.Contains("MF"))
                 {
                     a = "";
                     switch (achieveTier)
                     {
                         case 1:
-                            b = "ù ģ���� �����";
+                            b = "첫 친구를 사귀자";
                             break;
                         case 2:
-                            b = "�ƽ� Ż��";
+                            b = "아싸탈출";
                             break;
                         case 3:
-                            b = "�ν�";
+                            b = "인싸";
                             break;
                         case 4:
-                            b = "���ν�";
+                            b = "핵인싸";
                             break;
                         case 5:
-                            b = "ģ�� ������";
+                            b = "미니친구 수집광";
                             break;
                     }
                     condition = $"{UserDataManager.instance.conditionMfCount[achieveTier - 1]}�� ����";
                 }
                 else
                 {
-                    if(_achieveName.Contains("Coin1"))
+                    if (_achieveName.Contains("Coin1"))
                     {
-                        a = "�Ϲ���ȭ ";
-                        b = $"������ {achieveTier}";
-                        condition = $"{UserDataManager.instance.coin1Condition[achieveTier-1]} �� ����";
+                        a = "일반재화 ";
+                        b = $"모으기 {achieveTier}";
+                        condition = $"{UserDataManager.instance.coin1Condition[achieveTier - 1]} �� ����";
                     }
                     else
                     {
-                        a = "Ư����ȭ ";
-                        b = $"������ {achieveTier}";
+                        a = "특수재화 ";
+                        b = $"모으기 {achieveTier}";
                         condition = $"{UserDataManager.instance.coin2Condition[achieveTier - 1]} �� ����";
                     }
                 }
             }
-
-                
             GameObject obj = Instantiate(achieveTextObj, contentsTr);
             obj.GetComponent<Toggle>().group = obj.transform.parent.GetComponent<ToggleGroup>();
             Text achiveText = obj.GetComponent<Text>();
@@ -468,26 +460,22 @@ public class PhoneUI : MonoBehaviour
     }
     public void SetTitle(GameObject _thisObj)
     {
-        
         playerTitle = FindObjectOfType<Player>().GetComponentInChildren<Text>();
         Text title = _thisObj.GetComponent<Text>();
         Transform parentTr = _thisObj.transform.parent;
 
         playerTitle.text = $"<{title.text}>";
-        for(int i = 0; i<parentTr.childCount;i++)
+        for (int i = 0; i < parentTr.childCount; i++)
         {
-            Toggle a=parentTr.GetChild(i).GetComponent<Toggle>();
-            if(a.isOn)
+            Toggle a = parentTr.GetChild(i).GetComponent<Toggle>();
+            if (a.isOn)
             {
                 break;
             }
-            if(i==parentTr.childCount-1)
+            if (i == parentTr.childCount - 1)
             {
                 playerTitle.text = "";
             }
         }
-
-        
     }
-    
 }
