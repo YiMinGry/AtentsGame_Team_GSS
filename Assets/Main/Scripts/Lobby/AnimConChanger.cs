@@ -42,6 +42,8 @@ public class AnimConChanger : MonoBehaviour
 
     public bool isMoveingHold = false;//캐릭터가 움직이지 못하게 하기 위한 변수
 
+    private bool isFootstepStarted = false;
+
     Coroutine coPhoneUI;
 
     //마우스의 위치를 추적하여 방향으로 변환하여 리턴하는 함수
@@ -192,6 +194,11 @@ public class AnimConChanger : MonoBehaviour
             //걷기 달리기 체크
             if (rgBody.velocity.x == 0 && rgBody.velocity.z == 0)
             {//움직이지 않을때
+                if(isFootstepStarted)
+                {
+                    AudioManager.Inst.StopAllSFX();
+                    isFootstepStarted = false;
+                }                
                 pRState = PRState.stop;//상태를 정지상태로 만들어줍니다.
                 animator.SetBool("isMove", false);
                 walkTime = 0;
@@ -199,6 +206,11 @@ public class AnimConChanger : MonoBehaviour
             }
             else
             {
+                if(!isFootstepStarted)
+                {
+                    AudioManager.Inst.RepeatSFX("Footstep", -1);
+                    isFootstepStarted = true;
+                }
                 pRState = PRState.move;//상태를 움직임상태로 만들어줍니다.
 
                 animator.SetBool("isMove", true);
