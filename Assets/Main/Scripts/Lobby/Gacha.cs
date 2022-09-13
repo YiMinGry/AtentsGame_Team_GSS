@@ -212,6 +212,7 @@ public class Gacha : MonoBehaviour
         AudioManager.Inst.PlaySFX("Gacha_CoinSound_01");
         nameText.text = MFDataManager.instance.mfarr[petNum].friendName;
         MFDataManager.instance.Send_HaveMF(petNum);
+        StartCoroutine(UserDataManager.instance.AchivementCheck(0));
 
         switch (grade)
         {
