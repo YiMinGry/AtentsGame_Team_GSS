@@ -14,6 +14,8 @@ public class Gacha : MonoBehaviour
 
     private Animator anim = null;
 
+    public RuntimeAnimatorController[] animCon;
+
     //public MiniFriendData[] Pets = null;
     [SerializeField]
     Text nameText, gradeText, normalCoinText, rareCoinText;
@@ -234,6 +236,16 @@ public class Gacha : MonoBehaviour
         DeleteObject(preSpawnEffect);
         addedPet = MakeObject(MFDataManager.instance.mfarr[petNum].prefab, petSpawner); // 펫 생성 및 petPosition의 자식으로 설정
         anim = addedPet.GetComponentInChildren<Animator>();
+        if(petNum < 17)
+        {
+            anim.runtimeAnimatorController = animCon[0];
+        }
+        else
+        {
+            anim.runtimeAnimatorController = animCon[petNum - 16];
+        }
+
+
         anim.SetBool("Spawn", true);
         spawnEffect = MakeObject(spawn[3 * effectType + grade], effectSpawner);
 
