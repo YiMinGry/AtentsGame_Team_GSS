@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class MiniGame5_Obastacle : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             if (!MiniGame5_GameManager.Inst.Player.IsSuperMode)
             {

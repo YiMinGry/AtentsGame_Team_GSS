@@ -24,6 +24,7 @@ public class MiniGame5_StartChoiceUI : MiniGame5_UI
 
         closeBtn = transform.Find("CloseBtn").GetComponent<Button>();
         closeBtn.onClick.AddListener(CloseScene);
+        closeBtn.onClick.AddListener(MiniGame5_SoundManager.Inst.PlayButtonClip);
 
         choiceTabBtn = new Button[transform.Find("NonActiveTabs").childCount];
         for (int i = 0; i < choiceTabBtn.Length; i++)
