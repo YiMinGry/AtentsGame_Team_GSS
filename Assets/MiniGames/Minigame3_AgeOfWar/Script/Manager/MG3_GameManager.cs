@@ -21,6 +21,7 @@ public class MG3_GameManager : MonoBehaviour
     public GameObject[] enemyTurretSlot;
     private MG3_Base myBase;
     private MG3_Base enemyBase;
+    private Text getcoinText;
 
     MG3_Menu menu;
     private int enemyRevol = 0;
@@ -86,6 +87,8 @@ public class MG3_GameManager : MonoBehaviour
         //    }
         //}
         NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);//서버에서 UpdateRanking 커멘드로 패킷이 올경우 실행
+        getcoinText = gameoverUI.transform.Find("GetCoin").GetComponent<Text>();
+        Debug.Log(UserDataManager.instance.MG3PlayData._playCount);
     }
     
     //--------------------------------------------------------------------------
@@ -173,12 +176,32 @@ public class MG3_GameManager : MonoBehaviour
             
             //tapperUIManager.EndMyScore(Utill.ConvertNumberComma((int)score);
             gameOverMyScore.text = string.Format($"My Score : {score}");//위에꺼 푼거
+            int getCoin = 1 + score / 1000;
+            UserDataManager.instance.CL2S_UserCoinUpdate(0, getCoin);
+            Debug.Log(UserDataManager.instance.MG3PlayData._playCount);
+
+
+            
+            StartCoroutine(UserDataManager.instance.AchivementCheck(3));
+
+            getcoinText.text = $"Get  x{getCoin}";
+            
 
             gameoverUI.SetActive(true);
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
+
             StartCoroutine(GameContinued());
         }
     }
+    IEnumerator CheckAchieveCondition()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        Debug.Log(UserDataManager.instance.MG3PlayData._playCount);
+
+
+    }
+    
 
     IEnumerator GameContinued()
     {

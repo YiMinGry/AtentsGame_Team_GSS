@@ -10,8 +10,10 @@ public class MinigameImageUI : MonoBehaviour
     private RectTransform rectParent;
     private RectTransform rectImage;
     private Image image;
+    private Text title;
     public Vector3 offset = Vector3.zero;
     public Sprite[] minigameSprites;
+    public Transform playerTr;
     [HideInInspector] public Transform targetTr;
     private void Start()
     {
@@ -20,20 +22,33 @@ public class MinigameImageUI : MonoBehaviour
         rectParent = canvas.GetComponent<RectTransform>();
         rectImage = GetComponent<RectTransform>();
         image = GetComponentInParent<Image>();
+        title = GetComponentInParent<Text>();
+        if(title!=null)
+        {
+            targetTr = playerTr;
+        }
     }
 
     public void PopUpImage(Transform _targetTr,string _name)
     {
-        int num = int.Parse(_name[_name.Length - 1].ToString()) -1;
-        image.sprite=minigameSprites[num];
+        if (image != null)
+        {
+            int num = int.Parse(_name[_name.Length - 1].ToString()) - 1;
+            image.sprite = minigameSprites[num];
 
-        targetTr = _targetTr;
-        image.enabled = true;
+            targetTr = _targetTr;
+            image.enabled = true;
+        }
+        
 
     }
     public void HideImage()
     {
-        image.enabled = false;
+        if(image!=null)
+        {
+            image.enabled = false;
+        }
+        
     }
     private void LateUpdate()
     {
@@ -47,6 +62,10 @@ public class MinigameImageUI : MonoBehaviour
             var localPos = Vector2.zero;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(rectParent, screenPos, uiCamera, out localPos);
             //스크린포인트에서 ui캔버스의 좌표로 localPos에저장
+            if(title!=null)
+            {
+                localPos += Vector2.up * 500;
+            }
             rectImage.localPosition = localPos; //체력의 좌표를 localpos로
         }
     }

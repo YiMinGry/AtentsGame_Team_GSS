@@ -43,7 +43,10 @@ public class PhoneUI : MonoBehaviour
     //Transform page3_AchiveList;
     Transform page3_RankList;
     Text[] page3_RankText;
-    int minigameNum = 2;
+    public GameObject achieveTextObj;
+    public Transform contentsTr;
+    private Text playerTitle;
+    
 
     private void Awake()
     {
@@ -140,12 +143,12 @@ public class PhoneUI : MonoBehaviour
         {
             page3_RankText[i] = page3_RankList.GetChild(i).GetComponent<Text>();
         }
-
+        
 
     }
     private void OnEnable()
     {
-        NetEventManager.Regist("ReadRanking", S2CL_ReadRanking);//서버에서 ReadRanking 커멘드로 패킷이 올경우 실행
+        NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);//서버에서 ReadRanking 커멘드로 패킷이 올경우 실행
         NetEventManager.Regist("TotalRanking", S2CL_TotalRanking);
     }
 
@@ -217,69 +220,58 @@ public class PhoneUI : MonoBehaviour
 
     public void SetPage3()
     {
-        CL2S_TotalRanking();
-        StartCoroutine(UpdateRank());
         // 미니게임들 완성되고 넣어야할듯한...
 
         //page3_AchieveCount = 
-        //page3_TotalScore =
         //page3_TotalRank = 
 
+        //page3_TotalScore =
         //그 외 디테일 볼 수 있게 하단 버튼에 연결
     }
     //page3함수========================================================================
-    IEnumerator UpdateRank()
+    public void UpdateRank()
     {
-        minigameNum = 2;
-        string BaseSceneName = "MG_";
-        string SceneName;
-        for (int i = 2; i < page3_RankText.Length; i++)
-        {
-            int num;
-            num = (i + 2) / 2;
-
-            SceneName = $"{BaseSceneName}{num}";
-            CL2S_ReadRanking(SceneName);
-            i++;
-            yield return new WaitForSeconds(0.15f);
-        }
-    }
-    
-    public void S2CL_ReadRanking(JObject _jdata)
-    {
-       
-        Debug.Log(_jdata);
-        JObject _data = JObject.Parse(_jdata["myRkData"].ToString());
-        string rank = $"{_data["ranking"]}";
-        if(rank=="-1")
-        {
-            page3_RankText[minigameNum].text = "기록없음";
-            minigameNum++;
-            page3_RankText[minigameNum].text = $"--";
-            minigameNum++;
-        }
-        else
-        {
-            page3_RankText[minigameNum].text = $"{_data["ranking"]}위";
-            minigameNum++;
-            page3_RankText[minigameNum].text = $"{_data["Score"]}점";
-            minigameNum++;
-        }
+        CL2S_ReadMyAllRanking();
         
     }
-    void CL2S_ReadRanking(string _name)
+    
+    
+    public void CL2S_ReadMyAllRanking()
     {
         JObject _userData = new JObject();
-        _userData.Add("cmd", "ReadRanking");
+        _userData.Add("cmd", "ReadMyAllRanking");
         _userData.Add("ID", UserDataManager.instance.ID);
-        _userData.Add("MG_NAME", _name);
 
         NetManager.instance.CL2S_SEND(_userData);
     }
 
+    public void S2CL_ReadMyAllRanking(JObject _jdata)
+    {
+        
+        string BaseSceneName = "MG_";
+        string SceneName;
+        for (int i = 2; i < 6; i++)
+        {
+            SceneName = $"{BaseSceneName}{i}";
+            JArray _data = JArray.Parse(_jdata[SceneName].ToString());
+
+            JObject data = JObject.Parse(_data[10].ToString());
+
+            string rank = $"{data["ranking"]}";
+            if (rank == "-1")
+            {
+                page3_RankText[i * 2 - 2].text = "기록없음";
+                page3_RankText[i * 2-1].text = $"--";
+            }
+            else
+            {
+                page3_RankText[i * 2 - 2].text = $"{data["ranking"]}위";
+                page3_RankText[i * 2-1].text = $"{data["Score"]}점";
+            }
+        }
+    }
     public void S2CL_TotalRanking(JObject _jdata)
     {
-        Debug.Log(_jdata);
 
         JObject _data = JObject.Parse(_jdata["MyRank"].ToString());
         page3_TotalRank.text = $"{_data["MG_Total_Rank"]}";
@@ -295,4 +287,210 @@ public class PhoneUI : MonoBehaviour
 
         NetManager.instance.CL2S_SEND(_userData);
     }
+    public void AchieveMentPopUp()
+    {
+        if(contentsTr.childCount>0)
+        {
+            for(int a=0; a<contentsTr.childCount; a++)
+            {
+                Destroy(contentsTr.GetChild(a).gameObject);
+            }
+        }
+        string achivementName;
+        JObject data = JObject.Parse(UserDataManager.instance.archiveList);
+
+        int check;
+        for (int i = 0; i < 5; i++)
+        {
+            for(int j=0; j<5; j++)
+            {
+                achivementName = $"MG_{i+1}_Score_{j + 1}";
+                CheckAchieveMent(data, achivementName);
+                
+            }
+            for (int j = 0; j < 5; j++)
+            {
+                achivementName = $"MG_{i + 1}_Count_{j + 1}";
+                CheckAchieveMent(data, achivementName);
+            }
+        }
+        for(int i=0;i<5;i++)
+        {
+            achivementName = $"MG_{i + 1}_1st";
+            CheckAchieveMent(data, achivementName);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            achivementName = $"MF_Count_{i + 1}";
+            CheckAchieveMent(data, achivementName);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            achivementName = $"Coin1_{i + 1}";
+            CheckAchieveMent(data, achivementName);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            achivementName = $"Coin2_{i + 1}";
+            CheckAchieveMent(data, achivementName);
+        }
+        achivementName = $"Total_1st";
+        CheckAchieveMent(data, achivementName);
+
+    }
+    void CheckAchieveMent(JObject _data,string _achieveName)
+    {
+        int check = int.Parse(_data[_achieveName].ToString());
+        if (check == 1)
+        {
+
+            int achieveTier= int.Parse(_achieveName[_achieveName.Length - 1].ToString());
+            string a = string.Empty;
+            string b = string.Empty;
+            string condition = string.Empty;
+            if (_achieveName.Contains("MG"))
+            {
+
+                int mgNum = int.Parse(_achieveName[3].ToString());
+                switch (mgNum)
+                {
+                    case 2:
+                        a = "물고기키우기 ";
+                        break;
+                    case 3:
+                        a = "전쟁시대 ";
+                        break;
+                    case 4:
+                        a = "태퍼 ";
+                        break;
+                    case 5:
+                        a = "미니런 ";
+                        break;
+                }
+                if (_achieveName.Contains("_Score"))
+                {
+                    int ScoreCon = UserDataManager.instance.conditionScore[mgNum - 1, achieveTier - 1];
+                    condition = $" 점수 {ScoreCon}점";
+                    switch (achieveTier)
+                    {
+                        case 1:
+                            b = "왕초보";
+                            break;
+                        case 2:
+                            b = "초보";
+                            break;
+                        case 3:
+                            b = "중수";
+                            break;
+                        case 4:
+                            b = "고수";
+                            break;
+                        case 5:
+                            b = "초고수";
+                            break;
+                    }
+                }
+                else if (_achieveName.Contains("_Count"))
+                {
+                    int playCountCon = UserDataManager.instance.conditionPlayCount[achieveTier - 1];
+                    condition = $"플레이 횟수 {playCountCon}회";
+                    switch (achieveTier)
+                    {
+                        case 1:
+                            b = "뉴비";
+                            break;
+                        case 2:
+                            b = "숙련자";
+                            break;
+                        case 3:
+                            b = "고인물";
+                            break;
+                        case 4:
+                            b = "썩은물";
+                            break;
+                        case 5:
+                            b = "석유";
+                            break;
+                    }
+                }
+                else if (_achieveName.Contains("1st"))
+                {
+                    b = "마스터";
+                    condition = $"랭킹 1등 달성";
+                }
+            }
+            else
+            {
+                if(_achieveName.Contains("MF"))
+                {
+                    a = "";
+                    switch (achieveTier)
+                    {
+                        case 1:
+                            b = "첫 친구를 사귀자";
+                            break;
+                        case 2:
+                            b = "아싸 탈출";
+                            break;
+                        case 3:
+                            b = "인싸";
+                            break;
+                        case 4:
+                            b = "핵인싸";
+                            break;
+                        case 5:
+                            b = "친구 수집광";
+                            break;
+                    }
+                    condition = $"{UserDataManager.instance.conditionMfCount[achieveTier - 1]}명 수집";
+                }
+                else
+                {
+                    if(_achieveName.Contains("Coin1"))
+                    {
+                        a = "일반재화 ";
+                        b = $"모으기 {achieveTier}";
+                        condition = $"{UserDataManager.instance.coin1Condition[achieveTier-1]} 개 수집";
+                    }
+                    else
+                    {
+                        a = "특수재화 ";
+                        b = $"모으기 {achieveTier}";
+                        condition = $"{UserDataManager.instance.coin2Condition[achieveTier - 1]} 개 수집";
+                    }
+                }
+            }
+
+                
+            GameObject obj = Instantiate(achieveTextObj, contentsTr);
+            obj.GetComponent<Toggle>().group = obj.transform.parent.GetComponent<ToggleGroup>();
+            Text achiveText = obj.GetComponent<Text>();
+            achiveText.text = a + b;
+            achiveText.transform.GetChild(1).GetComponent<Text>().text = a + condition;
+        }
+    }
+    public void SetTitle(GameObject _thisObj)
+    {
+        
+        playerTitle = FindObjectOfType<Player>().GetComponentInChildren<Text>();
+        Text title = _thisObj.GetComponent<Text>();
+        Transform parentTr = _thisObj.transform.parent;
+
+        playerTitle.text = $"<{title.text}>";
+        for(int i = 0; i<parentTr.childCount;i++)
+        {
+            Toggle a=parentTr.GetChild(i).GetComponent<Toggle>();
+            if(a.isOn)
+            {
+                break;
+            }
+            if(i==parentTr.childCount-1)
+            {
+                playerTitle.text = "";
+            }
+        }
+
+        
+    }
+    
 }
