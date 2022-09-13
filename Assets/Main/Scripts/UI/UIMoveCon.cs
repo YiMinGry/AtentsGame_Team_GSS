@@ -17,10 +17,14 @@ public class UIMoveCon : MonoBehaviour
     [SerializeField]
     string dir = "up";
 
+    private void Awake()
+    {
+        EndPos = transform.position;
+    }
+
     private void OnEnable()
     {
         AudioManager.Inst.PlaySFX("EffectSound_Pop2");
-        EndPos = transform.position;
         switch (dir)
         {
             case "up":
@@ -58,5 +62,4 @@ public class UIMoveCon : MonoBehaviour
         transform.DOMove(EndPos, animTime);
         yield return new WaitForSeconds(animTime);
     }
-
 }
