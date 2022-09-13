@@ -170,7 +170,7 @@ public class NetManager : MonoSingleton<NetManager>
             {
                 //캔버스를 활성화
                 RollingCavans.SetActive(true);
-
+                AudioManager.Inst.PlaySFX("Notification");
                 string[] _alertMsg = rollingTextQue.Dequeue();
 
                 //텍스트에 큐에 담겨있는 첫번째 메세지를 입력
