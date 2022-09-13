@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Gacha : MonoBehaviour
-{
+{  
     [SerializeField]
     private GameObject petRender;
     [SerializeField]
@@ -39,7 +39,7 @@ public class Gacha : MonoBehaviour
     private void Start()
     {
         //petNumMax = Pets.Length;
-        petNumMax = MFDataManager.instance.mfarr.Length;        
+        petNumMax = MFDataManager.instance.mfarr.Length;  
     }
 
     private void OnEnable()

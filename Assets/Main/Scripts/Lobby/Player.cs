@@ -188,8 +188,7 @@ public class Player : MonoBehaviour
             case "MG_S_04":
             case "MG_S_05":
                 curEventTypr = 1;//�ɱ�
-                nextMoveScenes = _name;//�̵��� ���̸�
-                sitPos = _transform;
+                nextMoveScenes = _name;//�̵��� ���̸�                
                 other.transform.parent.GetComponent<Outline>().enabled = true;//���� ������Ʈ�� �ƿ������� Ȱ��ȭ
                                                                               //EventManager.Invoke("ActiveFInfo", "�̴ϰ��� : " + _name);//����ǥ��
 
@@ -207,6 +206,9 @@ public class Player : MonoBehaviour
                 isArcadeUIOn = true;
                 break;
             //�˾�
+            case "SitPos":
+                sitPos = _transform;
+                break;
             case "Ranking":
             case "Friends":
             case "Gacha":
@@ -254,7 +256,9 @@ public class Player : MonoBehaviour
                     isArcadeUIOn = false;
                 }
                 break;
-
+            case "SitPos":
+                sitPos = null;
+                break;
             case "Ranking":
             case "Friends":
             case "Gacha":
@@ -277,6 +281,10 @@ public class Player : MonoBehaviour
 
     IEnumerator SitDown(Transform _transform)
     {
+        if(sitPos == null)
+        {
+            sitPos = transform;
+        }
         while(true)
         {
             transform.position = Vector3.Lerp(transform.position, _transform.position, Time.deltaTime * 2.0f);
@@ -297,7 +305,7 @@ public class Player : MonoBehaviour
     IEnumerator GotoNextScene(string _name)
     {
         yield return Utill.WaitForSeconds(1f);
-
+        AudioManager.Inst.StopBGM();
         bl_SceneLoaderManager.LoadScene(_name);
     }
 }
