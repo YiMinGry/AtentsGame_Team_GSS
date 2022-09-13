@@ -80,6 +80,8 @@ public class MiniGame5_SceneManager : MonoBehaviour
 
         sceneList[(int)SceneState.StartScene].OpenScene();
         sceneList[(int)SceneState.MainScene].CloseScene();
+
+        uiList[(int)UIState.OpeningUI].StartScene();
     }
 
     public void OnStart()
@@ -106,6 +108,7 @@ public class MiniGame5_SceneManager : MonoBehaviour
         uiList[(int)UIState.StartChoiceUI].CloseScene();
         sceneList[(int)SceneState.StartScene].CloseScene();
 
+        MiniGame5_SoundManager.Inst.MainBGM();
         uiList[(int)UIState.MainPlayingUI].OpenScene();
         sceneList[(int)SceneState.MainScene].OpenScene();
 
@@ -116,7 +119,6 @@ public class MiniGame5_SceneManager : MonoBehaviour
     {
         uiList[(int)UIState.MainPlayingUI].StartScene();
         sceneList[(int)SceneState.MainScene].StartScene();
-        MiniGame5_SoundManager.Inst.MainBGM();
     }
 
     public void OnBonusTimeEnd()
@@ -142,8 +144,8 @@ public class MiniGame5_SceneManager : MonoBehaviour
 
     IEnumerator OnChangeNextRunnerOnPlay()
     {
-        yield return new WaitForSeconds(1f);
-        MiniGame5_GameManager.Inst.Life = 0.5f;
+        yield return new WaitForSeconds(3f);
+        MiniGame5_GameManager.Inst.Life = 0.75f;
         sceneList[(int)SceneState.MainScene].ChangeCharator(ChoiceState.NextRunFriend);
     }
 

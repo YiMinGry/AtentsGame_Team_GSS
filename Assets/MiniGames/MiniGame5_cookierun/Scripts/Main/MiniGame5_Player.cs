@@ -37,15 +37,36 @@ public class MiniGame5_Player : MonoBehaviour
     float startPosY = 10.0f;
 
     public bool isJumping = false;
-
-    float jumpPower = 12f;
-    int originMag = 20;
-    public float magnitude = 20f;
-    
     int jumpCount = 0;
+    public float jumpPower = 12f;
+    public float doubleJumpPower = 30f;
+    public int originMag = 5;
+    public float magnitude = 5f;
+
+    bool isSlide = false;
+
+    public Vector3 nomalColi_center = new(0f, 0.27f, 0f);
+    public Vector2 nomalColi_RadiusHeight = new(0.15f, 0.54f);
+
+    public Vector3 slideColi_center = new(0f, 0.2f, -0.17f);
+    public Vector2 slideColi_RadiusHeight = new(0.2f, 0.3f);
+
+    public float jumpColi_height = 0.45f;
+
+    Coroutine coSuper;
 
     bool isSuperMode = false;
-    public bool IsSuperMode => isSuperMode;
+    public bool IsSuperMode
+    {
+        get => isSuperMode;
+        set
+        {
+            isSuperMode = value;
+            Debug.Log($"player super mode = {isSuperMode}");
+            if (isSuperMode) coSuper = StartCoroutine(CoSuperTime());
+            else StopCoroutine(coSuper);
+        }
+    } 
 
     bool isSuperBig = false;
     public bool IsSuperBig
@@ -54,7 +75,7 @@ public class MiniGame5_Player : MonoBehaviour
         private set
         {
             isSuperBig = value;
-            isSuperMode = value;
+            IsSuperMode = value;
             if (!isSuperBig)
                 StopCoroutine(coBig);
         }
@@ -66,7 +87,7 @@ public class MiniGame5_Player : MonoBehaviour
         private set
         {
             isSuperBoost = value;
-            isSuperMode = value;
+            IsSuperMode = value;
         }
     }
 
@@ -119,10 +140,9 @@ public class MiniGame5_Player : MonoBehaviour
     {
         magnitude = (float)originMag;
 
-        //coli.material = MiniGame5_GameManager.Inst.MiniFriendData.coliMat;
-        coli.center = new Vector3(0f, 0.27f, 0f);
-        coli.radius = 0.1f;
-        coli.height = 0.54f;
+        coli.center = nomalColi_center;
+        coli.height = 0.3f;
+        coli.radius = nomalColi_RadiusHeight.x;
 
         rigid.constraints =
             RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
@@ -142,6 +162,7 @@ public class MiniGame5_Player : MonoBehaviour
         isFirst = true;
         isReady = false;
         isJumping = false;
+        isSlide = false;
         anim.SetBool("isLanding", false);
         anim.SetBool("isDie", false);
         anim.SetBool("isJumping", false);
@@ -156,12 +177,14 @@ public class MiniGame5_Player : MonoBehaviour
 
         actions.Player.Jump.performed += onJump;
         actions.Player.Slide.started += onSlide;
+        actions.Player.Slide.performed += onSlide;
         actions.Player.Slide.canceled += onSlide;
     }
 
     private void OnDisable()
     {
         actions.Player.Slide.canceled -= onSlide;
+        actions.Player.Slide.performed -= onSlide;
         actions.Player.Slide.started -= onSlide;
         actions.Player.Jump.performed -= onJump;
 
@@ -170,9 +193,9 @@ public class MiniGame5_Player : MonoBehaviour
 
     private void onJump(InputAction.CallbackContext obj)
     {
-        coli.height = 0.45f;
-        Jump();
+        coli.height = jumpColi_height;
         MiniGame5_SoundManager.Inst.PlayJumpCilp();
+        Jump();
     }
 
     private void onSlide(InputAction.CallbackContext obj)
@@ -196,21 +219,42 @@ public class MiniGame5_Player : MonoBehaviour
             {
                 anim.SetBool("isJumping", false);
                 isJumping = false;
-                coli.height = 0.54f;
+                if (!isSlide && !isDie) coli.height = nomalColi_RadiusHeight.y;
             }
             jumpCount = 0;
         }
+    }
+
+    private void Start()
+    {
+        IsSuperMode = true;
+
+        coli.center = nomalColi_center;
+        coli.height = nomalColi_RadiusHeight.y;
+        coli.radius = nomalColi_RadiusHeight.x;
     }
 
     private void Update()
     {
         if (!isDie)
         {
-            if (jumpCount > 0) rigid.AddForce(magnitude * jumpCount * -transform.up);
-            else rigid.AddForce(magnitude * -transform.up);
+            //if (jumpCount > 0) rigid.AddForce(magnitude * jumpCount * -transform.up);
+            //else rigid.AddForce(magnitude * -transform.up);
+
+            if (transform.localPosition.y > 4f)
+            {
+                rigid.velocity += Vector3.up * Physics.gravity.y * (magnitude - 1) * jumpCount * Time.deltaTime;
+            }
 
             MagNet();
         }
+    }
+
+    public IEnumerator CoSuperTime()
+    {
+        isSuperMode = true;
+        yield return new WaitForSeconds(5f);
+        isSuperMode = false;
     }
 
     void Jump()
@@ -221,7 +265,7 @@ public class MiniGame5_Player : MonoBehaviour
             {
                 anim.SetBool("isJumping", true);
                 rigid.velocity = Vector3.zero;
-                rigid.AddForce(transform.up * jumpPower * 1.1f, ForceMode.Impulse);
+                rigid.AddForce(transform.up * jumpPower, ForceMode.Impulse);
 
                 isJumping = true;
                 jumpCount = 1;
@@ -230,7 +274,7 @@ public class MiniGame5_Player : MonoBehaviour
             {
                 anim.SetBool("Roll", true);
                 rigid.velocity = Vector3.zero;
-                rigid.AddForce(transform.up * jumpPower * 1.75f, ForceMode.Impulse);
+                rigid.AddForce(transform.up * doubleJumpPower, ForceMode.Impulse);
 
                 jumpCount = 2;
             }
@@ -248,16 +292,24 @@ public class MiniGame5_Player : MonoBehaviour
         if (context.started)
         {
             anim.SetBool("isSlide", true);
-            coli.center = new Vector3(0f, 0.2f, -0.17f);
-            coli.radius = 0.2f;
-            coli.height = 0.4f;
+            isSlide = true;
+        }
+        else if (context.performed)
+        {
+            coli.center = slideColi_center;
+            coli.height = slideColi_RadiusHeight.y;
+            coli.radius = slideColi_RadiusHeight.x;
+            
+            rigid.AddForce(-transform.up * jumpPower, ForceMode.Impulse);
         }
         else if (context.canceled)
         {
             anim.SetBool("isSlide", false);
-            coli.center = new Vector3(0f, 0.27f, 0f);
-            coli.radius = 0.1f;
-            coli.height = 0.54f;
+            coli.center = nomalColi_center;
+            coli.height = nomalColi_RadiusHeight.y;
+            coli.radius = nomalColi_RadiusHeight.x;
+
+            isSlide = false;
         }
     }
 
@@ -271,19 +323,29 @@ public class MiniGame5_Player : MonoBehaviour
     {
         anim.SetBool("isDie", true);
         isDie = true;
+
         MiniGame5_SoundManager.Inst.PlayDieClip();
         Debug.Log("Player Die");
 
-        Destroy(rigid, 10f);
-        Destroy(coli, 10f);
-        Destroy(gameObject, 10f);
+        actions.Player.Slide.canceled -= onSlide;
+        actions.Player.Slide.started -= onSlide;
+        actions.Player.Jump.performed -= onJump;
+
+        actions.Player.Disable();
+        //coli.enabled = false;
+
+        Destroy(rigid, 2f);
+        Destroy(coli, 2f);
+        Destroy(gameObject, 5f);
+        Destroy(GetComponent<MiniGame5_Player>());
     }
 
     void MagNet()
     {
         if (isMagnetOn)
         {
-            Collider[] cols = Physics.OverlapSphere((0.7f * Vector3.up) + transform.position, magnetRange, LayerMask.GetMask("Item"));
+            //가져오고자 하는 오브젝트가 트리거일 경우 QueryTriggerInteraction.Collide 체크
+            Collider[] cols = Physics.OverlapSphere((0.7f * Vector3.up) + transform.position, magnetRange, LayerMask.GetMask("Item"), QueryTriggerInteraction.Collide);
             for (int i = 0; i < cols.Length; i++)
             {
                 cols[i].GetComponent<MiniGame5_Item>().OnMagnet((0.7f * Vector3.up) + transform.position);

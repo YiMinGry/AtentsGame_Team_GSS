@@ -100,8 +100,8 @@ public class PhoneUI : MonoBehaviour
             _mfs[idx].SetCallBack(
                 (string str) =>
                 {
-                    page2_MiniDetail_NotData.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? false : true);//¹Ì¼ÒÀ¯
-                    page2_MiniDetail_Data.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? true : false);//¼ÒÀ¯
+                    page2_MiniDetail_NotData.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? false : true);//ï¿½Ì¼ï¿½ï¿½ï¿½
+                    page2_MiniDetail_Data.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? true : false);//ï¿½ï¿½ï¿½ï¿½
 
                     page2_MiniDetail_Image.sprite = MFDataManager.instance.mfarr[idx].sprite;
                     page2_MiniDetail_Name.text = MFDataManager.instance.mfarr[idx].friendName;
@@ -143,18 +143,18 @@ public class PhoneUI : MonoBehaviour
         {
             page3_RankText[i] = page3_RankList.GetChild(i).GetComponent<Text>();
         }
-        
-
+        page3_sidePage.Find("OutBtn").GetComponent<Button>().onClick.AddListener(() => page3_sidePage.gameObject.SetActive(false));
     }
     private void OnEnable()
     {
-        NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);//¼­¹ö¿¡¼­ ReadRanking Ä¿¸àµå·Î ÆÐÅ¶ÀÌ ¿Ã°æ¿ì ½ÇÇà
+        NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ReadRanking Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¶ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         NetEventManager.Regist("TotalRanking", S2CL_TotalRanking);
     }
 
     private void Start()
     {
         Init();
+        OpenPage(0);
     }
 
     void Init()
@@ -180,7 +180,7 @@ public class PhoneUI : MonoBehaviour
     {
         if (UserDataManager.instance.nickName != "") page1_PlayerName.text = UserDataManager.instance.nickName;
         else if (UserDataManager.instance.nickName == "") page1_PlayerName.text = "Noname";
-        //page1_HaveMini = $"{UserDataManager.instance.º¸À¯ÇÑ¹Ì´ÏÄ£±¸°¹¼ö}¸¶¸®";
+        //page1_HaveMini = $"{UserDataManager.instance.ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹Ì´ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½";
         page1_HaveCoin1.text = UserDataManager.instance.coin1.ToString();
         page1_HaveCoin2.text = UserDataManager.instance.coin2.ToString();
         //if (UserDataManager.instance.comment != "") page1_Comment = UserDataManager.instance.comment;
@@ -188,9 +188,9 @@ public class PhoneUI : MonoBehaviour
 
     public void SetPage2()
     {
-        // scriptable object ¸ÞÀÎ¿¡¼­ °ü¸® ¾îÄÉ ÇÒ°ÇÁö Á¤ÇØ¼­ °Å±â¼­ Á¤º¸ ¹Þ¾Æ¼­ ¾Æ·¡ Ã³¸®
+        // scriptable object ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½Å±â¼­ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½Æ·ï¿½ Ã³ï¿½ï¿½
         SetPage2_detail();
-        // page2_MiniList ¿ä¼Ò Ã¤¿ì±â Instantiate
+        // page2_MiniList ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½ Instantiate
     }
 
     public void SetPage2_detail(MiniFriendData data = null)
@@ -205,7 +205,7 @@ public class PhoneUI : MonoBehaviour
             page2_MiniDetail_NotData.gameObject.SetActive(false);
             page2_MiniDetail_Data.gameObject.SetActive(true);
 
-            // page2_MiniDetail ¿¡ µé¾î°¥ ¿ä¼Ò Ã¤¿ì±â
+            // page2_MiniDetail ï¿½ï¿½ ï¿½ï¿½î°¥ ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½
         }
     }
 
@@ -220,15 +220,12 @@ public class PhoneUI : MonoBehaviour
 
     public void SetPage3()
     {
-        // ¹Ì´Ï°ÔÀÓµé ¿Ï¼ºµÇ°í ³Ö¾î¾ßÇÒµíÇÑ...
+        // ï¿½Ì´Ï°ï¿½ï¿½Óµï¿½ ï¿½Ï¼ï¿½ï¿½Ç°ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½...
 
         //page3_AchieveCount = 
         //page3_TotalRank = 
-
-        //page3_TotalScore =
-        //±× ¿Ü µðÅ×ÀÏ º¼ ¼ö ÀÖ°Ô ÇÏ´Ü ¹öÆ°¿¡ ¿¬°á
     }
-    //page3ÇÔ¼ö========================================================================
+    //page3ï¿½Ô¼ï¿½========================================================================
     public void UpdateRank()
     {
         CL2S_ReadMyAllRanking();
@@ -260,13 +257,13 @@ public class PhoneUI : MonoBehaviour
             string rank = $"{data["ranking"]}";
             if (rank == "-1")
             {
-                page3_RankText[i * 2 - 2].text = "±â·Ï¾øÀ½";
+                page3_RankText[i * 2 - 2].text = "ï¿½ï¿½Ï¾ï¿½ï¿½ï¿½";
                 page3_RankText[i * 2-1].text = $"--";
             }
             else
             {
-                page3_RankText[i * 2 - 2].text = $"{data["ranking"]}À§";
-                page3_RankText[i * 2-1].text = $"{data["Score"]}Á¡";
+                page3_RankText[i * 2 - 2].text = $"{data["ranking"]}ï¿½ï¿½";
+                page3_RankText[i * 2-1].text = $"{data["Score"]}ï¿½ï¿½";
             }
         }
     }
@@ -275,9 +272,9 @@ public class PhoneUI : MonoBehaviour
 
         JObject _data = JObject.Parse(_jdata["MyRank"].ToString());
         page3_TotalRank.text = $"{_data["MG_Total_Rank"]}";
-        page3_RankText[0].text = $"{_data["MG_Total_Rank"]}À§";
+        page3_RankText[0].text = $"{_data["MG_Total_Rank"]}ï¿½ï¿½";
         page3_TotalScore.text = $"{_data["MG_Total_Score"]}";
-        page3_RankText[1].text = $"{_data["MG_Total_Score"]}Á¡";
+        page3_RankText[1].text = $"{_data["MG_Total_Score"]}ï¿½ï¿½";
     }
     public void CL2S_TotalRanking()
     {
@@ -355,68 +352,68 @@ public class PhoneUI : MonoBehaviour
                 switch (mgNum)
                 {
                     case 2:
-                        a = "¹°°í±âÅ°¿ì±â ";
+                        a = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ï¿½ ";
                         break;
                     case 3:
-                        a = "ÀüÀï½Ã´ë ";
+                        a = "ï¿½ï¿½ï¿½ï¿½Ã´ï¿½ ";
                         break;
                     case 4:
-                        a = "ÅÂÆÛ ";
+                        a = "ï¿½ï¿½ï¿½ï¿½ ";
                         break;
                     case 5:
-                        a = "¹Ì´Ï·± ";
+                        a = "ï¿½Ì´Ï·ï¿½ ";
                         break;
                 }
                 if (_achieveName.Contains("_Score"))
                 {
                     int ScoreCon = UserDataManager.instance.conditionScore[mgNum - 1, achieveTier - 1];
-                    condition = $" Á¡¼ö {ScoreCon}Á¡";
+                    condition = $" ï¿½ï¿½ï¿½ï¿½ {ScoreCon}ï¿½ï¿½";
                     switch (achieveTier)
                     {
                         case 1:
-                            b = "¿ÕÃÊº¸";
+                            b = "ï¿½ï¿½ï¿½Êºï¿½";
                             break;
                         case 2:
-                            b = "ÃÊº¸";
+                            b = "ï¿½Êºï¿½";
                             break;
                         case 3:
-                            b = "Áß¼ö";
+                            b = "ï¿½ß¼ï¿½";
                             break;
                         case 4:
-                            b = "°í¼ö";
+                            b = "ï¿½ï¿½ï¿½ï¿½";
                             break;
                         case 5:
-                            b = "ÃÊ°í¼ö";
+                            b = "ï¿½Ê°ï¿½ï¿½ï¿½";
                             break;
                     }
                 }
                 else if (_achieveName.Contains("_Count"))
                 {
                     int playCountCon = UserDataManager.instance.conditionPlayCount[achieveTier - 1];
-                    condition = $"ÇÃ·¹ÀÌ È½¼ö {playCountCon}È¸";
+                    condition = $"ï¿½Ã·ï¿½ï¿½ï¿½ È½ï¿½ï¿½ {playCountCon}È¸";
                     switch (achieveTier)
                     {
                         case 1:
-                            b = "´ººñ";
+                            b = "ï¿½ï¿½ï¿½ï¿½";
                             break;
                         case 2:
-                            b = "¼÷·ÃÀÚ";
+                            b = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
                             break;
                         case 3:
-                            b = "°íÀÎ¹°";
+                            b = "ï¿½ï¿½ï¿½Î¹ï¿½";
                             break;
                         case 4:
-                            b = "½âÀº¹°";
+                            b = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
                             break;
                         case 5:
-                            b = "¼®À¯";
+                            b = "ï¿½ï¿½ï¿½ï¿½";
                             break;
                     }
                 }
                 else if (_achieveName.Contains("1st"))
                 {
-                    b = "¸¶½ºÅÍ";
-                    condition = $"·©Å· 1µî ´Þ¼º";
+                    b = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+                    condition = $"ï¿½ï¿½Å· 1ï¿½ï¿½ ï¿½Þ¼ï¿½";
                 }
             }
             else
@@ -427,36 +424,36 @@ public class PhoneUI : MonoBehaviour
                     switch (achieveTier)
                     {
                         case 1:
-                            b = "Ã¹ Ä£±¸¸¦ »ç±ÍÀÚ";
+                            b = "Ã¹ Ä£ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½";
                             break;
                         case 2:
-                            b = "¾Æ½Î Å»Ãâ";
+                            b = "ï¿½Æ½ï¿½ Å»ï¿½ï¿½";
                             break;
                         case 3:
-                            b = "ÀÎ½Î";
+                            b = "ï¿½Î½ï¿½";
                             break;
                         case 4:
-                            b = "ÇÙÀÎ½Î";
+                            b = "ï¿½ï¿½ï¿½Î½ï¿½";
                             break;
                         case 5:
-                            b = "Ä£±¸ ¼öÁý±¤";
+                            b = "Ä£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
                             break;
                     }
-                    condition = $"{UserDataManager.instance.conditionMfCount[achieveTier - 1]}¸í ¼öÁý";
+                    condition = $"{UserDataManager.instance.conditionMfCount[achieveTier - 1]}ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
                 }
                 else
                 {
                     if(_achieveName.Contains("Coin1"))
                     {
-                        a = "ÀÏ¹ÝÀçÈ­ ";
-                        b = $"¸ðÀ¸±â {achieveTier}";
-                        condition = $"{UserDataManager.instance.coin1Condition[achieveTier-1]} °³ ¼öÁý";
+                        a = "ï¿½Ï¹ï¿½ï¿½ï¿½È­ ";
+                        b = $"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {achieveTier}";
+                        condition = $"{UserDataManager.instance.coin1Condition[achieveTier-1]} ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
                     }
                     else
                     {
-                        a = "Æ¯¼öÀçÈ­ ";
-                        b = $"¸ðÀ¸±â {achieveTier}";
-                        condition = $"{UserDataManager.instance.coin2Condition[achieveTier - 1]} °³ ¼öÁý";
+                        a = "Æ¯ï¿½ï¿½ï¿½ï¿½È­ ";
+                        b = $"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {achieveTier}";
+                        condition = $"{UserDataManager.instance.coin2Condition[achieveTier - 1]} ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
                     }
                 }
             }

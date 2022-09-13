@@ -10,10 +10,11 @@ public class Player : MonoBehaviour
     int curEventTypr = 0;//�÷��̾ ��ȣ�ۿ��Ҷ� � �ִϸ��̼��� �����ؾ����� ����
     string nextMoveScenes = "";//���̵��Ҷ� �������� �������� �̸�����
     string openUIName = "";//��ȣ�ۿ����� ui�� ���� �ݱ� ���� �̸� ����
+    Transform sitPos;
     public bool isOpenUI = false;
+    public bool isArcadeUIOn = false;
 
     MinigameImageUI minigameImageUI;
-
 
     [SerializeField]
     private Transform[] mfPos;
@@ -23,7 +24,6 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         EventManager.Regist("MF_Refresh", MF_Refresh);
-
 
         MFInit();
     }
@@ -43,7 +43,11 @@ public class Player : MonoBehaviour
                 _mf.name = _data.id.ToString();
                 mfPosCheck[_idx] = true;
                 mfs[_idx] = _mf;
-
+                Collider mfCollider = _mf.GetComponent<Collider>(); // Player가 미니친구 콜라이더에 밀리는 문제 방지
+                if (mfCollider != null)
+                {
+                    mfCollider.enabled = false;
+                }
                 _idx++;
             }
         }
@@ -70,6 +74,11 @@ public class Player : MonoBehaviour
                 _mf.name = _data.id.ToString();
                 mfPosCheck[_idx] = true;
                 mfs[_idx] = _mf;
+                Collider mfCollider = _mf.GetComponent<Collider>();
+                if(mfCollider != null)
+                {
+                    mfCollider.enabled = false;
+                }
 
             }
             _idx++;
@@ -115,6 +124,9 @@ public class Player : MonoBehaviour
                     {
                         //�ڵ��� on off
                         animConChanger.TogglePhone();
+
+                        // 폰UI 켜질때 arcade UI는 꺼지도록
+                        if (isArcadeUIOn) minigameImageUI.ToggleUI();
                     }
                     else
                     {
@@ -137,6 +149,7 @@ public class Player : MonoBehaviour
                                     //�̴ϰ��� �����̵� �ӽſ� ������츦 �����Ͽ�
                                     //�ش� ������ �̵��ϰ�
                                     StartCoroutine(GotoNextScene(nextMoveScenes));
+                                    StartCoroutine(SitDown(sitPos));
                                 });
 
                                 break;
@@ -164,6 +177,7 @@ public class Player : MonoBehaviour
     {
         //�÷��̾ ���� �ݶ��̾��� ������Ʈ �̸��� �޾ƿͼ� �̸��� �´� �̺�Ʈ ����
         string _name = other.gameObject.name;
+        Transform _transform = other.gameObject.transform;
 
         switch (_name)
         {
@@ -175,13 +189,16 @@ public class Player : MonoBehaviour
             case "MG_S_05":
                 curEventTypr = 1;//�ɱ�
                 nextMoveScenes = _name;//�̵��� ���̸�
+                sitPos = _transform;
                 other.transform.parent.GetComponent<Outline>().enabled = true;//���� ������Ʈ�� �ƿ������� Ȱ��ȭ
                 EventManager.Invoke("ActiveFInfo", "�̴ϰ��� : " + _name);//����ǥ��
                 if(minigameImageUI==null)
                 {
                     minigameImageUI=FindObjectOfType<MinigameImageUI>();
                 }
-                minigameImageUI.PopUpImage(other.transform.parent.transform,_name);
+                //minigameImageUI.PopUpImage(other.transform.parent.transform, _name);
+                minigameImageUI.PopUpImage(other.gameObject.transform, _name);
+                isArcadeUIOn = true;
                 break;
             //�˾�
             case "Ranking":
@@ -220,7 +237,8 @@ public class Player : MonoBehaviour
                 other.transform.parent.GetComponent<Outline>().enabled = false;
                 if(minigameImageUI!=null)
                 {
-                    minigameImageUI.HideImage();
+                    minigameImageUI.ToggleUI();
+                    isArcadeUIOn = false;
                 }
                 break;
 
@@ -244,7 +262,24 @@ public class Player : MonoBehaviour
 
     }
 
+    IEnumerator SitDown(Transform _transform)
+    {
+        while(true)
+        {
+            transform.position = Vector3.Lerp(transform.position, _transform.position, Time.deltaTime * 1.0f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_transform.rotation.eulerAngles*(-1.0f)), Time.deltaTime * 2.0f);
+            yield return null;
+        }
+    }
+    void OpenArcadeUI_withOutline()
+    {
 
+    }
+
+    void ArcadeUI_withOutline()
+    {
+
+    }
 
     IEnumerator GotoNextScene(string _name)
     {
