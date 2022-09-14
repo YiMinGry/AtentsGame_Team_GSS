@@ -20,6 +20,7 @@ public class PhoneUI : MonoBehaviour
     Text page1_HaveCoin1;
     Text page1_HaveCoin2;
     InputField page1_Comment;
+    public Text aaa;
 
     //Page2================
     Transform page2_MiniDetail_NotData;
@@ -473,8 +474,12 @@ public class PhoneUI : MonoBehaviour
         playerTitle = FindObjectOfType<Player>().GetComponentInChildren<Text>();
         Text title = _thisObj.GetComponent<Text>();
         Transform parentTr = _thisObj.transform.parent;
+        Text aaa = FindObjectOfType<PhoneUI>().transform.GetChild(0).Find("Pages").Find("Page1").Find("Contents").Find("PlayerName").Find("Achievements").GetComponent<Text>();
+
+        
 
         playerTitle.text = $"<{title.text}>";
+        aaa.text = $"<{title.text}>";
         for (int i = 0; i < parentTr.childCount; i++)
         {
             Toggle a = parentTr.GetChild(i).GetComponent<Toggle>();
