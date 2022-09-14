@@ -98,6 +98,9 @@ public class OderMove : MonoBehaviour
                     tapperGameManager.AddBeerFail();
                     tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "<color=red>!@#!@$@#!@#</color>");
                     state = oderState.back;
+
+                    AudioManager.Inst.PlaySFX("etfx_explosion_magic");
+
                 }
 
             }
@@ -172,6 +175,9 @@ public class OderMove : MonoBehaviour
                     tapperGameManager.AddBeer();
                     tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "«—¿‹ µÈ∂Û∞Ì!");
                 }
+
+                AudioManager.Inst.PlaySFX("FX-PowBoost");
+
                 break;
             default:
                 break;

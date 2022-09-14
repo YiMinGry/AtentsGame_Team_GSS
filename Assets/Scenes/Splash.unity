@@ -4204,6 +4204,16 @@ PrefabInstance:
       propertyPath: loadingBarBG
       value: 
       objectReference: {fileID: 467938823}
+    - target: {fileID: 8700920060424107739, guid: 010d95610c805ab459f5741c7e437f7b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -4.3500977
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700920060424107739, guid: 010d95610c805ab459f5741c7e437f7b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 62.19995
+      objectReference: {fileID: 0}
     - target: {fileID: 8700920060424108815, guid: 010d95610c805ab459f5741c7e437f7b,
         type: 3}
       propertyPath: m_Pivot.x
@@ -6165,6 +6175,10 @@ MonoBehaviour:
   coin2: 0
   mfList: 
   archiveList: 
+  conditionPlayCount: 0100000003000000070000000a0000000d000000
+  conditionMfCount: 01000000050000000f0000001900000022000000
+  coin1Condition: 0a0000001e0000003200000064000000f4010000
+  coin2Condition: 010000000a000000190000003c00000064000000
 --- !u!4 &2077956651
 Transform:
   m_ObjectHideFlags: 0
@@ -6496,6 +6510,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 18df578f079b92b469f9945ba4aa20c6, type: 3}
   - {fileID: 8300000, guid: 260d76c5d8f19a34e8d93ed60a2cf891, type: 3}
   - {fileID: 8300000, guid: 27599742ee6e0f34faaccfbf744e2c0d, type: 3}
+  - {fileID: 8300000, guid: 6eea7f91d13566e478384c1606f42729, type: 3}
+  - {fileID: 8300000, guid: 32f565ba94f200f49adb407cce64e873, type: 3}
+  - {fileID: 8300000, guid: 9c62c93deb5774144a661cff013c5171, type: 3}
+  - {fileID: 8300000, guid: 3e06c45e3372dd345b50a642fe86616d, type: 3}
+  - {fileID: 8300000, guid: 3a0e3471cca4f314685eaa9f91440f43, type: 3}
+  - {fileID: 8300000, guid: 303ee82bf12cbce48b2c0beec638a092, type: 3}
+  - {fileID: 8300000, guid: 0f3bdbf8f10f5cc41a817e2eb4a1a329, type: 3}
 --- !u!82 &2142776086
 AudioSource:
   m_ObjectHideFlags: 0
