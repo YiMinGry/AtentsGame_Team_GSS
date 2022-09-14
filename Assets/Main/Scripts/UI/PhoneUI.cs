@@ -433,7 +433,7 @@ public class PhoneUI : MonoBehaviour
                             b = "미니친구 수집광";
                             break;
                     }
-                    condition = $"{UserDataManager.instance.conditionMfCount[achieveTier - 1]}�� ����";
+                    condition = $"미니친구{UserDataManager.instance.conditionMfCount[achieveTier - 1]}마리 획득";
                 }
                 else
                 {

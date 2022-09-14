@@ -38,8 +38,8 @@ public class UserDataManager : MonoSingleton<UserDataManager>
 
     //업적용 조건
     
-    public int[,] conditionScore= { {0,0,0,0,0 },{ 1, 5, 10, 25, 50 }, { 50,1500,3000,4500,6000 }, { 1, 5, 10, 25, 50 }, { 1, 5, 10, 25, 50 } };
-    public int[] conditionPlayCount= {1, 3, 7, 10, 13 };
+    public int[,] conditionScore= { {0,0,0,0,0 },{ 1000, 2000, 3000, 5000, 10000 }, { 50,1500,3000,4500,6000 }, { 100, 500, 1000, 2500, 5000 }, { 100, 500, 1000, 2500, 5000 } };
+    public int[] conditionPlayCount= {1, 8, 20, 35, 50 };
     public int[] conditionMfCount = {1,5,15,25,34};
     public int[] coin1Condition = {10,30,50,100,500};
     public int[] coin2Condition = { 1, 10, 25, 60,100 };

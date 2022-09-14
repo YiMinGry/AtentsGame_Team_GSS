@@ -9,7 +9,7 @@ public class MG3_skill : MonoBehaviour
 
     float rand;
     float sidedistance = 13.0f;
-    public int basenumProjectile = 5;
+    public int basenumProjectile = 10;
     public int numProjectile;
 
     Button skillButton;

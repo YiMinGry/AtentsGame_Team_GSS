@@ -76,7 +76,7 @@ public class MG3_EnemySpawner : MG3_UnitSpawner
                     unittype = 2;
                 }
                 SpawnUnit(unittype + 3*MG3_GameManager.Inst.EnemyRevol);
-                spawnCool = Random.Range(5.0f, 8.0f);
+                spawnCool = Random.Range(3.0f, 5.0f);
 
             }
         }
