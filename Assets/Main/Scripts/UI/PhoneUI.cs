@@ -16,6 +16,7 @@ public class PhoneUI : MonoBehaviour
 
     //Page1================
     Text page1_PlayerName;
+    public Text page1_PlayerAcheive;
     Text page1_HaveMini;
     Text page1_HaveCoin1;
     Text page1_HaveCoin2;
@@ -71,6 +72,7 @@ public class PhoneUI : MonoBehaviour
 
         //Page1=================================================
         page1_PlayerName = pages[0].Find("Contents").Find("PlayerName").GetComponent<Text>();
+        if(page1_PlayerAcheive == null) page1_PlayerAcheive = pages[0].Find("Contents").Find("PlayerName").Find("Achievements").GetComponent<Text>();
         page1_HaveMini = pages[0].Find("Contents").Find("HaveMini").GetComponent<Text>();
         page1_HaveCoin1 = pages[0].Find("Contents").Find("HaveCoins").Find("Coin1").GetComponent<Text>();
         page1_HaveCoin2 = pages[0].Find("Contents").Find("HaveCoins").Find("Coin2").GetComponent<Text>();
@@ -475,6 +477,7 @@ public class PhoneUI : MonoBehaviour
         Transform parentTr = _thisObj.transform.parent;
 
         playerTitle.text = $"<{title.text}>";
+        page1_PlayerAcheive.text = $"{title.text}";
         for (int i = 0; i < parentTr.childCount; i++)
         {
             Toggle a = parentTr.GetChild(i).GetComponent<Toggle>();
@@ -485,6 +488,7 @@ public class PhoneUI : MonoBehaviour
             if (i == parentTr.childCount - 1)
             {
                 playerTitle.text = "";
+                page1_PlayerAcheive.text = "";
             }
         }
     }
