@@ -477,8 +477,6 @@ public class PhoneUI : MonoBehaviour
         Transform parentTr = _thisObj.transform.parent;
         
 
-        
-
         playerTitle.text = $"<{title.text}>";
         aaa.text = $"<{title.text}>";
         for (int i = 0; i < parentTr.childCount; i++)
@@ -491,6 +489,10 @@ public class PhoneUI : MonoBehaviour
             if (i == parentTr.childCount - 1)
             {
                 playerTitle.text = "";
+<<<<<<< HEAD
+=======
+                aaa.text = "";
+>>>>>>> main
             }
         }
     }
