@@ -312,6 +312,7 @@ public class MG2_GameManager : MonoBehaviour
             if (count < 0 || chance < 1)
             {
                 CL2S_UpdateRanking(Score);
+                StartCoroutine(UserDataManager.instance.AchivementCheck(2));
                 mg2_UIManager.SetRankingPanel(true);
                 mg2_UIManager.SetResultPanel(true);
                 StartCoroutine(AfterGameOver());
@@ -336,6 +337,7 @@ public class MG2_GameManager : MonoBehaviour
                 else
                 {
                     CL2S_UpdateRanking(Score);
+                    StartCoroutine(UserDataManager.instance.AchivementCheck(2));
                     mg2_UIManager.SetRankingPanel(true);
                     mg2_UIManager.SetResultPanel(true);
                     StartCoroutine(AfterGameOver());
@@ -411,8 +413,8 @@ public class MG2_GameManager : MonoBehaviour
         AudioManager.Inst.IsSoundOn = false;
         TimeStop(false);
         StopAllCoroutines();
-        //bl_SceneLoaderManager.LoadScene("Main_Lobby");    // 메인로비
-        bl_SceneLoaderManager.LoadScene("Dev_Lobby");       // 디버그용 로비
+        bl_SceneLoaderManager.LoadScene("Main_Lobby");    // 메인로비
+        //bl_SceneLoaderManager.LoadScene("Dev_Lobby");       // 디버그용 로비
     }
     private void OnDisable()
     {

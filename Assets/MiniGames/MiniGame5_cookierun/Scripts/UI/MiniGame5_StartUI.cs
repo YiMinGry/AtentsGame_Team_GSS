@@ -89,6 +89,6 @@ public class MiniGame5_StartUI : MiniGame5_UI
 
     public void Refresh_BestScore()
     {
-        // bestScore = 서버에서 MiniGame5 캐릭터의 최고점수 받아와서 적용
+        bestScore.text = UserDataManager.instance.MG5PlayData._maxScore.ToString("N0");
     }
 }

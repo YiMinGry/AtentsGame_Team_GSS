@@ -10,8 +10,11 @@ public class Player : MonoBehaviour
     int curEventTypr = 0;//�÷��̾ ��ȣ�ۿ��Ҷ� � �ִϸ��̼��� �����ؾ����� ����
     string nextMoveScenes = "";//���̵��Ҷ� �������� �������� �̸�����
     string openUIName = "";//��ȣ�ۿ����� ui�� ���� �ݱ� ���� �̸� ����
+    Transform sitPos;
+    public bool isOpenUI = false;
+    public bool isArcadeUIOn = false;
+
     MinigameImageUI minigameImageUI;
-    
 
     [SerializeField]
     private Transform[] mfPos;
@@ -21,7 +24,6 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         EventManager.Regist("MF_Refresh", MF_Refresh);
-
 
         MFInit();
     }
@@ -41,7 +43,11 @@ public class Player : MonoBehaviour
                 _mf.name = _data.id.ToString();
                 mfPosCheck[_idx] = true;
                 mfs[_idx] = _mf;
-
+                Collider mfCollider = _mf.GetComponent<Collider>(); // Player가 미니친구 콜라이더에 밀리는 문제 방지
+                if (mfCollider != null)
+                {
+                    mfCollider.enabled = false;
+                }
                 _idx++;
             }
         }
@@ -68,17 +74,30 @@ public class Player : MonoBehaviour
                 _mf.name = _data.id.ToString();
                 mfPosCheck[_idx] = true;
                 mfs[_idx] = _mf;
+                Collider mfCollider = _mf.GetComponent<Collider>();
+                if (mfCollider != null)
+                {
+                    mfCollider.enabled = false;
+                }
 
             }
-                _idx++;
+            _idx++;
         }
     }
 
 
     public void Update()
     {
-        //�����̱� ���� �Լ�
-        animConChanger.Walk(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        if (isOpenUI)
+        {
+            animConChanger.Walk(0, 0);
+        }
+        else
+        {
+            //�����̱� ���� �Լ�
+            animConChanger.Walk(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        }
 
 
         //animConChanger�� ���¿� ���� ���������� �����ϱ� ���� ����ġ��
@@ -105,11 +124,15 @@ public class Player : MonoBehaviour
                     {
                         //�ڵ��� on off
                         animConChanger.TogglePhone();
+
+                        // 폰UI 켜질때 arcade UI는 꺼지도록
+                        if (isArcadeUIOn) minigameImageUI.ToggleUI();
                     }
                     else
                     {
                         //�˾��� ���������� �ݱ�
                         EventManager.Invoke("CloseUI", openUIName);
+                        isOpenUI = false;
                     }
                 }
 
@@ -126,6 +149,7 @@ public class Player : MonoBehaviour
                                     //�̴ϰ��� �����̵� �ӽſ� ������츦 �����Ͽ�
                                     //�ش� ������ �̵��ϰ�
                                     StartCoroutine(GotoNextScene(nextMoveScenes));
+                                    StartCoroutine(SitDown(sitPos));
                                 });
 
                                 break;
@@ -134,6 +158,8 @@ public class Player : MonoBehaviour
                                 {
                                     //ui�˾� Ȱ��ȭ
                                     EventManager.Invoke("OpenUI", openUIName);
+                                    isOpenUI = true;
+
                                 });
                                 break;
                         }
@@ -142,6 +168,8 @@ public class Player : MonoBehaviour
 
                 break;
         }
+
+
     }
 
 
@@ -149,6 +177,7 @@ public class Player : MonoBehaviour
     {
         //�÷��̾ ���� �ݶ��̾��� ������Ʈ �̸��� �޾ƿͼ� �̸��� �´� �̺�Ʈ ����
         string _name = other.gameObject.name;
+        Transform _transform = other.gameObject.transform;
 
         switch (_name)
         {
@@ -159,22 +188,21 @@ public class Player : MonoBehaviour
             case "MG_S_04":
             case "MG_S_05":
                 curEventTypr = 1;//�ɱ�
-                nextMoveScenes = _name;//�̵��� ���̸�
+                nextMoveScenes = _name;//�̵��� ���̸�                
                 other.transform.parent.GetComponent<Outline>().enabled = true;//���� ������Ʈ�� �ƿ������� Ȱ��ȭ
                 EventManager.Invoke("ActiveFInfo", "�̴ϰ��� : " + _name);//����ǥ��
-                
-                if (titleText != null)
-                {
-                    titleText.enabled = true;
-                    titleText.text = other.transform.GetChild(0).gameObject.name;
-                }
                 if(minigameImageUI==null)
                 {
                     minigameImageUI=FindObjectOfType<MinigameImageUI>();
                 }
-                minigameImageUI.PopUpImage(other.transform.parent.transform,_name);
+                //minigameImageUI.PopUpImage(other.transform.parent.transform, _name);
+                minigameImageUI.PopUpImage(other.gameObject.transform, _name);
+                isArcadeUIOn = true;
                 break;
             //�˾�
+            case "SitPos":
+                sitPos = _transform;
+                break;
             case "Ranking":
             case "Friends":
             case "Gacha":
@@ -184,13 +212,6 @@ public class Player : MonoBehaviour
                 openUIName = _name;
                 other.transform.parent.GetComponent<Outline>().enabled = true;
                 EventManager.Invoke("ActiveFInfo", _name);
-                if(titleText!=null)
-                {
-                    titleText.enabled = true;
-                    titleText.text = other.transform.GetChild(0).gameObject.name;
-                }
-                
-
                 break;
             //�� �̸��� �ƴ� �ٸ�������Ʈ�� ����
             default:
@@ -214,16 +235,17 @@ public class Player : MonoBehaviour
             case "MG_S_05":
                 curEventTypr = 0;
                 nextMoveScenes = "";
-                EventManager.Invoke("DeActiveFInfo", _name);
+                //EventManager.Invoke("DeActiveFInfo", _name);
                 other.transform.parent.GetComponent<Outline>().enabled = false;
-                if(titleText!=null)
-                    titleText.enabled = false;
                 if(minigameImageUI!=null)
                 {
-                    minigameImageUI.HideImage();
+                    minigameImageUI.ToggleUI();
+                    isArcadeUIOn = false;
                 }
                 break;
-
+            case "SitPos":
+                sitPos = null;
+                break;
             case "Ranking":
             case "Friends":
             case "Gacha":
@@ -232,7 +254,7 @@ public class Player : MonoBehaviour
                 curEventTypr = 0;
                 openUIName = "";
                 other.transform.parent.GetComponent<Outline>().enabled = false;
-                EventManager.Invoke("DeActiveFInfo", _name);
+                //EventManager.Invoke("DeActiveFInfo", _name);
                 other.transform.parent.GetComponent<Outline>().enabled = false;
                 if(titleText != null)
                     titleText.enabled = false;
@@ -244,12 +266,33 @@ public class Player : MonoBehaviour
 
     }
 
+    IEnumerator SitDown(Transform _transform)
+    {
+        if (sitPos == null)
+        {
+            sitPos = transform;
+        }
+        while (true)
+        {
+            transform.position = Vector3.Lerp(transform.position, _transform.position, Time.deltaTime * 2.0f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_transform.rotation.eulerAngles * (-1.0f)), Time.deltaTime * 2.0f);
+            yield return null;
+        }
+    }
+    void OpenArcadeUI_withOutline()
+    {
 
+    }
+
+    void ArcadeUI_withOutline()
+    {
+
+    }
 
     IEnumerator GotoNextScene(string _name)
     {
         yield return Utill.WaitForSeconds(1f);
-
+        AudioManager.Inst.StopBGM();
         bl_SceneLoaderManager.LoadScene(_name);
     }
 }

@@ -4,12 +4,13 @@ using UnityEngine;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
-public struct MGPlayData//¹Ì´Ï°ÔÀÓ ¾÷Àû Ã¼Å©¿ë
+public struct MGPlayData//ë¯¸ë‹ˆê²Œì„ ì—…ì  ì²´í¬ìš©
 {
-    public bool _is1st;//1µîÇÑ ±â·ÏÀÌ ÀÖ´ÂÁö
-    public int _maxScore;//ÃÖ´ë Á¡¼ö
-    public int _playCount;//ÇÃ·¹ÀÌ Ä«¿îÆ®
+    public bool _is1st;//1ë“±í•œ ê¸°ë¡ì´ ìˆëŠ”ì§€
+    public int _maxScore;//ìµœëŒ€ ì ìˆ˜
+    public int _playCount;//í”Œë ˆì´ ì¹´ìš´íŠ¸
 
 }
 
@@ -18,21 +19,35 @@ public class UserDataManager : MonoSingleton<UserDataManager>
     [SerializeField]
     private KoreaInput koreaInput;
 
-    public int idx;//È¸¿ø¹øÈ£
-    public string ssID;//¼¼¼Ç¾ÆÀÌµğ
-    public string ID;//µğ¹ÙÀÌ½º ¾ÆÀÌµğ
-    public string nickName;//´Ğ³×ÀÓ
-    public long coin1;//ÀÏ¹İÀçÈ­
-    public long coin2;//Æ¯¼öÀçÈ­
+    public int idx;//íšŒì›ë²ˆí˜¸
+    public string ssID;//ì„¸ì…˜ì•„ì´ë””
+    public string ID;//ë””ë°”ì´ìŠ¤ ì•„ì´ë””
+    public string nickName;//ë‹‰ë„¤ì„
+    public long coin1;//ì¼ë°˜ì¬í™”
+    public long coin2;//íŠ¹ìˆ˜ì¬í™”
     public string mfList;
-    public string archiveList;//¾÷Àû ¸®½ºÆ®
+    public string archiveList;//ì—…ì  ë¦¬ìŠ¤íŠ¸
 
-    //¹Ì´Ï°ÔÀÓ ¾÷Àû¿ë µ¥ÀÌÅÍ Á¢±Ù¿ë
+    //ë¯¸ë‹ˆê²Œì„ ì—…ì ìš© ë°ì´í„° ì ‘ê·¼ìš©
     public MGPlayData MG1PlayData;
     public MGPlayData MG2PlayData;
     public MGPlayData MG3PlayData;
     public MGPlayData MG4PlayData;
     public MGPlayData MG5PlayData;
+    public List<MGPlayData> MGPlayDataList;
+
+    //ì—…ì ìš© ì¡°ê±´
+    
+    public int[,] conditionScore= { {0,0,0,0,0 },{ 1, 5, 10, 25, 50 }, { 50,1500,3000,4500,6000 }, { 1, 5, 10, 25, 50 }, { 1, 5, 10, 25, 50 } };
+    public int[] conditionPlayCount= {1, 3, 7, 10, 13 };
+    public int[] conditionMfCount = {1,5,15,25,34};
+    public int[] coin1Condition = {10,30,50,100,500};
+    public int[] coin2Condition = { 1, 10, 25, 60,100 };
+
+
+
+
+
 
 
     // Start is called before the first frame update
@@ -44,10 +59,11 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         NetEventManager.Regist("SetUserNickName", S2CL_SetUserNickName);
         NetEventManager.Regist("UserCoinUpdate", S2CL_UserCoinUpdate);
 
-        NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);
+        //NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);
         NetEventManager.Regist("ArchiveUpdate", S2CL_ArchiveUpdate);
 
         ID = SystemInfo.deviceUniqueIdentifier;
+        
     }
 
     public void RefreshUserInfo()
@@ -103,15 +119,28 @@ public class UserDataManager : MonoSingleton<UserDataManager>
 
         if (!_jdata["retMsg"].ToString().Equals("Refresh"))
         {
-            //NetManager.instance.AddRollingMSG($"È¯¿µÇÕ´Ï´Ù, {nickName}´Ô.");
+            NetManager.instance.AddRollingMSG("ë¡œê·¸ì¸", $"{nickName}ë‹˜ í™˜ì˜í•©ë‹ˆë‹¤.");
+            NetManager.instance.AddRollingMSG("ë ˆíŠ¸ë¡œ í”„ë Œì¦ˆ", $"{nickName}ë‹˜ ì¦ê±°ìš´ ì‹œê°„ ë˜ì‹­ì‹œì˜¤.");
 
-            //¸ŞÀÎ
+            //ï¿½ï¿½ï¿½ï¿½
             bl_SceneLoaderManager.LoadScene("Main_Lobby");
 
-            //Å×½ºÆ®¿ë Dev_Lobby ÁøÀÔÀÌ ÇÊ¿äÇÏ¸é À§ ¸ŞÀÎ·Îºñ ºÎºĞ ÁÖ¼®ÇÏ°í ¾Æ·¡ µ¥ºê·Îºñ ÁÖ¼® Ç®±â
+            //ï¿½×½ï¿½Æ®ï¿½ï¿½ Dev_Lobby ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î·Îºï¿½ ï¿½Îºï¿½ ï¿½Ö¼ï¿½ï¿½Ï°ï¿½ ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½Îºï¿½ ï¿½Ö¼ï¿½ Ç®ï¿½ï¿½
 
             //bl_SceneLoaderManager.LoadScene("Dev_Lobby");
+
+
+           
         }
+
+        
+        MGPlayDataList = null;
+        MGPlayDataList = new List<MGPlayData>();
+        MGPlayDataList.Add(MG1PlayData);
+        MGPlayDataList.Add(MG2PlayData);
+        MGPlayDataList.Add(MG3PlayData);
+        MGPlayDataList.Add(MG4PlayData);
+        MGPlayDataList.Add(MG5PlayData);
     }
 
     public void S2CL_SetUserNickName(JObject _jdata)
@@ -143,7 +172,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         NickNamePopClose();
     }
 
-    public bool CL2S_UserCoinUpdate(int _coinType, int _addAmount)//0ÀÏ¹İÀçÈ­ 1Æ¯¼öÀçÈ­ / ´õÇØÁÙ°ª Áõ°¡´Â ¾ç¼ö °¨¼Ò´Â À½¼ö
+    public bool CL2S_UserCoinUpdate(int _coinType, int _addAmount)//0ï¿½Ï¹ï¿½ï¿½ï¿½È­ 1Æ¯ï¿½ï¿½ï¿½ï¿½È­ / ï¿½ï¿½ï¿½ï¿½ï¿½Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò´ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
 
         long _money = _coinType == 0 ? coin1 : coin2;
@@ -151,7 +180,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         if (_money + _addAmount < 0)
         {
 
-            //¼ÒÁö±İ ºÎÁ·
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             return false;
         }
         else
@@ -193,7 +222,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         Debug.Log(_str);
     }
 
-    //¾÷Àû ´Ş¼ºÇß´Ù°í ¼­¹ö·Î Àü¼ÛÇÏ´Â ÇÔ¼ö _archiveName¿¡ ¿øÇÏ´Â ¾÷Àû Å×ÀÌºí ÀÌ¸§ ³Ö¾î¼­ ÇÔ¼ö È£Ãâ
+    //ì—…ì  ë‹¬ì„±í–ˆë‹¤ê³  ì„œë²„ë¡œ ì „ì†¡í•˜ëŠ” í•¨ìˆ˜ _archiveNameì— ì›í•˜ëŠ” ì—…ì  í…Œì´ë¸” ì´ë¦„ ë„£ì–´ì„œ í•¨ìˆ˜ í˜¸ì¶œ
     public void CL2S_ArchiveUpdate(string _archiveName)
     {
         JObject _userData = new JObject();
@@ -203,13 +232,84 @@ public class UserDataManager : MonoSingleton<UserDataManager>
 
 
         NetManager.instance.CL2S_SEND(_userData);
+
+        NetManager.instance.AddRollingMSG("ì—…ì ", $"{_archiveName}ì—…ì ì„ ë‹¬ì„±í–ˆìŠµë‹ˆë‹¤.");
+
     }
 
-    //¾÷Àû ´Ş¼ºÇÏ°í ¼­¹ö¿¡¼­ º¸³»ÁÖ´Â ´äÀå ¾÷Àû ¸®½ºÆ® º¸¿©ÁÜ
+    //ì—…ì  ë‹¬ì„±í•˜ê³  ì„œë²„ì—ì„œ ë³´ë‚´ì£¼ëŠ” ë‹µì¥ ì—…ì  ë¦¬ìŠ¤íŠ¸ ë³´ì—¬ì¤Œ
     public void S2CL_ArchiveUpdate(JObject _jdata)
     {
         Debug.Log(_jdata.ToString());
 
-        archiveList = _jdata["ArchiveList"].ToString();
+        archiveList = _jdata["List"].ToString();
+    }
+    public IEnumerator AchivementCheck(int MG_num=0)
+    {
+        yield return new WaitForSeconds(1.0f);
+        RefreshUserInfo();
+        yield return new WaitForSeconds(1.0f);
+        string achivementName;
+        JObject _data = JObject.Parse(archiveList);
+        if (MG_num == 0)
+        {
+            MatchCollection matches = Regex.Matches(mfList, "\"1");
+            int cnt = matches.Count;
+            for (int i=0; i<5;i++)
+            {
+                //if (conditionMfCount[i]<=mf)
+                
+                if (conditionMfCount[i] <=cnt)
+                {
+                    achivementName = $"MF_Count_{i + 1}";
+                    CallAchievement(_data, achivementName);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                int z = conditionScore[MG_num - 1, i];
+                if (conditionScore[MG_num - 1, i] <= MGPlayDataList[MG_num - 1]._maxScore)
+                {
+                    achivementName = $"MG_{MG_num}_Score_{i + 1}";
+                    CallAchievement(_data, achivementName);
+                }
+                if (conditionPlayCount[i] <= MGPlayDataList[MG_num - 1]._playCount)
+                {
+                    achivementName = $"MG_{MG_num}_Count_{i + 1}";
+                    CallAchievement(_data, achivementName);
+                }
+                if (MGPlayDataList[i]._is1st)
+                {
+                    achivementName = $"MG_{MG_num}_1st";
+                    CallAchievement(_data, achivementName);
+                }
+            }
+            //ì „ì²´ ë­í¬ 1ë“±
+        }
+        for(int i=0;i<5;i++)//ì½”ì¸ì²´í¬
+        {
+            if (coin1Condition[i] <=coin1)
+            {
+                achivementName = $"Coin1_{i + 1}";
+                CallAchievement(_data, achivementName);
+            }
+            if (coin2Condition[i] <= coin2)
+            {
+                achivementName = $"Coin2_{i + 1}";
+                CallAchievement(_data, achivementName);
+            }
+        }
+        
+    }
+    private void CallAchievement(JObject _data,string _achievementName)
+    {
+        int check = int.Parse(_data[_achievementName].ToString());
+        if (check == 0)
+        {
+            CL2S_ArchiveUpdate(_achievementName);
+        }
     }
 }

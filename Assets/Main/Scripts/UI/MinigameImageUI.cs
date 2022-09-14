@@ -9,45 +9,100 @@ public class MinigameImageUI : MonoBehaviour
     private Canvas canvas;
     private RectTransform rectParent;
     private RectTransform rectImage;
-    private Image image;
+
+    private Image frameImg;
+    private Image contentsImg;
+    private Text title;
     public Vector3 offset = Vector3.zero;
+
     public Sprite[] minigameSprites;
+    public Sprite[] frameSprites = new Sprite[3];
+
     [HideInInspector] public Transform targetTr;
+
+    bool isOpen = false;
+
     private void Start()
     {
+        title = GetComponent<Text>();
+        if (title == null)
+        {
+            frameImg = transform.GetChild(0).GetComponentInChildren<Image>();
+            contentsImg = frameImg.transform.GetChild(0).GetChild(0).GetComponentInChildren<Image>();
+            isOpen = false;
+            frameImg.gameObject.SetActive(isOpen);
+        }
+        else
+        {
+            targetTr = FindObjectOfType<Player>().transform;
+
+        }
         canvas = GetComponentInParent<Canvas>();
         uiCamera = canvas.worldCamera;
         rectParent = canvas.GetComponent<RectTransform>();
         rectImage = GetComponent<RectTransform>();
-        image = GetComponentInParent<Image>();
-    }
 
-    public void PopUpImage(Transform _targetTr,string _name)
-    {
-        int num = int.Parse(_name[_name.Length - 1].ToString()) -1;
-        image.sprite=minigameSprites[num];
 
-        targetTr = _targetTr;
-        image.enabled = true;
 
     }
-    public void HideImage()
+
+    public void PopUpImage(Transform _targetTr, string _name)
     {
-        image.enabled = false;
+        if (title == null)
+        {
+            int num = int.Parse(_name[_name.Length - 1].ToString()) - 1;
+            contentsImg.sprite = minigameSprites[num];
+
+            targetTr = _targetTr;
+
+            // ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½Ç³ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½
+            float yAngle = targetTr.localEulerAngles.y;
+            //Debug.Log($"arcade {_name} y = {yAngle}");
+
+            if (yAngle < 10f) // y = 0
+            {
+                frameImg.sprite = frameSprites[1];
+            }
+            else if (yAngle > 80f && yAngle < 100f) // y = 90
+            {
+                frameImg.sprite = frameSprites[2];
+            }
+            else if (yAngle > 260f) // y = 270
+            {
+                frameImg.sprite = frameSprites[0];
+            }
+
+
+            isOpen = true;
+            frameImg.gameObject.SetActive(isOpen);
+        }
+
+    }
+
+    public void ToggleUI()
+    {
+        if (title == null)
+        {
+            isOpen = !isOpen;
+            frameImg.gameObject.SetActive(isOpen);
+        }
     }
     private void LateUpdate()
     {
         if (targetTr != null)
         {
-            var screenPos = Camera.main.WorldToScreenPoint(targetTr.position + offset);//¿ùµå ÁÂÇ¥¸¦ ½ºÅ©¸° ÁÂÇ¥·Î vector3¹ÝÈ¯
-            if (screenPos.z < 0.0f)
-            {
-                screenPos *= -1.0f; //z ´Â ¸ÞÀÎÄ«¸Þ¶ó¿¡¼­ xyÆò¸é±îÁöÀÇ °Å¸® ÀÌÃ³¸®¸¦ ¾ÈÇÏ¸é ¹Ý´ëÆí¿¡¼­µµ ÀûÀÇ hp¸¸ º¸ÀÓ
-            }
-            var localPos = Vector2.zero;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectParent, screenPos, uiCamera, out localPos);
-            //½ºÅ©¸°Æ÷ÀÎÆ®¿¡¼­ uiÄµ¹ö½ºÀÇ ÁÂÇ¥·Î localPos¿¡ÀúÀå
-            rectImage.localPosition = localPos; //Ã¼·ÂÀÇ ÁÂÇ¥¸¦ localpos·Î
+            transform.position = Camera.main.WorldToScreenPoint(targetTr.position + offset);
+
+            //var screenPos = Camera.main.WorldToScreenPoint(targetTr.position + offset);//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ vector3ï¿½ï¿½È¯
+            //if (screenPos.z < 0.0f)
+            //{
+            //    screenPos *= -1.0f; //z ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä«ï¿½Þ¶ó¿¡¼ï¿½ xyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ hpï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            //}
+            //var localPos = Vector2.zero;
+            //RectTransformUtility.ScreenPointToLocalPointInRectangle(rectParent, screenPos, uiCamera, out localPos);
+            ////ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ uiÄµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ localPosï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            //rectImage.localPosition = localPos; //Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ localposï¿½ï¿½
         }
     }
 }
+

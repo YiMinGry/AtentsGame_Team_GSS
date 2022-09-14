@@ -100,6 +100,13 @@ public class bl_SceneLoaderEditor : Editor
         Script.ScreenUI = EditorGUILayout.ObjectField("Loader UI", Script.ScreenUI, typeof(bl_LoadingScreenUI), true) as bl_LoadingScreenUI;
         GUILayout.EndVertical();
 
+        GUILayout.BeginVertical("box");
+        GUILayout.Label("Custom", EditorStyles.helpBox);
+        GUILayout.Space(2);
+        Script.waitBeforeLoading = EditorGUILayout.ToggleLeft("Wait Before Loading", Script.waitBeforeLoading, EditorStyles.toolbarButton);
+        GUILayout.Space(2);
+        GUILayout.EndVertical();
+
         GUILayout.EndVertical();
         if (GUI.changed)
         {

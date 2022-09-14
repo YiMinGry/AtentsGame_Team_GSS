@@ -13,6 +13,7 @@ public class LobbyInitializer : SceneInitializer//상속받아와서
 
     void Start()
     {
+        AudioManager.Inst.PlayBGM("RoccoW - Free Singles 2013 - 03 Messeah");
 
         UserDataManager.instance.RefreshUserInfo();
         MapLoad("Prefabs/Lobby/" + MapPrefab_Name + (isDev == true ? "_Dev" : ""));//리소스 폴더에서 맵 프리펩 로드

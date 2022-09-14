@@ -73,6 +73,8 @@ public class TapperGameManager : MonoBehaviour
         NetEventManager.Regist("UpdateRanking", S2CL_UpdateRanking);//서버에서 UpdateRanking 커멘드로 패킷이 올경우 실행
 
         tapperUIManager.Update_beerFail(beerFailCount, beerFailMaxCount);
+
+        AudioManager.Inst.PlayBGM("Binks Sake");
     }
 
 
@@ -155,6 +157,7 @@ public class TapperGameManager : MonoBehaviour
     {
 
         CL2S_UpdateRanking(score);
+        StartCoroutine(UserDataManager.instance.AchivementCheck(4));
 
         isGameOver = true;
 

@@ -43,7 +43,10 @@ public class PhoneUI : MonoBehaviour
     //Transform page3_AchiveList;
     Transform page3_RankList;
     Text[] page3_RankText;
-    int minigameNum = 2;
+    public GameObject achieveTextObj;
+    public Transform contentsTr;
+    private Text playerTitle;
+
 
     private void Awake()
     {
@@ -82,7 +85,7 @@ public class PhoneUI : MonoBehaviour
         page2_MiniDetail_Check = page2_MiniDetail_Data.Find("Check").gameObject;
         page2_MiniDetail_NotCheck = page2_MiniDetail_Data.Find("NotCheck").gameObject;
         page2_MiniList = pages[1].Find("MiniList");
-        
+
 
         _mfs = new List<MFItemInfo>();
 
@@ -97,8 +100,8 @@ public class PhoneUI : MonoBehaviour
             _mfs[idx].SetCallBack(
                 (string str) =>
                 {
-                    page2_MiniDetail_NotData.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? false : true);//¹Ì¼ÒÀ¯
-                    page2_MiniDetail_Data.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? true : false);//¼ÒÀ¯
+                    page2_MiniDetail_NotData.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? false : true);//ï¿½Ì¼ï¿½ï¿½ï¿½
+                    page2_MiniDetail_Data.gameObject.SetActive(MFDataManager.instance.mfarr[idx].isHave == true ? true : false);//ï¿½ï¿½ï¿½ï¿½
 
                     page2_MiniDetail_Image.sprite = MFDataManager.instance.mfarr[idx].sprite;
                     page2_MiniDetail_Name.text = MFDataManager.instance.mfarr[idx].friendName;
@@ -136,22 +139,22 @@ public class PhoneUI : MonoBehaviour
         page3_sidePage = pages[2].Find("SideContents");
         page3_RankList = page3_sidePage.Find("RankingDetail").Find("ScrollView").Find("Viewport");
         page3_RankText = new Text[10];
-        for(int i=0; i<10; i++)
+        for (int i = 0; i < 10; i++)
         {
             page3_RankText[i] = page3_RankList.GetChild(i).GetComponent<Text>();
         }
-
-
+        page3_sidePage.Find("OutBtn").GetComponent<Button>().onClick.AddListener(() => page3_sidePage.gameObject.SetActive(false));
     }
     private void OnEnable()
     {
-        NetEventManager.Regist("ReadRanking", S2CL_ReadRanking);//¼­¹ö¿¡¼­ ReadRanking Ä¿¸àµå·Î ÆÐÅ¶ÀÌ ¿Ã°æ¿ì ½ÇÇà
+        NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ReadRanking Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¶ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         NetEventManager.Regist("TotalRanking", S2CL_TotalRanking);
     }
 
     private void Start()
     {
         Init();
+        OpenPage(0);
     }
 
     void Init()
@@ -163,6 +166,7 @@ public class PhoneUI : MonoBehaviour
 
     void OpenPage(int index)
     {
+        AudioManager.Inst.PlaySFX("EffectSound_Pop2");
         foreach (var page in pages)
         {
             page.gameObject.SetActive(false);
@@ -176,7 +180,7 @@ public class PhoneUI : MonoBehaviour
     {
         if (UserDataManager.instance.nickName != "") page1_PlayerName.text = UserDataManager.instance.nickName;
         else if (UserDataManager.instance.nickName == "") page1_PlayerName.text = "Noname";
-        //page1_HaveMini = $"{UserDataManager.instance.º¸À¯ÇÑ¹Ì´ÏÄ£±¸°¹¼ö}¸¶¸®";
+        //page1_HaveMini = $"{UserDataManager.instance.ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹Ì´ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½";
         page1_HaveCoin1.text = UserDataManager.instance.coin1.ToString();
         page1_HaveCoin2.text = UserDataManager.instance.coin2.ToString();
         //if (UserDataManager.instance.comment != "") page1_Comment = UserDataManager.instance.comment;
@@ -184,9 +188,9 @@ public class PhoneUI : MonoBehaviour
 
     public void SetPage2()
     {
-        // scriptable object ¸ÞÀÎ¿¡¼­ °ü¸® ¾îÄÉ ÇÒ°ÇÁö Á¤ÇØ¼­ °Å±â¼­ Á¤º¸ ¹Þ¾Æ¼­ ¾Æ·¡ Ã³¸®
+        // scriptable object ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½Å±â¼­ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½Æ·ï¿½ Ã³ï¿½ï¿½
         SetPage2_detail();
-        // page2_MiniList ¿ä¼Ò Ã¤¿ì±â Instantiate
+        // page2_MiniList ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½ Instantiate
     }
 
     public void SetPage2_detail(MiniFriendData data = null)
@@ -201,7 +205,7 @@ public class PhoneUI : MonoBehaviour
             page2_MiniDetail_NotData.gameObject.SetActive(false);
             page2_MiniDetail_Data.gameObject.SetActive(true);
 
-            // page2_MiniDetail ¿¡ µé¾î°¥ ¿ä¼Ò Ã¤¿ì±â
+            // page2_MiniDetail ï¿½ï¿½ ï¿½ï¿½î°¥ ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½
         }
     }
 
@@ -216,75 +220,55 @@ public class PhoneUI : MonoBehaviour
 
     public void SetPage3()
     {
-        CL2S_TotalRanking();
-        StartCoroutine(UpdateRank());
-        // ¹Ì´Ï°ÔÀÓµé ¿Ï¼ºµÇ°í ³Ö¾î¾ßÇÒµíÇÑ...
-
-        //page3_AchieveCount = 
-        //page3_TotalScore =
-        //page3_TotalRank = 
-
-        //±× ¿Ü µðÅ×ÀÏ º¼ ¼ö ÀÖ°Ô ÇÏ´Ü ¹öÆ°¿¡ ¿¬°á
     }
-    //page3ÇÔ¼ö========================================================================
-    IEnumerator UpdateRank()
+    //page3ï¿½Ô¼ï¿½========================================================================
+    public void UpdateRank()
     {
-        minigameNum = 2;
-        string BaseSceneName = "MG_";
-        string SceneName;
-        for (int i = 2; i < page3_RankText.Length; i++)
-        {
-            int num;
-            num = (i + 2) / 2;
+        CL2S_ReadMyAllRanking();
 
-            SceneName = $"{BaseSceneName}{num}";
-            CL2S_ReadRanking(SceneName);
-            i++;
-            yield return new WaitForSeconds(0.15f);
-        }
     }
-    
-    public void S2CL_ReadRanking(JObject _jdata)
-    {
-       
-        Debug.Log(_jdata);
-        JObject _data = JObject.Parse(_jdata["myRkData"].ToString());
-        string rank = $"{_data["ranking"]}";
-        if(rank=="-1")
-        {
-            page3_RankText[minigameNum].text = "±â·Ï¾øÀ½";
-            minigameNum++;
-            page3_RankText[minigameNum].text = $"--";
-            minigameNum++;
-        }
-        else
-        {
-            page3_RankText[minigameNum].text = $"{_data["ranking"]}À§";
-            minigameNum++;
-            page3_RankText[minigameNum].text = $"{_data["Score"]}Á¡";
-            minigameNum++;
-        }
-        
-    }
-    void CL2S_ReadRanking(string _name)
+    public void CL2S_ReadMyAllRanking()
     {
         JObject _userData = new JObject();
-        _userData.Add("cmd", "ReadRanking");
+        _userData.Add("cmd", "ReadMyAllRanking");
         _userData.Add("ID", UserDataManager.instance.ID);
-        _userData.Add("MG_NAME", _name);
 
         NetManager.instance.CL2S_SEND(_userData);
     }
 
+    public void S2CL_ReadMyAllRanking(JObject _jdata)
+    {
+
+        string BaseSceneName = "MG_";
+        string SceneName;
+        for (int i = 2; i < 6; i++)
+        {
+            SceneName = $"{BaseSceneName}{i}";
+            JArray _data = JArray.Parse(_jdata[SceneName].ToString());
+
+            JObject data = JObject.Parse(_data[10].ToString());
+
+            string rank = $"{data["ranking"]}";
+            if (rank == "-1")
+            {
+                page3_RankText[i * 2 - 2].text = "ê¸°ë¡ì—†ìŒ";
+                page3_RankText[i * 2 - 1].text = $"--";
+            }
+            else
+            {
+                page3_RankText[i * 2 - 2].text = $"{data["ranking"]}ë“±";
+                page3_RankText[i * 2 - 1].text = $"{data["Score"]}ì ";
+            }
+        }
+    }
     public void S2CL_TotalRanking(JObject _jdata)
     {
-        Debug.Log(_jdata);
 
         JObject _data = JObject.Parse(_jdata["MyRank"].ToString());
         page3_TotalRank.text = $"{_data["MG_Total_Rank"]}";
-        page3_RankText[0].text = $"{_data["MG_Total_Rank"]}À§";
+        page3_RankText[0].text = $"{_data["MG_Total_Rank"]}ë“±";
         page3_TotalScore.text = $"{_data["MG_Total_Score"]}";
-        page3_RankText[1].text = $"{_data["MG_Total_Score"]}Á¡";
+        page3_RankText[1].text = $"{_data["MG_Total_Score"]}ì ";
     }
     public void CL2S_TotalRanking()
     {
@@ -293,5 +277,215 @@ public class PhoneUI : MonoBehaviour
         _userData.Add("ID", UserDataManager.instance.ID);
 
         NetManager.instance.CL2S_SEND(_userData);
+    }
+    public void AchieveMentPopUp()
+    {
+        if (contentsTr.childCount > 0)
+        {
+            for (int a = 0; a < contentsTr.childCount; a++)
+            {
+                Destroy(contentsTr.GetChild(a).gameObject);
+            }
+        }
+        string achivementName;
+        JObject data = JObject.Parse(UserDataManager.instance.archiveList);
+
+        int check;
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                achivementName = $"MG_{i + 1}_Score_{j + 1}";
+                CheckAchieveMent(data, achivementName);
+
+            }
+            for (int j = 0; j < 5; j++)
+            {
+                achivementName = $"MG_{i + 1}_Count_{j + 1}";
+                CheckAchieveMent(data, achivementName);
+            }
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            achivementName = $"MG_{i + 1}_1st";
+            CheckAchieveMent(data, achivementName);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            achivementName = $"MF_Count_{i + 1}";
+            CheckAchieveMent(data, achivementName);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            achivementName = $"Coin1_{i + 1}";
+            CheckAchieveMent(data, achivementName);
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            achivementName = $"Coin2_{i + 1}";
+            CheckAchieveMent(data, achivementName);
+        }
+        achivementName = $"Total_1st";
+        CheckAchieveMent(data, achivementName);
+
+    }
+    void CheckAchieveMent(JObject _data, string _achieveName)
+    {
+        int check = int.Parse(_data[_achieveName].ToString());
+        if (check == 1)
+        {
+
+            int achieveTier = int.Parse(_achieveName[_achieveName.Length - 1].ToString());
+            string a = string.Empty;
+            string b = string.Empty;
+            string condition = string.Empty;
+            if (_achieveName.Contains("MG"))
+            {
+
+                int mgNum = int.Parse(_achieveName[3].ToString());
+                switch (mgNum)
+                {
+                    case 2:
+                        a = "ë¬¼ê³ ê¸°í‚¤ìš°ê¸° ";
+                        break;
+                    case 3:
+                        a = "ì „ìŸì‹œëŒ€ ";
+                        break;
+                    case 4:
+                        a = "íƒœí¼ ";
+                        break;
+                    case 5:
+                        a = "ë¯¸ë‹ˆëŸ° ";
+                        break;
+                }
+                if (_achieveName.Contains("_Score"))
+                {
+                    int ScoreCon = UserDataManager.instance.conditionScore[mgNum - 1, achieveTier - 1];
+                    condition = $"ì ìˆ˜ {ScoreCon}ì  ì´ìƒ";
+                    switch (achieveTier)
+                    {
+                        case 1:
+                            b = "ì™•ì´ˆë³´";
+                            break;
+                        case 2:
+                            b = "ì´ˆë³´";
+                            break;
+                        case 3:
+                            b = "ì¤‘ìˆ˜";
+                            break;
+                        case 4:
+                            b = "ê³ ìˆ˜";
+                            break;
+                        case 5:
+                            b = "ì´ˆê³ ìˆ˜";
+                            break;
+                    }
+                }
+                else if (_achieveName.Contains("_Count"))
+                {
+                    int playCountCon = UserDataManager.instance.conditionPlayCount[achieveTier - 1];
+                    condition = $"í”Œë ˆì´íšŸìˆ˜ {playCountCon}ë²ˆ ì´ìƒ";
+                    switch (achieveTier)
+                    {
+                        case 1:
+                            b = "ë‰´ë¹„";
+                            break;
+                        case 2:
+                            b = "ìˆ™ë ¨ìž";
+                            break;
+                        case 3:
+                            b = "ê³ ì¸ë¬¼";
+                            break;
+                        case 4:
+                            b = "ì©ì€ë¬¼";
+                            break;
+                        case 5:
+                            b = "ì„ìœ ";
+                            break;
+                    }
+                }
+                else if (_achieveName.Contains("1st"))
+                {
+                    b = "ë§ˆìŠ¤í„°";
+                    condition = $"ëž­í‚¹ 1ë“± ë‹¬ì„±";
+                }
+            }
+            else
+            {
+                if (_achieveName.Contains("MF"))
+                {
+                    a = "";
+                    switch (achieveTier)
+                    {
+                        case 1:
+                            b = "ì²« ì¹œêµ¬ë¥¼ ì‚¬ê·€ìž";
+                            break;
+                        case 2:
+                            b = "ì•„ì‹¸íƒˆì¶œ";
+                            break;
+                        case 3:
+                            b = "ì¸ì‹¸";
+                            break;
+                        case 4:
+                            b = "í•µì¸ì‹¸";
+                            break;
+                        case 5:
+                            b = "ë¯¸ë‹ˆì¹œêµ¬ ìˆ˜ì§‘ê´‘";
+                            break;
+                    }
+                    condition = $"{UserDataManager.instance.conditionMfCount[achieveTier - 1]}ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
+                }
+                else
+                {
+                    if (_achieveName.Contains("Coin1"))
+                    {
+                        a = "ì¼ë°˜ìž¬í™” ";
+                        b = $"ëª¨ìœ¼ê¸° {achieveTier}";
+                        condition = $"{UserDataManager.instance.coin1Condition[achieveTier - 1]} ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
+                    }
+                    else
+                    {
+                        a = "íŠ¹ìˆ˜ìž¬í™” ";
+                        b = $"ëª¨ìœ¼ê¸° {achieveTier}";
+                        condition = $"{UserDataManager.instance.coin2Condition[achieveTier - 1]} ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½";
+                    }
+                }
+            }
+            GameObject obj = Instantiate(achieveTextObj, contentsTr);
+            obj.GetComponent<Toggle>().group = obj.transform.parent.GetComponent<ToggleGroup>();
+            Text achiveText = obj.GetComponent<Text>();
+            achiveText.text = a + b;
+            achiveText.transform.GetChild(1).GetComponent<Text>().text = a + condition;
+        }
+    }
+    public void SetTitle(GameObject _thisObj)
+    {
+        playerTitle = FindObjectOfType<Player>().GetComponentInChildren<Text>();
+        Text title = _thisObj.GetComponent<Text>();
+        Transform parentTr = _thisObj.transform.parent;
+
+        playerTitle.text = $"<{title.text}>";
+        for (int i = 0; i < parentTr.childCount; i++)
+        {
+            Toggle a = parentTr.GetChild(i).GetComponent<Toggle>();
+            if (a.isOn)
+            {
+                break;
+            }
+            if (i == parentTr.childCount - 1)
+            {
+                playerTitle.text = "";
+            }
+        }
+    }
+
+    public void SetBGM() 
+    {
+        AudioManager.Inst.MusicVolume = AudioManager.Inst.MusicVolume == 0 ? 1 : 0;
+    }
+
+    public void SetFX()
+    {
+        AudioManager.Inst.SoundVolume = AudioManager.Inst.SoundVolume == 0 ? 1 : 0;
     }
 }

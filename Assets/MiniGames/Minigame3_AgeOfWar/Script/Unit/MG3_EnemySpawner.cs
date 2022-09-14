@@ -36,7 +36,7 @@ public class MG3_EnemySpawner : MG3_UnitSpawner
 
     private void Update()
     {
-        if (spawnStart)
+        if (spawnStart&&!MG3_GameManager.Inst.IsGameover)
         {
             spawnCool -= Time.deltaTime;
             //if (enemyRevol < 2 && GameManager.Inst.Exp > GameManager.Inst.RevolExps[enemyRevol]*0.9f)

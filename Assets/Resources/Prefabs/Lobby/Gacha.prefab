@@ -783,7 +783,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1516084440560212987
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1587,7 +1587,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: X 50
+  m_Text: X 5
 --- !u!1 &1516084441207801376
 GameObject:
   m_ObjectHideFlags: 0
@@ -2528,7 +2528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1516084442025270872
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2604,7 +2604,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1516084442071853149
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2746,7 +2746,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: X 50
+  m_Text: X 1
 --- !u!1 &1516084442115145891
 GameObject:
   m_ObjectHideFlags: 0
@@ -3469,6 +3469,26 @@ MonoBehaviour:
   petRender: {fileID: 2176690887833002302}
   petSpawner: {fileID: 7024392236502647797}
   effectSpawner: {fileID: 7912546079616529042}
+  animCon:
+  - {fileID: 22100000, guid: 23729d1074c955041844584709a2ae7e, type: 2}
+  - {fileID: 22100000, guid: e76f70528372c2e42a2aadd4d831913f, type: 2}
+  - {fileID: 22100000, guid: 6db545f1da2911943956be2c5251ee82, type: 2}
+  - {fileID: 22100000, guid: 8048e5ab356e5d74d8b94c729fdd0e3b, type: 2}
+  - {fileID: 22100000, guid: 322db9b5360ab4a4382bb67ebb9a6846, type: 2}
+  - {fileID: 22100000, guid: 0a3c2a99c8982094c9d5dc3302210a04, type: 2}
+  - {fileID: 22100000, guid: c208e7b31e38648478801866ac7cf6a6, type: 2}
+  - {fileID: 22100000, guid: 05c2dea6b29368845a4093d7430b021d, type: 2}
+  - {fileID: 22100000, guid: 883eef57f7918b44e87a9bfa24be7b53, type: 2}
+  - {fileID: 22100000, guid: 4e18ec26c548c664ba2d5950ae1cd81a, type: 2}
+  - {fileID: 22100000, guid: 4f47b08c9314a3f42ba6ca1e91132dad, type: 2}
+  - {fileID: 22100000, guid: ec8a0b1c63000a84d8f1b10f9ba8087c, type: 2}
+  - {fileID: 22100000, guid: ab67812c0000c9f469d282b1d417fe32, type: 2}
+  - {fileID: 22100000, guid: 2cd75b2d33ed65649aaf09e0f2f7e610, type: 2}
+  - {fileID: 22100000, guid: 17239f06f42d0524192e546670dfae42, type: 2}
+  - {fileID: 22100000, guid: 0adb5e95ece5c26488e5b42e80dc0d43, type: 2}
+  - {fileID: 22100000, guid: 8b9300ff6da2ad74583f09f108e564d6, type: 2}
+  - {fileID: 22100000, guid: 9f35cc713ca9fdb41a0c29abfa949b93, type: 2}
+  - {fileID: 9100000, guid: aa9d36f7862d682478302cc1d353aa57, type: 2}
   nameText: {fileID: 1516084441874731160}
   gradeText: {fileID: 1516084442071853150}
   normalCoinText: {fileID: 1516084441906273340}
@@ -3824,6 +3844,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8956741768827209691}
   - component: {fileID: 1159289856840961416}
+  - component: {fileID: 2313903432613339076}
   m_Layer: 0
   m_Name: GachaCamera
   m_TagString: Untagged
@@ -3890,6 +3911,68 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!108 &2313903432613339076
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7838955918224893237}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 10
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &8936197631665188315
 GameObject:
   m_ObjectHideFlags: 0

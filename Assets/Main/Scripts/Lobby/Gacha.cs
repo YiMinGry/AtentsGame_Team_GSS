@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Gacha : MonoBehaviour
-{
+{  
     [SerializeField]
     private GameObject petRender;
     [SerializeField]
@@ -13,6 +13,8 @@ public class Gacha : MonoBehaviour
     private Transform effectSpawner = null;
 
     private Animator anim = null;
+
+    public RuntimeAnimatorController[] animCon;
 
     //public MiniFriendData[] Pets = null;
     [SerializeField]
@@ -39,7 +41,7 @@ public class Gacha : MonoBehaviour
     private void Start()
     {
         //petNumMax = Pets.Length;
-        petNumMax = MFDataManager.instance.mfarr.Length;        
+        petNumMax = MFDataManager.instance.mfarr.Length;  
     }
 
     private void OnEnable()
@@ -98,8 +100,14 @@ public class Gacha : MonoBehaviour
                 effectType = Random.Range(0, 3);
                 gachaCamera.SetActive(true);
                 StartCoroutine(PetSpawn());
+                //return true;
             }
+            //else
+            //{
+            //    return false;
+            //}
         }
+        //return true;
     }
 
     private int SetPetNumber()
@@ -134,10 +142,15 @@ public class Gacha : MonoBehaviour
 
     public void NormalPetSpawnButton()
     {
-        if (UserDataManager.instance.CL2S_UserCoinUpdate(0, -50))
+        if (UserDataManager.instance.CL2S_UserCoinUpdate(0, -5))    // 일반코인 5개 감소 후 뽑기, 감소 실패 시 else문 실행
         {
             SetNormalGrade();
             PetSpawnButton();
+            //if (!PetSpawnButton())
+            //{
+            //    UserDataManager.instance.CL2S_UserCoinUpdate(0, 5); // 뽑기 실패 시 코인 반환
+            //    Debug.Log("코인 반환");
+            //}
         }
         else
         {
@@ -149,16 +162,19 @@ public class Gacha : MonoBehaviour
             normalCoinText.fontSize = startCoinFontSize;
             noCoinCount = 0.0f;
             NoCoinCoroutine = StartCoroutine(NoCoin(normalCoinText));
-            Debug.Log("소지금이 부족합니다.");
         }
     }
 
     public void RarePetSpawnButton()
     {
-        if (UserDataManager.instance.CL2S_UserCoinUpdate(1, -50))
+        if (UserDataManager.instance.CL2S_UserCoinUpdate(1, -1))    // 특수코인 1개 감소 후 뽑기, 감소 실패 시 else문 실행
         {
             SetRareGrade();
             PetSpawnButton();
+            //if (!PetSpawnButton())
+            //{
+            //    UserDataManager.instance.CL2S_UserCoinUpdate(1, 1); // 뽑기 실패 시 코인 반환
+            //}
         }
         else
         {
@@ -170,7 +186,6 @@ public class Gacha : MonoBehaviour
             normalCoinText.fontSize = startCoinFontSize;
             noCoinCount = 0.0f;
             NoCoinCoroutine = StartCoroutine(NoCoin(rareCoinText));
-            Debug.Log("소지금이 부족합니다.");
         }
     }    
 
@@ -210,6 +225,7 @@ public class Gacha : MonoBehaviour
         AudioManager.Inst.PlaySFX("Gacha_CoinSound_01");
         nameText.text = MFDataManager.instance.mfarr[petNum].friendName;
         MFDataManager.instance.Send_HaveMF(petNum);
+        StartCoroutine(UserDataManager.instance.AchivementCheck(0));
 
         switch (grade)
         {
@@ -234,6 +250,16 @@ public class Gacha : MonoBehaviour
         DeleteObject(preSpawnEffect);
         addedPet = MakeObject(MFDataManager.instance.mfarr[petNum].prefab, petSpawner); // 펫 생성 및 petPosition의 자식으로 설정
         anim = addedPet.GetComponentInChildren<Animator>();
+        if(petNum < 17)
+        {
+            anim.runtimeAnimatorController = animCon[0];
+        }
+        else
+        {
+            anim.runtimeAnimatorController = animCon[petNum - 16];
+        }
+
+
         anim.SetBool("Spawn", true);
         spawnEffect = MakeObject(spawn[3 * effectType + grade], effectSpawner);
 
@@ -243,6 +269,8 @@ public class Gacha : MonoBehaviour
         additionalEffect = MakeObject(additional[3 * effectType + grade], effectSpawner);
         canvas.SetActive(true);
         isSpawnEnd = true;
+
+        NetManager.instance.AddRollingMSG("미니친구", $"미니친구 {MFDataManager.instance.mfarr[petNum].friendName}를 뽑았습니다.");
     }
 
     IEnumerator PetDespawn()

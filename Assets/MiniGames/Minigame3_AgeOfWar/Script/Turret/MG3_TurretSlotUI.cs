@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class MG3_TurretSlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler
+public class MG3_TurretSlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,IPointerExitHandler
 {
     public GameObject turretSlotObj;
     private MG3_TurretSlot turretSlot;
@@ -14,9 +14,25 @@ public class MG3_TurretSlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnt
     {
         slotImg = GetComponent<Image>();
         turretSlot = turretSlotObj.GetComponent<MG3_TurretSlot>();
+        MG3_GameManager.Inst.Menu.OnClickTurretButton += MakeBright;
+        MG3_GameManager.Inst.Menu.OnClickTurretCancel += MakeNoBright;
     }
-
-
+    public void MakeBright()
+    {
+        if(slotImg.color!=Color.clear)
+        {
+            slotImg.color = Color.white;
+        }
+        
+    }
+    public void MakeNoBright()
+    {
+        if (slotImg.color != Color.clear)
+        {
+            slotImg.color = new Color(0.8f, 0.8f, 0.8f);
+        }
+        
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left) //ÁÂÅ¬¸¯
@@ -53,9 +69,18 @@ public class MG3_TurretSlotUI : MonoBehaviour, IPointerClickHandler, IPointerEnt
     }
 
 
+
     private void Update()
     {
         transform.position = Camera.main.WorldToScreenPoint(turretSlotObj.transform.position);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (MG3_GameManager.Inst.Menu.isSellTurret && turretSlot.TurretData != null)
+        {
+            MG3_GameManager.Inst.Menu.Detail.hide();
+        }
     }
 }
 

@@ -42,6 +42,10 @@ public class AnimConChanger : MonoBehaviour
 
     public bool isMoveingHold = false;//캐릭터가 움직이지 못하게 하기 위한 변수
 
+    private bool isFootstepStarted = false;
+
+    Coroutine coPhoneUI;
+
     //마우스의 위치를 추적하여 방향으로 변환하여 리턴하는 함수
     Vector3 GetMouseScreenToWorldPoint()
     {
@@ -190,6 +194,11 @@ public class AnimConChanger : MonoBehaviour
             //걷기 달리기 체크
             if (rgBody.velocity.x == 0 && rgBody.velocity.z == 0)
             {//움직이지 않을때
+                if(isFootstepStarted)
+                {
+                    AudioManager.Inst.StopAllSFX();
+                    isFootstepStarted = false;
+                }                
                 pRState = PRState.stop;//상태를 정지상태로 만들어줍니다.
                 animator.SetBool("isMove", false);
                 walkTime = 0;
@@ -197,6 +206,11 @@ public class AnimConChanger : MonoBehaviour
             }
             else
             {
+                if(!isFootstepStarted)
+                {
+                    AudioManager.Inst.RepeatSFX("Footstep", -1);
+                    isFootstepStarted = true;
+                }
                 pRState = PRState.move;//상태를 움직임상태로 만들어줍니다.
 
                 animator.SetBool("isMove", true);
@@ -216,24 +230,25 @@ public class AnimConChanger : MonoBehaviour
         // 폰 닫혀있으면 열고
         if (animator.GetBool("isPhoneOpen") == false)
         {
-            if (isHandCamMode)
+            AudioManager.Inst.PlaySFX("EffectSound_Pop");
+            if (isHandCamMode) // 1인칭
             {
                 
                 isHandCam = true;
                 PhoneMode_PhoneFocus.gameObject.SetActive(true);
             }
-            else
+            else // 3인칭
             {
                 PhoneAnim?.Invoke(true);
                 //PlayerFocusCam.gameObject.SetActive(true);
-                StartCoroutine(lookAtPlayer.doMove_PhoneModeOn(this.transform, PhoneMode_PlayerFocus));
+                coPhoneUI = StartCoroutine(lookAtPlayer.DoMove_PhoneModeOn(this.transform, PhoneMode_PlayerFocus));
             }
             isMoveingHold = true;
             animator.SetBool("isPhoneOpen", true);
         }
         else //열려있으면 닫음
         {
-
+            AudioManager.Inst.PlaySFX("EffectSound_Pop2");
             if (isHandCamMode)
             {
                 isHandCam = false;
@@ -243,12 +258,12 @@ public class AnimConChanger : MonoBehaviour
             {
                 PhoneAnim?.Invoke(false);
                 //PlayerFocusCam.gameObject.SetActive(false);
-                StartCoroutine(lookAtPlayer.doMove_PhoneModeOff());
+                coPhoneUI = StartCoroutine(lookAtPlayer.DoMove_PhoneModeOff());
             }
             isMoveingHold = false;
             animator.SetBool("isPhoneOpen", false);
         }
-        StopAllCoroutines();
+        StopCoroutine(coPhoneUI);
     }
 
     

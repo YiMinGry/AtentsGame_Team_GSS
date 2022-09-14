@@ -21,19 +21,11 @@ public class MiniGame5_RankingUI : MiniGame5_UI
 
         okBtn.onClick.AddListener(MiniGame5_SceneManager.Inst.OnReset);
         okBtn.onClick.AddListener(MiniGame5_SceneManager.Inst.OnOpening);
-
     }
 
-    public override void StartScene()
+    public void SetRank(int index, string _name, string _score)
     {
-        for (int i = 0; i < names.Length; i++)
-        {
-            //서버에서 받아서 갱신
-        }
-
-        for (int i = 0; i < scores.Length; i++)
-        {
-            //서버에서 받아서 갱신
-        }
+        names[index].text = _name;
+        scores[index].text = _score.ToString();
     }
 }

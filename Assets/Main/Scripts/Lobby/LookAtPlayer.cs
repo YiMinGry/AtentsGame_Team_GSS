@@ -139,7 +139,7 @@ public class LookAtPlayer : MonoBehaviour
             transform.LookAt(target);
     }
 
-    public IEnumerator doMove_PhoneModeOn(Transform PlayerTrs, Transform TargetCamTrs)
+    public IEnumerator DoMove_PhoneModeOn(Transform PlayerTrs, Transform TargetCamTrs)
     {
         isFollowingPlayerMode = false;
         transform.DOMove(PlayerTrs.position + TargetCamTrs.localPosition, animDuration).SetEase(animEase);
@@ -147,12 +147,17 @@ public class LookAtPlayer : MonoBehaviour
         yield return new WaitForSeconds(animDuration);
     }
 
-    public IEnumerator doMove_PhoneModeOff()
+    public IEnumerator DoMove_PhoneModeOff()
     {
         transform.DOMove(originPosition, animDuration).SetEase(animEase);
         transform.DORotate(originRotation.eulerAngles, animDuration).SetEase(animEase).OnComplete(() => { isFollowingPlayerMode = true; });
         yield return null;
         //yield return new WaitForSeconds(animDuration);
         //isFollowingPlayerMode = true;
+    }
+
+    public IEnumerator DoMove_GoToMiniGame()
+    {
+        yield return null;
     }
 }
