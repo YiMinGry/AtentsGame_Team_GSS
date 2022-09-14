@@ -59,6 +59,8 @@ public class PlayerMove : MonoBehaviour
                 _beer.transform.localPosition = new Vector3(_beer.transform.localPosition.x, 0.15f, 0);
                 _beer.name = "BeerMove";
                 _beer.transform.localScale = Vector3.one;
+
+                AudioManager.Inst.PlaySFX("etfx_shoot_nuke02");
             }
         }
     }
@@ -107,6 +109,8 @@ public class PlayerMove : MonoBehaviour
                 }
                 Instantiate(smokeFx, smokeFxPos);
                 lineIdx--;
+                AudioManager.Inst.PlaySFX("etfx_shoot_mystic");
+
             }
 
             if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
@@ -117,6 +121,8 @@ public class PlayerMove : MonoBehaviour
                 }
                 Instantiate(smokeFx, smokeFxPos);
                 lineIdx++;
+                AudioManager.Inst.PlaySFX("etfx_shoot_mystic");
+
             }
         }
 
@@ -133,9 +139,22 @@ public class PlayerMove : MonoBehaviour
         beerController.gameObject.SetActive(true);
         beerController.SetFill(0f);
 
-        tapperGameManager.tapperTextBoxManager.SetDiaLog(transform,"한잔은 떠나버린 너를 위하여...");
-        //tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "한잔은 이미 초라해진 나를 위하여...");
-        //tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "또 한잔은 너와의 영원한 사랑을 위하여...");
+        int _idx = Random.Range(0,3);
+
+
+        switch (_idx) 
+        {
+            case 0:
+                tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "한잔은 떠나버린 너를 위하여...");
+                break;
+            case 1:
+                tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "한잔은 이미 초라해진 나를 위하여...");
+                break;
+            default:
+                tapperGameManager.tapperTextBoxManager.SetDiaLog(transform, "또 한잔은 너와의 영원한 사랑을 위하여...");
+                break;
+        }      
+        
 
         while ((fillTime / beerfillMaxTime) < 1f)
         {

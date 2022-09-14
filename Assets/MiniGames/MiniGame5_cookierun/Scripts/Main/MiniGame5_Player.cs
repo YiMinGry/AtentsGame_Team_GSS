@@ -428,6 +428,7 @@ public class MiniGame5_Player : MonoBehaviour
         IsBonusTime = false;
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (isMagnetOn)
@@ -436,4 +437,5 @@ public class MiniGame5_Player : MonoBehaviour
             Handles.DrawWireDisc((0.7f * Vector3.up) + transform.position, transform.right, magnetRange);
         }
     }
+#endif
 }

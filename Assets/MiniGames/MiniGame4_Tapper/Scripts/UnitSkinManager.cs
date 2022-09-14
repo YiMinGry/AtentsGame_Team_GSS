@@ -698,5 +698,7 @@ public class UnitSkinManager : MonoBehaviour
         _pantType = Random.Range(0, 16);
         _helmetType = Random.Range(0, 22);
         _armorType = Random.Range(0, 21);
+
+        AudioManager.Inst.PlaySFX("FX-MartyLaserCharging");
     }
 }
