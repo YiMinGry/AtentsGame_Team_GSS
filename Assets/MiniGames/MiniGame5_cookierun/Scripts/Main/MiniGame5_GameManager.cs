@@ -137,14 +137,15 @@ public class MiniGame5_GameManager : MonoBehaviour
         }
     }
 
-    float life = 1f;
+    float life = 100;
+    public float maxLife = 100;
     public float Life
     {
         get => life;
         set
         {
             life = value;
-            Mathf.Clamp(life, 0f, 1f);
+            Mathf.Clamp(life, 0f, maxLife);
             OnLifeChange?.Invoke();
             if (value <= 0 && !isBonusTime)
             {
@@ -157,6 +158,9 @@ public class MiniGame5_GameManager : MonoBehaviour
     public System.Action OnCoinChange;
     public System.Action OnCreditChange;
     public System.Action OnLifeChange;
+
+    public bool isPause = false;
+    public bool isLifePause = false;
 
     bool[] bonusTime = new bool[9];
     public bool[] BonusTime => bonusTime;
@@ -196,10 +200,12 @@ public class MiniGame5_GameManager : MonoBehaviour
             if (isBonusTime)
             {
                 StartBonusTime?.Invoke();
+                isLifePause = true;
             }
             else
             {
                 EndBonusTime?.Invoke();
+                isLifePause = false;
             }
         }
     }
@@ -266,10 +272,11 @@ public class MiniGame5_GameManager : MonoBehaviour
 
     public void GameSet()
     {
+        InitLife();
+
         IsGameGoing = false;
         stageLevel = 1;
         score = 0;
-        life = 1f;
         coin = 0;
         for (int i = 0; i < bonusTime.Length; i++)
         {
@@ -302,14 +309,20 @@ public class MiniGame5_GameManager : MonoBehaviour
         }
     }
 
+    public void InitLife()
+    {
+        maxLife = player.playerMaxLife;
+        life = maxLife;
+    }
+
     void LifeTimer()
     {
-        Life -= Time.deltaTime * 0.02f * (float)stageLevel;
+        if (!isPause && !isLifePause) Life -= stageLevel * 2 * Time.deltaTime;
     }
 
     void ScoreTimer()
     {
-        Score += 1 * stageLevel;
+        if (!isPause) Score += stageLevel;
     }
 
     public void SendUserData()
@@ -322,6 +335,7 @@ public class MiniGame5_GameManager : MonoBehaviour
         _userData.Add("Score", Score);
 
         NetManager.instance.CL2S_SEND(_userData);
+        StartCoroutine(UserDataManager.instance.AchivementCheck(5));
     }
 
     public void S2CL_UpdateRanking(JObject _jdata)

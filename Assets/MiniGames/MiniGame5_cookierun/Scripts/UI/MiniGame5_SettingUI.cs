@@ -46,8 +46,11 @@ public class MiniGame5_SettingUI : MiniGame5_UI
     void ToggleBtn()
     {
         isDetailOpen = !isDetailOpen;
+
+        MiniGame5_GameManager.Inst.isPause = isDetailOpen;
         detail.SetActive(isDetailOpen);
         //Debug.Log("Setting Toggle");
+        
         if (isDetailOpen) Time.timeScale = 0;
         else Time.timeScale = 1;
     }
