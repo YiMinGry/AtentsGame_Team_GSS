@@ -73,7 +73,7 @@ public class MiniGame5_MainPlayingUI : MiniGame5_UI
     }
     void RefreshLifeBarUI()
     {
-        lifeBar.value = MiniGame5_GameManager.Inst.Life;
+        lifeBar.value = MiniGame5_GameManager.Inst.Life / MiniGame5_GameManager.Inst.maxLife;
     }
 
     void RefreshBonusTime()

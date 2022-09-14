@@ -110,4 +110,16 @@ public class MFDataManager : MonoSingleton<MFDataManager>
             }
         }
     }
+
+    public int HaveMFLength()
+    {
+        int count = 0;
+
+        for (int i = 0; i < mfarr.Length; i++)
+        {
+            if (mfarr[i].isHave) count++;
+        }
+
+        return count;
+    }
 }

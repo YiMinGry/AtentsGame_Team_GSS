@@ -32,7 +32,8 @@ public class TapperUIManager : MonoBehaviour
     //벌어들인 금액 업데이트 함수(맥주값 + 팁)
     //받은 맥주값 연출 함수
     //받은 팁 연출 함수
-
+    
+    public Text tipsText;
 
     [SerializeField]
     private Text gameOverMyScore;

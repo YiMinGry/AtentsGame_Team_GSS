@@ -19,7 +19,7 @@ public class MiniGame5_Item : MonoBehaviour
                     MiniGame5_GameManager.Inst.Score += value;
                     break;
                 case ItemState.HealItem:
-                    MiniGame5_GameManager.Inst.Life += 0.1f;
+                    MiniGame5_GameManager.Inst.Life += MiniGame5_GameManager.Inst.maxLife * 0.1f;
                     break;
                 case ItemState.CoinItem:
                     MiniGame5_GameManager.Inst.Coin += value;
@@ -35,6 +35,10 @@ public class MiniGame5_Item : MonoBehaviour
                     break;
                 case ItemState.StageUpItem:
                     MiniGame5_GameManager.Inst.StageLevel = value;
+                    break;
+                case ItemState.GameEndItem:
+                    MiniGame5_GameManager.Inst.Score += value;
+                    MiniGame5_GameManager.Inst.Life = 0;
                     break;
             }
             
