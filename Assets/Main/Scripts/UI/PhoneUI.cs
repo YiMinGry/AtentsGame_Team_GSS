@@ -16,7 +16,6 @@ public class PhoneUI : MonoBehaviour
 
     //Page1================
     Text page1_PlayerName;
-    public Text page1_PlayerAcheive;
     Text page1_HaveMini;
     Text page1_HaveCoin1;
     Text page1_HaveCoin2;
@@ -48,7 +47,7 @@ public class PhoneUI : MonoBehaviour
     public GameObject achieveTextObj;
     public Transform contentsTr;
     private Text playerTitle;
-
+    public Text AchiveNum;
 
     private void Awake()
     {
@@ -73,7 +72,6 @@ public class PhoneUI : MonoBehaviour
 
         //Page1=================================================
         page1_PlayerName = pages[0].Find("Contents").Find("PlayerName").GetComponent<Text>();
-        if(page1_PlayerAcheive == null) page1_PlayerAcheive = pages[0].Find("Contents").Find("PlayerName").Find("Achievements").GetComponent<Text>();
         page1_HaveMini = pages[0].Find("Contents").Find("HaveMini").GetComponent<Text>();
         page1_HaveCoin1 = pages[0].Find("Contents").Find("HaveCoins").Find("Coin1").GetComponent<Text>();
         page1_HaveCoin2 = pages[0].Find("Contents").Find("HaveCoins").Find("Coin2").GetComponent<Text>();
@@ -233,6 +231,7 @@ public class PhoneUI : MonoBehaviour
 
     public void SetPage3()
     {
+        AchiveNum.text=UserDataManager.instance.GetAchieveNum().ToString();
     }
     //page3�Լ�========================================================================
     public void UpdateRank()
@@ -454,13 +453,13 @@ public class PhoneUI : MonoBehaviour
                     {
                         a = "일반재화 ";
                         b = $"모으기 {achieveTier}";
-                        condition = $"{UserDataManager.instance.coin1Condition[achieveTier - 1]} �� ����";
+                        condition = $"{UserDataManager.instance.coin1Condition[achieveTier - 1]}개 이상 획득";
                     }
                     else
                     {
                         a = "특수재화 ";
                         b = $"모으기 {achieveTier}";
-                        condition = $"{UserDataManager.instance.coin2Condition[achieveTier - 1]} �� ����";
+                        condition = $"{UserDataManager.instance.coin2Condition[achieveTier - 1]}개 이상 획득";
                     }
                 }
             }
@@ -476,7 +475,7 @@ public class PhoneUI : MonoBehaviour
         playerTitle = FindObjectOfType<Player>().GetComponentInChildren<Text>();
         Text title = _thisObj.GetComponent<Text>();
         Transform parentTr = _thisObj.transform.parent;
-        Text aaa = FindObjectOfType<PhoneUI>().transform.GetChild(0).Find("Pages").Find("Page1").Find("Contents").Find("PlayerName").Find("Achievements").GetComponent<Text>();
+        
 
         
 
@@ -492,7 +491,6 @@ public class PhoneUI : MonoBehaviour
             if (i == parentTr.childCount - 1)
             {
                 playerTitle.text = "";
-                page1_PlayerAcheive.text = "";
             }
         }
     }

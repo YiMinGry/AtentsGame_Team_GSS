@@ -46,7 +46,7 @@ public class UserDataManager : MonoSingleton<UserDataManager>
 
 
 
-
+    
 
 
 
@@ -311,5 +311,11 @@ public class UserDataManager : MonoSingleton<UserDataManager>
         {
             CL2S_ArchiveUpdate(_achievementName);
         }
+    }
+    public int GetAchieveNum()
+    {
+        MatchCollection matches = Regex.Matches(archiveList, "\"1");
+        int cnt = matches.Count;
+        return cnt;
     }
 }
