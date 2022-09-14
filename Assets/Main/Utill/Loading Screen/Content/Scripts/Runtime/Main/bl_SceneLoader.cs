@@ -43,6 +43,8 @@ public class bl_SceneLoader : MonoBehaviour
     [System.Serializable] public class OnLoaded : UnityEvent { }
     [SerializeField] public OnLoaded onLoaded;
 
+    
+
     [Header("References")]
     public bl_LoadingScreenUI ScreenUI;
     public AsyncOperation sceneAsyncOp { get; set; }
@@ -57,6 +59,10 @@ public class bl_SceneLoader : MonoBehaviour
     private bl_SceneLoaderInfo CurrentLoadLevel = null;
     private bool isLoading = false;
     #endregion
+
+    [Header("Custom")]
+    public bool waitBeforeLoading = false;
+    public bool canStartLoading = false;
 
     /// <summary>
     /// 
@@ -131,9 +137,12 @@ public class bl_SceneLoader : MonoBehaviour
         if (!isOperationStarted || sceneAsyncOp == null)
             return;
 
-        UpdateProgress();
-        ScreenUI.OnUpdate();
-        SkipWithKey();
+        if (!waitBeforeLoading || (waitBeforeLoading && canStartLoading))
+        {
+            UpdateProgress();
+            ScreenUI.OnUpdate();
+            SkipWithKey();
+        }
     }
 
     /// <summary>
@@ -339,21 +348,25 @@ public class bl_SceneLoader : MonoBehaviour
     {
         get
         {
-            if (CurrentLoadLevel != null)
-            {
-                if (CurrentLoadLevel.SkipType != SceneSkipType.None)
-                {
-                    return CurrentLoadLevel.SkipType;
-                }
-            }
-            if (SkipType != SceneSkipType.None)
-            {
-                return SkipType;
-            }
-            else
-            {
-                return SceneSkipType.AnyKey;
-            }
+            //if (CurrentLoadLevel != null)
+            //{
+            //    if (CurrentLoadLevel.SkipType != SceneSkipType.None)
+            //    {
+            //        return CurrentLoadLevel.SkipType;
+            //    }
+            //}
+
+            //if (SkipType != SceneSkipType.None)
+            //{
+            //    return SkipType;
+            //}
+            //else
+            //{
+            //    return SceneSkipType.AnyKey;
+            //}
+
+            //왜인지 모르겠는데 CurrentLoadLevel.SkipType 이 AnyKey여서 걍 주석처리하고 가지고 있던 타입 반환
+            return SkipType;
         }
     }
 
