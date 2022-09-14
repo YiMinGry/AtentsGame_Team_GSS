@@ -144,7 +144,17 @@ public class PhoneUI : MonoBehaviour
             page3_RankText[i] = page3_RankList.GetChild(i).GetComponent<Text>();
         }
         page3_sidePage.Find("OutBtn").GetComponent<Button>().onClick.AddListener(() => page3_sidePage.gameObject.SetActive(false));
+
+
+        //Page4=================================================
+
     }
+
+    public void GameQuit()
+    {
+        Application.Quit();
+    }
+
     private void OnEnable()
     {
         NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);//�������� ReadRanking Ŀ���� ��Ŷ�� �ð�� ����
