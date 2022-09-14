@@ -145,7 +145,6 @@ public class MiniGame5_SceneManager : MonoBehaviour
     IEnumerator OnChangeNextRunnerOnPlay()
     {
         yield return new WaitForSeconds(3f);
-        MiniGame5_GameManager.Inst.Life = 0.75f;
         sceneList[(int)SceneState.MainScene].ChangeCharator(ChoiceState.NextRunFriend);
     }
 

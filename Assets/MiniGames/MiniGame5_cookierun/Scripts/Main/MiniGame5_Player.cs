@@ -12,6 +12,8 @@ public class MiniGame5_Player : MonoBehaviour
     Rigidbody rigid;
     CapsuleCollider coli;
 
+    public float playerMaxLife = 100f;
+
     bool isFirst = true;
     bool isDie = false;
     bool isReady = false;

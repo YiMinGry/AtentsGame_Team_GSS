@@ -40,6 +40,5 @@ public class MiniGame5_GameEndUI : MiniGame5_UI
 
         //미리 랭킹에 플레이어 정보 보내놓기
         MiniGame5_GameManager.Inst.SendUserData();
-        StartCoroutine(UserDataManager.instance.AchivementCheck(5));
     }
 }
