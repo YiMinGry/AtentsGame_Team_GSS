@@ -489,10 +489,9 @@ public class PhoneUI : MonoBehaviour
             if (i == parentTr.childCount - 1)
             {
                 playerTitle.text = "";
-<<<<<<< HEAD
-=======
+
                 aaa.text = "";
->>>>>>> main
+
             }
         }
     }
