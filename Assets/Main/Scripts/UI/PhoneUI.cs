@@ -478,4 +478,14 @@ public class PhoneUI : MonoBehaviour
             }
         }
     }
+
+    public void SetBGM() 
+    {
+        AudioManager.Inst.MusicVolume = AudioManager.Inst.MusicVolume == 0 ? 1 : 0;
+    }
+
+    public void SetFX()
+    {
+        AudioManager.Inst.SoundVolume = AudioManager.Inst.SoundVolume == 0 ? 1 : 0;
+    }
 }

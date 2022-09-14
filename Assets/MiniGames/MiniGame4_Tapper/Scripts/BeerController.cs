@@ -19,6 +19,8 @@ public class BeerController : MonoBehaviour
             amount = 1f;
             fx.SetActive(false);
             fx.SetActive(true);
+
+            AudioManager.Inst.PlaySFX("etfx_explosion_liquid2");
         }
         else 
         {

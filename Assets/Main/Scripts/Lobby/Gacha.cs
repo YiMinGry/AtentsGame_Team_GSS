@@ -100,8 +100,14 @@ public class Gacha : MonoBehaviour
                 effectType = Random.Range(0, 3);
                 gachaCamera.SetActive(true);
                 StartCoroutine(PetSpawn());
+                //return true;
             }
+            //else
+            //{
+            //    return false;
+            //}
         }
+        //return true;
     }
 
     private int SetPetNumber()
@@ -136,10 +142,15 @@ public class Gacha : MonoBehaviour
 
     public void NormalPetSpawnButton()
     {
-        if (UserDataManager.instance.CL2S_UserCoinUpdate(0, -50))
+        if (UserDataManager.instance.CL2S_UserCoinUpdate(0, -5))    // 일반코인 5개 감소 후 뽑기, 감소 실패 시 else문 실행
         {
             SetNormalGrade();
             PetSpawnButton();
+            //if (!PetSpawnButton())
+            //{
+            //    UserDataManager.instance.CL2S_UserCoinUpdate(0, 5); // 뽑기 실패 시 코인 반환
+            //    Debug.Log("코인 반환");
+            //}
         }
         else
         {
@@ -151,16 +162,19 @@ public class Gacha : MonoBehaviour
             normalCoinText.fontSize = startCoinFontSize;
             noCoinCount = 0.0f;
             NoCoinCoroutine = StartCoroutine(NoCoin(normalCoinText));
-            Debug.Log("소지금이 부족합니다.");
         }
     }
 
     public void RarePetSpawnButton()
     {
-        if (UserDataManager.instance.CL2S_UserCoinUpdate(1, -50))
+        if (UserDataManager.instance.CL2S_UserCoinUpdate(1, -1))    // 특수코인 1개 감소 후 뽑기, 감소 실패 시 else문 실행
         {
             SetRareGrade();
             PetSpawnButton();
+            //if (!PetSpawnButton())
+            //{
+            //    UserDataManager.instance.CL2S_UserCoinUpdate(1, 1); // 뽑기 실패 시 코인 반환
+            //}
         }
         else
         {
@@ -172,7 +186,6 @@ public class Gacha : MonoBehaviour
             normalCoinText.fontSize = startCoinFontSize;
             noCoinCount = 0.0f;
             NoCoinCoroutine = StartCoroutine(NoCoin(rareCoinText));
-            Debug.Log("소지금이 부족합니다.");
         }
     }    
 

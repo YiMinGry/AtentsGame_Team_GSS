@@ -36,6 +36,10 @@ public class bl_LoadingScreenUI : MonoBehaviour
     private int CurrentTip = 0;
     private int CurrentBackground = 0;
 
+    [Header("Custom")]
+    public GameObject background;
+    public GameObject loadingBarBG;
+
     /// <summary>
     /// 
     /// </summary>
@@ -61,7 +65,7 @@ public class bl_LoadingScreenUI : MonoBehaviour
 
         Source.volume = 0;
         Source.loop = true;
-        Source.clip = m_SceneLoader.BackgroundAudio;
+        if (m_SceneLoader.BackgroundAudio != null) Source.clip = m_SceneLoader.BackgroundAudio;
 
         // instead of restructure all the loader prefabs, lets do this needed change in runtime.
         if(FadeImageCanvas != null)
@@ -69,6 +73,18 @@ public class bl_LoadingScreenUI : MonoBehaviour
             FadeImageCanvas.transform.SetParent(RootAlpha.transform.parent, false);
             FadeImageCanvas.transform.SetAsLastSibling();
         }
+
+        if (m_SceneLoader.waitBeforeLoading)
+        {
+            if (background != null) background.SetActive(false);
+            if (loadingBarBG != null) loadingBarBG.SetActive(false);
+        }
+    }
+
+    public void ActiveBG()
+    {
+        if (!background.activeSelf) background.SetActive(true);
+        if (!loadingBarBG.activeSelf) loadingBarBG.SetActive(true);
     }
 
     /// <summary>
@@ -277,7 +293,7 @@ public class bl_LoadingScreenUI : MonoBehaviour
         RootUI.SetActive(true);
 
         //start audio loop
-        Source.Play();
+        if (m_SceneLoader.BackgroundAudio != null) Source.Play();
         StartCoroutine(FadeAudio(true));
     }
 

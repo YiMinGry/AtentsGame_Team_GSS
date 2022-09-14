@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class MiniGame5_SettingUI : MiniGame5_UI
@@ -48,5 +50,13 @@ public class MiniGame5_SettingUI : MiniGame5_UI
         //Debug.Log("Setting Toggle");
         if (isDetailOpen) Time.timeScale = 0;
         else Time.timeScale = 1;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ToggleBtn();
+        }
     }
 }
