@@ -40,7 +40,6 @@ public class Gacha : MonoBehaviour
 
     private void Start()
     {
-        //petNumMax = Pets.Length;
         petNumMax = MFDataManager.instance.mfarr.Length;  
     }
 
@@ -88,7 +87,7 @@ public class Gacha : MonoBehaviour
         }
     }
 
-    private void PetSpawnButton()
+    private bool PetSpawnButton()
     {
         if (!isGachaActive)
         {
@@ -100,14 +99,14 @@ public class Gacha : MonoBehaviour
                 effectType = Random.Range(0, 3);
                 gachaCamera.SetActive(true);
                 StartCoroutine(PetSpawn());
-                //return true;
+                return true;
             }
-            //else
-            //{
-            //    return false;
-            //}
+            else
+            {
+                return false;
+            }
         }
-        //return true;
+        return true;
     }
 
     private int SetPetNumber()

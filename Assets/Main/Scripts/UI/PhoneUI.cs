@@ -144,7 +144,17 @@ public class PhoneUI : MonoBehaviour
             page3_RankText[i] = page3_RankList.GetChild(i).GetComponent<Text>();
         }
         page3_sidePage.Find("OutBtn").GetComponent<Button>().onClick.AddListener(() => page3_sidePage.gameObject.SetActive(false));
+
+
+        //Page4=================================================
+
     }
+
+    public void GameQuit()
+    {
+        Application.Quit();
+    }
+
     private void OnEnable()
     {
         NetEventManager.Regist("ReadMyAllRanking", S2CL_ReadMyAllRanking);//�������� ReadRanking Ŀ���� ��Ŷ�� �ð�� ����
@@ -180,7 +190,7 @@ public class PhoneUI : MonoBehaviour
     {
         if (UserDataManager.instance.nickName != "") page1_PlayerName.text = UserDataManager.instance.nickName;
         else if (UserDataManager.instance.nickName == "") page1_PlayerName.text = "Noname";
-        //page1_HaveMini = $"{UserDataManager.instance.�����ѹ̴�ģ������}����";
+        page1_HaveMini.text = $"{MFDataManager.instance.HaveMFLength()}마리";
         page1_HaveCoin1.text = UserDataManager.instance.coin1.ToString();
         page1_HaveCoin2.text = UserDataManager.instance.coin2.ToString();
         //if (UserDataManager.instance.comment != "") page1_Comment = UserDataManager.instance.comment;

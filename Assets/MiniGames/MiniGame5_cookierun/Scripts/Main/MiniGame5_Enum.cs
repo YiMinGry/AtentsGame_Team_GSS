@@ -35,4 +35,5 @@ public enum ItemState
     MagnetItem,
     BigItem,
     StageUpItem,
+    GameEndItem
 }

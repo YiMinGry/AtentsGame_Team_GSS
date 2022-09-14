@@ -103,6 +103,7 @@ public class MiniGame5_MainScene : MiniGame5_Scene
         
         MiniGame5_GameManager.Inst.Player = obj.GetComponent<MiniGame5_Player>();
         MiniGame5_GameManager.Inst.Player = MiniGame5_GameManager.Inst.Player;
+        MiniGame5_GameManager.Inst.InitLife();
     }
 
     void ChangeNextRunner()
@@ -117,6 +118,7 @@ public class MiniGame5_MainScene : MiniGame5_Scene
 
         MiniGame5_GameManager.Inst.Player = obj.GetComponent<MiniGame5_Player>();
         MiniGame5_GameManager.Inst.Player = MiniGame5_GameManager.Inst.Player;
+        MiniGame5_GameManager.Inst.InitLife();
 
         obj.transform.localPosition = new(obj.transform.localPosition.x, obj.transform.localPosition.y, playerDiePos.z + 1f);
         mainCam.GetComponent<MiniGame5_FollowingTarget>().enabled = true;

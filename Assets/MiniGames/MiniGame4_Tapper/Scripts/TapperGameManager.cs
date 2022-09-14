@@ -45,7 +45,7 @@ public class TapperGameManager : MonoBehaviour
         }
     }
 
-   public void CL2S_UpdateRanking(int _score)
+    public void CL2S_UpdateRanking(int _score)
     {
         JObject _userData = new JObject();
         _userData.Add("cmd", "UpdateRanking");
@@ -167,6 +167,10 @@ public class TapperGameManager : MonoBehaviour
         playerMove.enabled = false;
 
         StartCoroutine(GameContinued());
+        _tapperUIManager.tipsText.text = string.Format($"Get Tip's <color=yellow>{tipAmount}</color>"); 
+
+        UserDataManager.instance.CL2S_UserCoinUpdate(0, tipAmount);
+
     }
 
     IEnumerator GameContinued()
